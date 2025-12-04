@@ -4,8 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gill Systems</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .status {
+            color: #28a745;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        .status::before {
+            content: "● ";
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Site under reconstruction</h1>
+    <div class="container">
+        <h1>GillSystems</h1>
+        <p class="status">Website is Live</p>
+    </div>
 </body>
 </html>
