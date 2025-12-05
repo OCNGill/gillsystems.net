@@ -1,147 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/assets/Gill Systems Logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gillsystems | Systems Should Serve Humans</title>
-    <meta name="description"
-        content="Gillsystems: 30+ Years of Systems Expertise. Empowering humans, not constraining them.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GillSystems.net - 30+ years of technology expertise from DOS to Cloud. Systems that serve humans, not vendors.">
+    <title>GillSystems.net | Technology Solutions That Serve Humans</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+<body>
+    <!-- Legacy Toggle - Placeholder for future functionality -->
+    <button class="legacy-toggle" aria-label="Toggle legacy view">
+        <span class="toggle-icon">⏳</span>
+        <span class="toggle-text">2010 Mode</span>
+    </button>
 
-<body class="theme-modern">
-    <div id="app">
-        <header class="terminal-header">
-            <div class="logo-container">
-                <img src="/assets/Gill Systems Logo.png" alt="Gillsystems Logo" class="logo" />
-                <span class="logo-text">Gillsystems</span>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/Gill Systems Logo.png" alt="GillSystems Logo">
+                <span class="logo-text">GillSystems</span>
             </div>
-            <nav class="terminal-nav">
-                <a href="#evolution" class="nav-link">Evolution</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#philosophy" class="nav-link">Philosophy</a>
-                <a href="#lab" class="nav-link">Lab</a>
-                <a href="#contact" class="nav-link">Connect</a>
-            </nav>
-            <div class="controls">
-                <button id="legacy-toggle" class="toggle-btn" aria-label="Toggle Legacy Mode">
-                    <span class="toggle-label">2025</span>
-                    <div class="toggle-switch"></div>
-                    <span class="toggle-label">2010</span>
-                </button>
-            </div>
-        </header>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">HOME</a></li>
+                <li><a href="#solutions">SOLUTIONS</a></li>
+                <li><a href="#philosophy">PHILOSOPHY</a></li>
+                <li><a href="#opensource">OPEN SOURCE</a></li>
+                <li><a href="#connect">CONNECT</a></li>
+            </ul>
+        </div>
+    </nav>
 
-        <main>
-            <section id="hero" class="hero-section">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Systems Should</span>
+                    <span class="title-line highlight">Serve Humans</span>
+                </h1>
+                <p class="hero-subtitle">
+                    30+ years of technology expertise. From DOS to Cloud.<br>
+                    Zero vendor lock-in. Maximum empowerment.
+                </p>
+                <div class="hero-cta">
+                    <a href="#solutions" class="btn btn-primary">Explore Solutions</a>
+                    <a href="#connect" class="btn btn-secondary">Let's Talk</a>
+                </div>
+            </div>
+
+            <!-- Timeline Visualization -->
+            <div class="timeline">
+                <div class="timeline-header">
+                    <h2>The Evolution</h2>
+                    <p>Three decades of staying ahead without leaving anyone behind</p>
+                </div>
+                
+                <div class="timeline-track">
+                    <div class="timeline-item" data-year="1990s">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">1990s</span>
+                            <h3>The DOS Days</h3>
+                            <p>Hand-coding solutions when C:\ was cutting edge</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-year="2000s">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">2000s</span>
+                            <h3>Custom Builds</h3>
+                            <p>Watercooled rigs and "Yes it can play Crysis!"</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-year="2010s">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">2010s</span>
+                            <h3>Cloud Migration</h3>
+                            <p>Helping businesses embrace the shift</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item active" data-year="2020s">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">2020s</span>
+                            <h3>AI & Integration</h3>
+                            <p>Modern solutions with timeless principles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commander's Message -->
+    <section class="commander-message">
+        <div class="container">
+            <div class="message-box">
+                <div class="message-header">
+                    <span class="prompt">cmdr@gillsystems:~$</span>
+                    <span class="cursor-blink">_</span>
+                </div>
+                <div class="message-content">
+                    <p>I've been in technology since before the web existed. I've seen every trend, survived every bubble, and learned one fundamental truth:</p>
+                    <blockquote>
+                        "Technology should empower users, not trap them."
+                    </blockquote>
+                    <p>I don't care about vendor lock-in, proprietary ecosystems, or selling you yesterday's solutions at tomorrow's prices. I care about building systems that work for <em>you</em>.</p>
+                    <p class="signature">— Commander Stephen Gill</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Scale Preview -->
+    <section id="solutions" class="solutions-preview">
+        <div class="container">
+            <h2 class="section-title">Solutions That Scale With You</h2>
+            <p class="section-subtitle">From personal tech support to enterprise consulting. Same expertise, different scale.</p>
+            
+            <div class="scale-container">
+                <!-- Scale Slider - Visual placeholder for now -->
+                <div class="scale-track">
+                    <div class="scale-marker" data-scale="personal">
+                        <div class="marker-dot"></div>
+                        <span class="marker-label">Personal</span>
+                        <p class="marker-desc">Your laptop is slow? Let's fix it.</p>
+                    </div>
+                    
+                    <div class="scale-marker" data-scale="small-business">
+                        <div class="marker-dot"></div>
+                        <span class="marker-label">Small Business</span>
+                        <p class="marker-desc">Growing pains? Time to systemize.</p>
+                    </div>
+                    
+                    <div class="scale-marker" data-scale="enterprise">
+                        <div class="marker-dot"></div>
+                        <span class="marker-label">Enterprise</span>
+                        <p class="marker-desc">Strategic consulting for complex challenges.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-icon">🔧</div>
+                    <h3>Technical Support</h3>
+                    <p>From virus removal to system optimization. Same personal service from 2010, better tools in 2025.</p>
+                </div>
+
+                <div class="solution-card">
+                    <div class="card-icon">🏗️</div>
+                    <h3>System Architecture</h3>
+                    <p>Design infrastructure that grows with your business. Cloud-native or hybrid, your choice.</p>
+                </div>
+
+                <div class="solution-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Digital Transformation</h3>
+                    <p>Modernize without the buzzwords. Real solutions for real businesses.</p>
+                </div>
+
+                <div class="solution-card">
+                    <div class="card-icon">🎓</div>
+                    <h3>Training & Mentorship</h3>
+                    <p>"A knowledgeable customer is a happy customer." Let me teach you the why, not just the how.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Stats Placeholder -->
+    <section id="opensource" class="github-section">
+        <div class="container">
+            <h2 class="section-title">Open Source Lab</h2>
+            <p class="section-subtitle">Code speaks louder than marketing materials.</p>
+            
+            <div class="github-placeholder">
                 <div class="terminal-window">
-                    <div class="terminal-bar">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                        <span class="title">gillsystems_init.exe</span>
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">github.com/OCNGill</span>
                     </div>
-                    <div class="terminal-content">
-                        <p class="prompt">root@gillsystems:~# ./init_sequence.sh --force-human-centric</p>
-                        <h1 class="glitch-text" data-text="Systems Should Serve Humans">Systems Should Serve Humans</h1>
-                        <p class="typing-effect">30+ Years of Uncompromising Technical Excellence.</p>
-                        <div class="cta-container">
-                            <a href="#services" class="btn primary">View Capabilities</a>
-                            <a href="#contact" class="btn secondary">Initiate Contact</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="evolution" class="content-section">
-                <h2 class="section-title">> Evolution_Timeline</h2>
-                <div class="timeline" id="timeline-container">
-                    <!-- Injected by JS -->
-                </div>
-            </section>
-
-            <section id="services" class="content-section">
-                <h2 class="section-title">> Service_Offerings</h2>
-                <div class="services-container">
-                    <div class="service-card">
-                        <h3>System Architecture</h3>
-                        <p>Robust, scalable systems designed for longevity and transparency. No black boxes.</p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Legacy Modernization</h3>
-                        <p>Transforming debt into assets. We respect the past while building the future.</p>
-                    </div>
-                    <div class="service-card highlight-card">
-                        <h3>Value Engineering</h3>
-                        <div class="image-wrapper">
-                            <img src="/assets/pricing_graphic.png" alt="Value Representation" class="service-img" />
-                        </div>
-                        <p>Maximizing impact. Minimizing waste. Real value, not just billable hours.</p>
+                    <div class="terminal-body">
+                        <p class="terminal-line"><span class="prompt">$</span> git status</p>
+                        <p class="terminal-line output">On branch main</p>
+                        <p class="terminal-line output">Your branch is up to date</p>
+                        <p class="terminal-line">&nbsp;</p>
+                        <p class="terminal-line"><span class="prompt">$</span> ls -la projects/</p>
+                        <p class="terminal-line output">📁 [Projects loading dynamically...]</p>
+                        <p class="terminal-line">&nbsp;</p>
+                        <p class="terminal-line comment"># Real GitHub stats will populate here</p>
                     </div>
                 </div>
-            </section>
-
-            <section id="philosophy" class="content-section">
-                <h2 class="section-title">> Core_Philosophy</h2>
-                <div class="philosophy-grid">
-                    <div class="philosophy-card">
-                        <h3>NO Walled Gardens</h3>
-                        <p>We reject vendor lock-in. Technology should liberate, not imprison. Open standards are
-                            non-negotiable.</p>
-                    </div>
-                    <div class="philosophy-card">
-                        <h3>Transparency</h3>
-                        <p>You own your code. You own your data. We build the systems; you hold the keys.</p>
-                    </div>
-                    <div class="philosophy-card">
-                        <h3>Human First</h3>
-                        <p>Algorithms serve people. If a system makes a human feel small, it is a failed system.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="lab" class="content-section">
-                <h2 class="section-title">> Leverage_Lab</h2>
-                <div class="lab-content">
-                    <h3>Project: VERDI</h3>
-                    <p class="lab-desc">Visual Environment for Rapid Data Integration.</p>
-                    <div class="terminal-loader">
-                        <span class="loader-text">Loading Modules...</span>
-                        <div class="loader-bar">
-                            <div class="loader-progress"></div>
-                        </div>
-                    </div>
-                    <p class="status-text">Status: [BETA_ACTIVE]</p>
-                </div>
-            </section>
-
-            <section id="activity" class="content-section">
-                <h2 class="section-title">> GitHub_Activity_Log</h2>
-                <div id="github-feed" class="terminal-feed">
-                    <p class="loading">Establishing secure connection to hub...</p>
-                </div>
-            </section>
-
-            <section id="contact" class="content-section">
-                <h2 class="section-title">> Establish_Connection</h2>
-                <div class="contact-form-container">
-                    <p>Ready to break free from the walled garden?</p>
-                    <a href="mailto:contact@gillsystems.net" class="btn primary">Send Transmission</a>
-                </div>
-            </section>
-        </main>
-
-        <footer class="terminal-footer">
-            <div class="status-bar">
-                <span>STATUS: ONLINE</span>
-                <span>UPTIME: 30+ YEARS</span>
-                <span>LOC: VERDI_FRAMEWORK</span>
+                <a href="https://github.com/OCNGill" target="_blank" class="btn btn-secondary">View GitHub Profile →</a>
             </div>
-            <p class="copyright">&copy; 2025 GillSystems. All Rights Reserved.</p>
-        </footer>
-    </div>
-    <script type="module" src="/main.js"></script>
-</body>
+        </div>
+    </section>
 
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="philosophy">
+        <div class="container">
+            <h2 class="section-title">Core Principles</h2>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <h3>🎯 User Empowerment</h3>
+                    <p>Systems should work for you, not the other way around. No vendor lock-in, no proprietary traps.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h3>🔍 Radical Transparency</h3>
+                    <p>You deserve to understand what you're paying for and why. No jargon, no upsells, no BS.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h3>🛠️ Build vs. Buy</h3>
+                    <p>Sometimes custom is overkill. Sometimes off-the-shelf doesn't cut it. Let's find your right answer.</p>
+                </div>
+                
+                <div class="principle-card">
+                    <h3>📚 Education First</h3>
+                    <p>A knowledgeable customer is a happy customer. I'm here to teach, not gatekeep.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section id="connect" class="connect">
+        <div class="container">
+            <h2 class="section-title">Let's Build Something</h2>
+            <p class="section-subtitle">Personal project or enterprise transformation? Let's talk.</p>
+            
+            <div class="connect-content">
+                <div class="connect-methods">
+                    <div class="method">
+                        <span class="method-icon">📧</span>
+                        <h3>Email</h3>
+                        <a href="mailto:gillsystems@gmail.com">gillsystems@gmail.com</a>
+                    </div>
+                    
+                    <div class="method">
+                        <span class="method-icon">💼</span>
+                        <h3>LinkedIn</h3>
+                        <a href="https://www.linkedin.com/in/stephen-gill-66004b6/" target="_blank">Connect with Stephen</a>
+                    </div>
+                    
+                    <div class="method">
+                        <span class="method-icon">💻</span>
+                        <h3>GitHub</h3>
+                        <a href="https://github.com/OCNGill" target="_blank">@OCNGill</a>
+                    </div>
+                </div>
+
+                <div class="availability-note">
+                    <p>⚡ <strong>Quick Response Time:</strong> Still operating with that 2010 personal service mentality. You're not a ticket number.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/Gill Systems Logo.png" alt="GillSystems Logo" class="footer-logo">
+                    <p>Systems Should Serve Humans</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#solutions">Solutions</a></li>
+                            <li><a href="#philosophy">Philosophy</a></li>
+                            <li><a href="#opensource">Open Source</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legacy</h4>
+                        <ul>
+                            <li><a href="https://web.archive.org/web/20101225140325/http://gillsystems.net/" target="_blank">2010 Archive</a></li>
+                            <li><a href="#" class="legacy-link">Classic Mode</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GillSystems.net | Logo by Ronny Slater (2002) | Built with zero frameworks, maximum intent</p>
+            </div>
+        </div>
+    </footer>
+</body>
 </html>
