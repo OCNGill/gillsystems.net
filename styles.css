@@ -590,28 +590,50 @@ body {
 
 .terminal-header {
     background: var(--bg-tertiary);
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
 }
 
-.terminal-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.terminal-dot.red { background: #ff5f56; }
-.terminal-dot.yellow { background: #ffbd2e; }
-.terminal-dot.green { background: #27c93f; }
-
 .terminal-title {
-    margin-left: auto;
     font-family: var(--font-mono);
     font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.terminal-control {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.terminal-control:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.terminal-control.close:hover {
+    background: #c42b1c;
+    border-color: #c42b1c;
+    color: white;
 }
 
 .terminal-body {
@@ -633,6 +655,17 @@ body {
 .terminal-line.output {
     color: var(--text-secondary);
     padding-left: 1rem;
+}
+
+.terminal-line.output a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.terminal-line.output a:hover {
+    color: var(--accent-primary);
+    text-decoration: underline;
 }
 
 .terminal-line.comment {
