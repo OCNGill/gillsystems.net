@@ -207,6 +207,30 @@ body {
     padding: 0 var(--spacing-md);
 }
 
+/* Hero Logo - Large centered logo for homepage (2010 style) */
+.hero-logo {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-logo img {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3));
+    animation: logoGlow 3s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3)); }
+    50% { filter: drop-shadow(0 0 50px rgba(0, 255, 136, 0.5)); }
+}
+
+/* Homepage logo - hide the nav image, show only text */
+.logo.homepage-logo img {
+    display: none;
+}
+
 .hero-content {
     max-width: 800px;
     margin-bottom: var(--spacing-xl);
@@ -965,6 +989,14 @@ body {
         padding: var(--spacing-lg) 0;
     }
     
+    .hero-logo {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .hero-logo img {
+        max-width: 280px;
+    }
+    
     .hero-cta {
         flex-direction: column;
     }
@@ -1016,6 +1048,10 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.75rem;
+    }
+    
+    .hero-logo img {
+        max-width: 220px;
     }
     
     .container {
