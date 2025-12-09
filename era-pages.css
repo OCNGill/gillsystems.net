@@ -278,6 +278,35 @@
     text-align: center;
 }
 
+/* ============================================
+   Cloud Wars - Hash Decode Effect
+   ============================================ */
+.cloud-wars-text {
+    font-family: var(--font-mono);
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+.cloud-wars-text .letter {
+    display: inline;
+    transition: color 0.2s ease;
+}
+
+.cloud-wars-text .hash-char {
+    color: var(--text-secondary);
+    font-weight: bold;
+}
+
+.cloud-wars-text .decoded {
+    color: var(--text-primary);
+}
+
+.cloud-wars-text .hex-glow {
+    color: var(--accent-primary);
+    text-shadow: 0 0 8px var(--accent-primary);
+    font-weight: bold;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .era-nav {

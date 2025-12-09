@@ -134,6 +134,8 @@ function bootEra(terminal) {
                         startTerminalTyping(typedText, cursor, loader);
                     }
                 }, 1000);
+            } else if (terminal.dataset.era === 'cloud_wars') {
+                revealCloudWars(content);
             } else {
                 // Standard fade in for other eras
                 content.style.opacity = '0';
@@ -354,5 +356,126 @@ function startWaveEffect(paragraph) {
         }
     }, 50); // Speed of the wave
 
+    paragraph.dataset.waveInterval = intervalId;
+}
+
+/**
+ * Cloud Wars reveal with hash-decode effect
+ * Text starts as random hash characters, then decodes letter by letter
+ */
+function revealCloudWars(content) {
+    const textElement = document.getElementById('cloud-wars-text');
+    
+    if (!textElement) return;
+    
+    const originalText = textElement.textContent;
+    const chars = Array.from(originalText);
+    
+    // Create hash characters (0-9, A-F for hex-like appearance)
+    const hashChars = '0123456789ABCDEF';
+    function randomHashChar() {
+        return hashChars[Math.floor(Math.random() * hashChars.length)];
+    }
+    
+    // Replace text with hash
+    textElement.innerHTML = '';
+    const letterSpans = [];
+    chars.forEach((char) => {
+        const span = document.createElement('span');
+        span.className = 'letter hash-char';
+        span.dataset.original = char;
+        
+        if (char === ' ') {
+            span.textContent = ' ';
+            span.style.whiteSpace = 'pre';
+        } else {
+            span.textContent = randomHashChar();
+        }
+        
+        textElement.appendChild(span);
+        letterSpans.push(span);
+    });
+    
+    // Show with hash
+    content.style.opacity = '1';
+    
+    // Decode effect - randomize each letter rapidly then settle to original
+    setTimeout(() => {
+        // Phase 1: Rapid randomization (creates "decoding" effect)
+        let randomizeCount = 0;
+        const maxRandomize = 8;
+        
+        const randomizeInterval = setInterval(() => {
+            letterSpans.forEach(span => {
+                if (span.textContent !== ' ' && span.textContent !== span.dataset.original) {
+                    span.textContent = randomHashChar();
+                }
+            });
+            
+            randomizeCount++;
+            if (randomizeCount >= maxRandomize) {
+                clearInterval(randomizeInterval);
+                
+                // Phase 2: Decode letters one by one from start to end
+                let decodeIndex = 0;
+                const decodeInterval = setInterval(() => {
+                    if (decodeIndex < letterSpans.length) {
+                        const span = letterSpans[decodeIndex];
+                        if (span.textContent !== ' ') {
+                            span.textContent = span.dataset.original;
+                            span.classList.remove('hash-char');
+                            span.classList.add('decoded');
+                        }
+                        decodeIndex++;
+                    } else {
+                        clearInterval(decodeInterval);
+                        
+                        // Phase 3: Start wave effect after decode completes
+                        setTimeout(() => {
+                            startCloudWarsWave(textElement);
+                        }, 300);
+                    }
+                }, 30); // Fast decode
+            }
+        }, 80); // Rapid randomization speed
+    }, 100);
+}
+
+/**
+ * Cloud Wars wave effect - blockchain-inspired hex wave
+ * Shows hex values (#00FF88) flowing through the text
+ */
+function startCloudWarsWave(paragraph) {
+    const letters = paragraph.querySelectorAll('.letter');
+    if (letters.length === 0) return;
+    
+    // Build list of non-space indices
+    const validIndices = [];
+    letters.forEach((letter, index) => {
+        if (letter.textContent.trim() !== '') {
+            validIndices.push(index);
+        }
+    });
+    
+    if (validIndices.length === 0) return;
+    
+    // Create wave sequence starting from beginning
+    let wavePosition = 0;
+    const waveLength = 15; // How many letters are highlighted at once
+    
+    const intervalId = setInterval(() => {
+        // Clear all highlights
+        letters.forEach(letter => letter.classList.remove('hex-glow'));
+        
+        // Apply glow to wave window
+        for (let i = 0; i < waveLength; i++) {
+            const index = (wavePosition + i) % validIndices.length;
+            const letterIndex = validIndices[index];
+            letters[letterIndex].classList.add('hex-glow');
+        }
+        
+        wavePosition = (wavePosition + 1) % validIndices.length;
+    }, 60); // Wave speed
+    
     paragraph.dataset.waveInterval = intervalId;
 }
