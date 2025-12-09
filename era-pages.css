@@ -1,0 +1,165 @@
+/* ============================================
+   Era Pages - Terminal Aesthetic with Green Glow
+   ============================================ */
+
+/* Era Hero Section */
+.era-hero {
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.era-title {
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.era-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+}
+
+/* Era Section */
+.era-section {
+    padding: var(--spacing-xl) 0;
+}
+
+/* Era Terminal - Green Phosphor Glow */
+.era-terminal {
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.4),
+                0 0 60px rgba(0, 255, 136, 0.2),
+                inset 0 0 30px rgba(0, 255, 136, 0.05);
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.era-terminal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: var(--bg-primary);
+    padding: 1rem;
+    font-family: var(--font-mono);
+    border-bottom: 1px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.terminal-prompt {
+    color: var(--accent-primary);
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+.terminal-text {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    animation: terminalGlow 2s ease-in-out infinite;
+}
+
+@keyframes terminalGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); }
+    50% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.9); }
+}
+
+/* Terminal Content */
+.terminal-content {
+    padding: 2rem;
+    background: var(--bg-secondary);
+    min-height: 200px;
+    position: relative;
+    z-index: 2;
+}
+
+.terminal-content p {
+    color: var(--accent-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.4);
+    margin-bottom: 1rem;
+}
+
+.terminal-content p:last-child {
+    margin-bottom: 0;
+}
+
+.coming-soon {
+    color: var(--accent-secondary);
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Scanlines Effect */
+.era-terminal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    pointer-events: none;
+    z-index: 3;
+    animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(10px); }
+}
+
+/* Era Navigation */
+.era-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.era-nav .btn {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .era-nav {
+        flex-direction: column;
+    }
+
+    .era-nav .btn {
+        width: 100%;
+    }
+
+    .terminal-content {
+        padding: 1.5rem;
+    }
+}
