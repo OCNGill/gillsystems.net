@@ -42,16 +42,17 @@
             <div class="era-terminal">
                 <div class="terminal-header">
                     <span class="terminal-prompt">C:\> </span>
-                    <span class="terminal-text">AI_ERA.EXE</span>
+                    <span class="terminal-text" id="ai-loader">LOADING AI_ERA.EXE...</span>
                 </div>
                 <div class="terminal-content">
-                    <p class="coming-soon">🤖 Coming Soon...</p>
-                    <p>The AI Era story is being written. From ChatGPT to autonomous systems, Gillsystems helps you harness AI without losing control of your technology and your data.</p>
+                    <div id="ai-content" style="display: none;">
+                        <!-- AI generated text will appear here -->
+                    </div>
                 </div>
             </div>
 
             <div class="era-nav">
-                <a href="index.html#home" class="btn btn-secondary">← Back to Home</a>
+                <a href="cloud-wars.html" class="btn btn-secondary">← Previous Era</a>
             </div>
         </div>
     </section>
@@ -70,5 +71,7 @@
             </div>
         </div>
     </footer>
+
+    <script src="ai-era.js"></script>
 </body>
 </html>
