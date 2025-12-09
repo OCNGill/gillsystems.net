@@ -39,20 +39,20 @@
     <!-- Era Terminal Content -->
     <section class="era-section">
         <div class="container">
-            <div class="era-terminal">
+            <div class="era-terminal expansion-era" data-era="expansion" data-year="2000-2010">
                 <div class="terminal-header">
                     <span class="terminal-prompt">C:\> </span>
-                    <span class="terminal-text">EXPANSION_ERA.EXE</span>
+                    <span class="terminal-text" id="expansion-loader">LOADING EXPANSION_ERA.EXE...</span>
                 </div>
-                <div class="terminal-content">
-                    <p class="coming-soon">🏗️ Coming Soon...</p>
-                    <p>The Expansion Era story is being written. Check back soon for the full narrative of how Gillsystems grew from a passionate startup into a trusted community resource for custom builds and technical expertise.</p>
+                <div class="terminal-content hidden" id="expansion-content">
+                    <p>PoliSci/Legal Studies degree, but spent nights unlocking Phenom 550BEs and building triple-GPU monsters. Started with law library databases, moved to Inmagic Software as Business Development, then discovered I could solve more problems in the car business. By 2010, I'd built the original Gillsystems site, mastered Linux, and was donating compute cycles to BOINC (should've mined Bitcoin, stayed altruistic instead). The decade taught me that real solutions come from understanding both the tech AND the business—a lesson that shaped everything since.</p>
                 </div>
+                <div class="scanlines hidden" id="expansion-scanlines"></div>
             </div>
 
             <div class="era-nav">
                 <a href="index.html#home" class="btn btn-secondary">← Back to Home</a>
-                <a href="convergence.html" class="btn btn-secondary">Next Era →</a>
+                <a href="dark-ages.html" class="btn btn-secondary">Next Era →</a>
             </div>
         </div>
     </section>
@@ -71,5 +71,7 @@
             </div>
         </div>
     </footer>
+
+    <script src="era-boot.js"></script>
 </body>
 </html>
