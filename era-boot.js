@@ -371,6 +371,11 @@ function revealCloudWars(content) {
     const originalText = textElement.textContent;
     const chars = Array.from(originalText);
     
+    // Define the phrase to keep white
+    const keepWhitePhrase = "Cloud Wars (2017-2023)";
+    const keepWhiteStart = originalText.indexOf(keepWhitePhrase);
+    const keepWhiteEnd = keepWhiteStart + keepWhitePhrase.length;
+    
     // Create hash characters (0-9, A-F for hex-like appearance)
     const hashChars = '0123456789ABCDEF';
     function randomHashChar() {
@@ -380,10 +385,15 @@ function revealCloudWars(content) {
     // Replace text with hash
     textElement.innerHTML = '';
     const letterSpans = [];
-    chars.forEach((char) => {
+    chars.forEach((char, index) => {
         const span = document.createElement('span');
         span.className = 'letter hash-char';
         span.dataset.original = char;
+        
+        // Mark characters that should stay white
+        if (index >= keepWhiteStart && index < keepWhiteEnd) {
+            span.classList.add('keep-white');
+        }
         
         if (char === ' ') {
             span.textContent = ' ';
@@ -424,7 +434,10 @@ function revealCloudWars(content) {
                         if (span.textContent !== ' ') {
                             span.textContent = span.dataset.original;
                             span.classList.remove('hash-char');
-                            span.classList.add('decoded');
+                            // Don't add 'decoded' class if it should stay white
+                            if (!span.classList.contains('keep-white')) {
+                                span.classList.add('decoded');
+                            }
                         }
                         decodeIndex++;
                     } else {
