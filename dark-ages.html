@@ -39,19 +39,23 @@
     <!-- Era Terminal Content -->
     <section class="era-section">
         <div class="container">
-            <div class="era-terminal">
+            <div class="era-terminal dark-ages-era" data-era="dark_ages">
                 <div class="terminal-header">
-                    <span class="terminal-prompt">C:\> </span>
-                    <span class="terminal-text">DARK_AGES.EXE</span>
+                    <span class="terminal-prompt">C:\></span>
+                    <span class="terminal-text" id="dark_ages-loader">LOADING DARK_AGES.EXE...</span>
+                    <span class="terminal-typed-text" id="terminal-typed-text"></span>
+                    <span class="terminal-cursor" id="terminal-cursor">_</span>
                 </div>
-                <div class="terminal-content">
-                    <p class="coming-soon">🌐 Coming Soon...</p>
-                    <p>The Dark Ages story is being written. This was when technology platforms began converging and Gillsystems adapted to serve the changing landscape.</p>
+                <div class="terminal-content hidden" id="dark_ages-content">
+                    <p class="dark-ages-part1" id="dark-ages-part1">Dark Ages (2010-2016): Maintained dealership systems when allowed, sold cars when I had to. The tech world evolved—I watched from the sidelines, keeping skills sharp enough to stay relevant but not sharp enough to lead. Sometimes you have to tear down to the studs 💪 before you can build something bulletproof 🤖. Woburn taught me family and friends matter, Amherst taught me to question everything, Salem taught me humility, Plymouth renewed everything.</p>
+                    <p class="dark-ages-part2 hidden" id="dark-ages-part2">Every architect knows: sometimes you have to let the old system die completely before the new architecture can emerge. 2016 ended with me betting everything on AMD's Ryzen architecture—both of us had been written off, both of us saw the future differently. That parallel rebuild launched everything that came next.</p>
+                    <p class="terminal-note hidden" id="dark-ages-note">Note: Even AMD was in the wilderness during these years—<a href="https://www.reddit.com/r/buildapc/comments/nx38gj/was_amd_really_that_bad_before_ryzen/" target="_blank" rel="noopener">Reddit remembers the Bulldozer dark times</a> and <a href="https://www.youtube.com/watch?v=RTA3Ls-WAcw" target="_blank" rel="noopener">this video</a> captures the pain perfectly. Sometimes the best companies need their dark age before the comeback.</p>
                 </div>
+                <div class="scanlines hidden" id="dark_ages-scanlines"></div>
             </div>
 
             <div class="era-nav">
-                <a href="index.html#home" class="btn btn-secondary">← Back to Home</a>
+                <a href="expansion-era.html" class="btn btn-secondary">← Previous Era</a>
                 <a href="cloud-wars.html" class="btn btn-secondary">Next Era →</a>
             </div>
         </div>
@@ -71,5 +75,7 @@
             </div>
         </div>
     </footer>
+
+    <script src="era-boot.js"></script>
 </body>
 </html>
