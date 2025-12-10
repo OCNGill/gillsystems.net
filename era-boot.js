@@ -121,21 +121,55 @@ function bootEra(terminal) {
             content.classList.remove('hidden');
             scanlines.classList.remove('hidden');
             
+            // Start the terminal typing animation for ALL eras
+            const eraType = terminal.dataset.era;
+            let typedTextId, cursorId;
+            
+            // Map era types to their unique IDs
+            switch(eraType) {
+                case 'dark_ages':
+                    typedTextId = 'terminal-typed-text';
+                    cursorId = 'terminal-cursor';
+                    break;
+                case 'cloud_wars':
+                    typedTextId = 'cloud-terminal-typed-text';
+                    cursorId = 'cloud-terminal-cursor';
+                    break;
+                case 'ai_era':
+                    typedTextId = 'ai-terminal-typed-text';
+                    cursorId = 'ai-terminal-cursor';
+                    break;
+                case 'expansion':
+                    typedTextId = 'expansion-terminal-typed-text';
+                    cursorId = 'expansion-terminal-cursor';
+                    break;
+                case 'foundation':
+                    typedTextId = 'foundation-terminal-typed-text';
+                    cursorId = 'foundation-terminal-cursor';
+                    break;
+            }
+            
+            // Start typing animation after a brief delay
+            setTimeout(() => {
+                const typedText = document.getElementById(typedTextId);
+                const cursor = document.getElementById(cursorId);
+                if (typedText && cursor) {
+                    startTerminalTyping(typedText, cursor, loader);
+                }
+            }, 800);
+            
             // Check if this is Dark Ages era for special two-part reveal
             if (terminal.dataset.era === 'dark_ages') {
                 revealDarkAges(content);
-                
-                // Start the terminal typing animation after content reveals
-                setTimeout(() => {
-                    const typedText = document.getElementById('terminal-typed-text');
-                    const cursor = document.getElementById('terminal-cursor');
-                    const loader = document.getElementById('dark_ages-loader');
-                    if (typedText && cursor && loader) {
-                        startTerminalTyping(typedText, cursor, loader);
-                    }
-                }, 1000);
             } else if (terminal.dataset.era === 'cloud_wars') {
                 revealCloudWars(content);
+            } else if (terminal.dataset.era === 'ai_era') {
+                // For AI era, trigger the AI generation animation
+                setTimeout(() => {
+                    if (typeof startAIGeneration === 'function') {
+                        startAIGeneration();
+                    }
+                }, 100);
             } else {
                 // Standard fade in for other eras
                 content.style.opacity = '0';

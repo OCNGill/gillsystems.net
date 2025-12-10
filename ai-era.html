@@ -39,16 +39,19 @@
     <!-- Era Terminal Content -->
     <section class="era-section">
         <div class="container">
-            <div class="era-terminal">
+            <div class="era-terminal" data-era="ai_era">
                 <div class="terminal-header">
-                    <span class="terminal-prompt">C:\> </span>
-                    <span class="terminal-text" id="ai-loader">LOADING AI_ERA.EXE...</span>
+                    <span class="terminal-prompt">C:\></span>
+                    <span class="terminal-text" id="ai_era-loader">LOADING AI_ERA.EXE...</span>
+                    <span class="terminal-typed-text" id="ai-terminal-typed-text"></span>
+                    <span class="terminal-cursor" id="ai-terminal-cursor">_</span>
                 </div>
-                <div class="terminal-content">
+                <div class="terminal-content hidden" id="ai_era-content">
                     <div id="ai-content" style="display: none;">
                         <!-- AI generated text will appear here -->
                     </div>
                 </div>
+                <div class="scanlines hidden" id="ai_era-scanlines"></div>
             </div>
 
             <div class="era-nav">
@@ -72,6 +75,7 @@
         </div>
     </footer>
 
+    <script src="era-boot.js"></script>
     <script src="ai-era.js"></script>
 </body>
 </html>
