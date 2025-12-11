@@ -39,7 +39,7 @@ function startTerminalTyping(typedText, cursor, loader) {
         if (currentIndex < text.length) {
             typedText.textContent = text.substring(0, currentIndex + 1);
             currentIndex++;
-            setTimeout(typeNextChar, 350);
+            setTimeout(typeNextChar, 280); // Sped up 1.25x from 350ms
         } else {
             // Typing complete, show enter key animation
             setTimeout(() => {
@@ -158,11 +158,15 @@ function bootEra(terminal) {
                 }
             }, 800);
             
-            // Check if this is Dark Ages era for special two-part reveal
+            // Apply hash-decode effect to eras
             if (terminal.dataset.era === 'dark_ages') {
-                revealDarkAges(content);
+                revealDarkAgesWithHash(content);
             } else if (terminal.dataset.era === 'cloud_wars') {
                 revealCloudWars(content);
+            } else if (terminal.dataset.era === 'foundation') {
+                revealWithHashDecode(content, 'foundation-text', 'Foundation Era (1992-2000)');
+            } else if (terminal.dataset.era === 'expansion') {
+                revealWithHashDecode(content, 'expansion-text', 'Expansion Era (2000-2010)');
             } else if (terminal.dataset.era === 'ai_era') {
                 // For AI era, trigger the AI generation animation
                 setTimeout(() => {
@@ -394,6 +398,204 @@ function startWaveEffect(paragraph) {
 }
 
 /**
+ * Generic hash-decode reveal with wave effect
+ * Used for Foundation, Expansion, and Dark Ages eras
+ */
+function revealWithHashDecode(content, textElementId, keepWhitePhrase) {
+    const textElement = document.getElementById(textElementId);
+    
+    if (!textElement) return;
+    
+    const originalText = textElement.textContent;
+    const chars = Array.from(originalText);
+    
+    // Find the phrase to keep white
+    const keepWhiteStart = originalText.indexOf(keepWhitePhrase);
+    const keepWhiteEnd = keepWhiteStart + keepWhitePhrase.length;
+    
+    // Create hash characters (0-9, A-F for hex-like appearance)
+    const hashChars = '0123456789ABCDEF';
+    function randomHashChar() {
+        return hashChars[Math.floor(Math.random() * hashChars.length)];
+    }
+    
+    // Replace text with hash
+    textElement.innerHTML = '';
+    const letterSpans = [];
+    chars.forEach((char, index) => {
+        const span = document.createElement('span');
+        span.className = 'letter hash-char';
+        span.dataset.original = char;
+        
+        // Mark characters that should stay white
+        if (index >= keepWhiteStart && index < keepWhiteEnd) {
+            span.classList.add('keep-white');
+        }
+        
+        if (char === ' ') {
+            span.textContent = ' ';
+            span.style.whiteSpace = 'pre';
+        } else {
+            span.textContent = randomHashChar();
+        }
+        
+        textElement.appendChild(span);
+        letterSpans.push(span);
+    });
+    
+    // Show with hash
+    content.style.opacity = '1';
+    
+    // Decode effect - randomize each letter rapidly then settle to original
+    setTimeout(() => {
+        // Phase 1: Rapid randomization (creates "decoding" effect)
+        let randomizeCount = 0;
+        const maxRandomize = 8;
+        
+        const randomizeInterval = setInterval(() => {
+            letterSpans.forEach(span => {
+                if (span.textContent !== ' ' && span.textContent !== span.dataset.original) {
+                    span.textContent = randomHashChar();
+                }
+            });
+            
+            randomizeCount++;
+            if (randomizeCount >= maxRandomize) {
+                clearInterval(randomizeInterval);
+                
+                // Phase 2: Decode letters one by one from start to end
+                let decodeIndex = 0;
+                const decodeInterval = setInterval(() => {
+                    if (decodeIndex < letterSpans.length) {
+                        const span = letterSpans[decodeIndex];
+                        if (span.textContent !== ' ') {
+                            span.textContent = span.dataset.original;
+                            span.classList.remove('hash-char');
+                            // Don't add 'decoded' class if it should stay white
+                            if (!span.classList.contains('keep-white')) {
+                                span.classList.add('decoded');
+                            }
+                        }
+                        decodeIndex++;
+                    } else {
+                        clearInterval(decodeInterval);
+                        
+                        // Phase 3: Start wave effect after decode completes
+                        setTimeout(() => {
+                            startGenericWave(textElement);
+                        }, 300);
+                    }
+                }, 24); // Fast decode (sped up 1.25x)
+            }
+        }, 64); // Rapid randomization speed (sped up 1.25x)
+    }, 100);
+}
+
+/**
+ * Dark Ages reveal with hash-decode effect on both paragraphs
+ * Shows first paragraph, then second, then note
+ */
+function revealDarkAgesWithHash(content) {
+    const text1 = document.getElementById('dark-ages-text');
+    const text2 = document.getElementById('dark-ages-text-2');
+    const note = document.getElementById('dark-ages-note');
+    
+    if (!text1) return;
+    
+    // Apply hash decode to first paragraph
+    revealWithHashDecode(content, 'dark-ages-text', 'Dark Ages (2010-2016)');
+    
+    // After first paragraph decodes, show second paragraph with hash
+    setTimeout(() => {
+        if (text2) {
+            text2.style.display = 'block';
+            text2.style.opacity = '0';
+            setTimeout(() => {
+                text2.style.transition = 'opacity 0.5s ease-in';
+                text2.style.opacity = '1';
+                
+                // Apply hash decode to second paragraph
+                const originalText = text2.textContent;
+                const chars = Array.from(originalText);
+                const hashChars = '0123456789ABCDEF';
+                function randomHashChar() {
+                    return hashChars[Math.floor(Math.random() * hashChars.length)];
+                }
+                
+                text2.innerHTML = '';
+                const letterSpans = [];
+                chars.forEach((char) => {
+                    const span = document.createElement('span');
+                    span.className = 'letter hash-char';
+                    span.dataset.original = char;
+                    
+                    if (char === ' ') {
+                        span.textContent = ' ';
+                        span.style.whiteSpace = 'pre';
+                    } else {
+                        span.textContent = randomHashChar();
+                    }
+                    
+                    text2.appendChild(span);
+                    letterSpans.push(span);
+                });
+                
+                // Decode second paragraph
+                setTimeout(() => {
+                    let randomizeCount = 0;
+                    const maxRandomize = 8;
+                    
+                    const randomizeInterval = setInterval(() => {
+                        letterSpans.forEach(span => {
+                            if (span.textContent !== ' ' && span.textContent !== span.dataset.original) {
+                                span.textContent = randomHashChar();
+                            }
+                        });
+                        
+                        randomizeCount++;
+                        if (randomizeCount >= maxRandomize) {
+                            clearInterval(randomizeInterval);
+                            
+                            let decodeIndex = 0;
+                            const decodeInterval = setInterval(() => {
+                                if (decodeIndex < letterSpans.length) {
+                                    const span = letterSpans[decodeIndex];
+                                    if (span.textContent !== ' ') {
+                                        span.textContent = span.dataset.original;
+                                        span.classList.remove('hash-char');
+                                        span.classList.add('decoded');
+                                    }
+                                    decodeIndex++;
+                                } else {
+                                    clearInterval(decodeInterval);
+                                    
+                                    // Start wave on second paragraph
+                                    setTimeout(() => {
+                                        startGenericWave(text2);
+                                    }, 300);
+                                    
+                                    // Show note after second paragraph
+                                    setTimeout(() => {
+                                        if (note) {
+                                            note.style.display = 'block';
+                                            note.style.opacity = '0';
+                                            setTimeout(() => {
+                                                note.style.transition = 'opacity 0.5s ease-in';
+                                                note.style.opacity = '1';
+                                            }, 50);
+                                        }
+                                    }, 500);
+                                }
+                            }, 24);
+                        }
+                    }, 64);
+                }, 100);
+            }, 50);
+        }
+    }, 2000); // Wait for first paragraph to complete
+}
+
+/**
  * Cloud Wars reveal with hash-decode effect
  * Text starts as random hash characters, then decodes letter by letter
  */
@@ -482,9 +684,9 @@ function revealCloudWars(content) {
                             startCloudWarsWave(textElement);
                         }, 300);
                     }
-                }, 30); // Fast decode
+                }, 24); // Fast decode (sped up 1.25x)
             }
-        }, 80); // Rapid randomization speed
+        }, 64); // Rapid randomization speed (sped up 1.25x)
     }, 100);
 }
 
@@ -493,6 +695,45 @@ function revealCloudWars(content) {
  * Shows hex values (#00FF88) flowing through the text
  */
 function startCloudWarsWave(paragraph) {
+    const letters = paragraph.querySelectorAll('.letter');
+    if (letters.length === 0) return;
+    
+    // Build list of non-space indices
+    const validIndices = [];
+    letters.forEach((letter, index) => {
+        if (letter.textContent.trim() !== '') {
+            validIndices.push(index);
+        }
+    });
+    
+    if (validIndices.length === 0) return;
+    
+    // Create wave sequence starting from beginning
+    let wavePosition = 0;
+    const waveLength = 15; // How many letters are highlighted at once
+    
+    const intervalId = setInterval(() => {
+        // Clear all highlights
+        letters.forEach(letter => letter.classList.remove('hex-glow'));
+        
+        // Apply glow to wave window
+        for (let i = 0; i < waveLength; i++) {
+            const index = (wavePosition + i) % validIndices.length;
+            const letterIndex = validIndices[index];
+            letters[letterIndex].classList.add('hex-glow');
+        }
+        
+        wavePosition = (wavePosition + 1) % validIndices.length;
+    }, 60); // Wave speed
+    
+    paragraph.dataset.waveInterval = intervalId;
+}
+
+/**
+ * Generic wave effect - same as Cloud Wars
+ * Shows white letters flowing through the text
+ */
+function startGenericWave(paragraph) {
     const letters = paragraph.querySelectorAll('.letter');
     if (letters.length === 0) return;
     

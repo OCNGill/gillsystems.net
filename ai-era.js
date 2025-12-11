@@ -73,6 +73,7 @@ const fullText = "Left the dealership world as industry consolidation made indep
         // Create heading
         const heading = document.createElement('div');
         heading.className = 'ai-heading';
+        heading.style.color = '#ffffff'; // White text for title
         heading.textContent = 'AI Era - what does it really mean?';
         container.appendChild(heading);
 
@@ -91,62 +92,142 @@ const fullText = "Left the dealership world as industry consolidation made indep
         textDiv.appendChild(cursor);
         container.appendChild(textDiv);
 
-        // Stream words with white-to-green effect
+        // Create a hidden hash version in background
+        const hashChars = '0123456789ABCDEF';
+        
+        // Pre-populate with hashed version of full text
         const words = fullText.split(' ');
-
-        for (let i = 0; i < words.length; i++) {
-            // Add word with space (preserve line breaks)
-            const wordToAdd = i === 0 ? words[i] : ' ' + words[i];
-
-            // Check if this is part of the bold phrase
-            const boldPhrase = "AI-augmented systems that amplify human capability,";
-            const currentText = textSpan.textContent + wordToAdd;
-
-            // Create word span
+        const letterSpanMap = {}; // Track all letter spans by index
+        let globalLetterIndex = 0;
+        
+        words.forEach((word, wordIdx) => {
+            const wordToAdd = wordIdx === 0 ? word : ' ' + word;
             const wordSpan = document.createElement('span');
             wordSpan.className = 'word';
-            wordSpan.textContent = wordToAdd;
-
-            // Check if word is part of bold phrase
-            if (boldPhrase.includes(words[i])) {
+            
+            if ('AI-augmented systems that amplify human capability,'.includes(word)) {
                 wordSpan.classList.add('bold-glow');
             }
-
-            // Start as white
-            wordSpan.style.color = '#ffffff';
+            
+            // Create letter spans for all characters (hash initially)
+            const chars = Array.from(wordToAdd);
+            chars.forEach(char => {
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'ai-letter';
+                letterSpan.dataset.original = char;
+                letterSpan.dataset.index = globalLetterIndex;
+                letterSpanMap[globalLetterIndex] = letterSpan;
+                
+                if (char === ' ' || char === '\n') {
+                    letterSpan.textContent = char;
+                    letterSpan.style.whiteSpace = 'pre';
+                } else {
+                    // Start fully hashed
+                    letterSpan.textContent = hashChars[Math.floor(Math.random() * hashChars.length)];
+                    letterSpan.style.color = '#666'; // dim gray hash
+                }
+                
+                wordSpan.appendChild(letterSpan);
+                globalLetterIndex++;
+            });
+            
             textSpan.appendChild(wordSpan);
-
-            // Transition to green after a moment
+        });
+        
+        // Now stream the reveal: hash -> white -> green
+        const words2 = fullText.split(' ');
+        let revealIndex = 0;
+        
+        for (let i = 0; i < words2.length; i++) {
+            // Reveal word-by-word
+            const wordToAdd = i === 0 ? words2[i] : ' ' + words2[i];
+            const wordLength = Array.from(wordToAdd).length;
+            
+            // After word delay, start revealing its letters
             setTimeout(() => {
-                wordSpan.style.color = '';
-            }, 150);
-
-            // Variable delay for natural feel (80-120ms - slower)
-            const delay = 80 + Math.random() * 40;
-            await new Promise(r => setTimeout(r, delay));
+                // For each letter in this word, do the decode animation
+                for (let j = 0; j < wordLength; j++) {
+                    const letterIdx = revealIndex + j;
+                    const letterSpan = letterSpanMap[letterIdx];
+                    if (letterSpan && letterSpan.textContent !== ' ' && letterSpan.textContent !== '\n') {
+                        // Hash flicker phase (40ms per flicker, 5-9 flickers)
+                        const randomizeCount = 5 + Math.floor(Math.random() * 4);
+                        let flickerCount = 0;
+                        
+                        const flickerInterval = setInterval(() => {
+                            letterSpan.textContent = hashChars[Math.floor(Math.random() * hashChars.length)];
+                            flickerCount++;
+                            
+                            if (flickerCount >= randomizeCount) {
+                                clearInterval(flickerInterval);
+                                
+                                // Reveal as white
+                                setTimeout(() => {
+                                    letterSpan.textContent = letterSpan.dataset.original;
+                                    letterSpan.style.color = '#ffffff';
+                                    
+                                    // Fade to green
+                                    setTimeout(() => {
+                                        letterSpan.style.transition = 'color 0.3s ease';
+                                        letterSpan.style.color = '';
+                                    }, 250);
+                                }, j * 25); // Stagger within word
+                            }
+                        }, 40); // Hash flicker speed
+                    }
+                }
+                
+                revealIndex += wordLength;
+            }, i * 165); // Word reveal delay (slower - 150-200ms range was 80-120ms)
         }
 
-        // Generation complete - add CTA prompt
+        // Generation complete - insert CTA component
         await new Promise(r => setTimeout(r, 500));
-
-        const ctaDiv = document.createElement('div');
-        ctaDiv.className = 'ai-cta';
-        ctaDiv.innerHTML = `
-            <div class="cta-line">
-                <span class="terminal-prompt">C:\\></span>
-                <span class="cta-text">Let's amplify your capabilities! 💪👍</span>
-            </div>
-            <div class="cta-links">
-                <a href="index.html#connect" class="cta-link">→ Get in Touch</a>
-            </div>
-        `;
-        container.appendChild(ctaDiv);
-
-        // Fade in CTA
-        setTimeout(() => {
-            ctaDiv.style.opacity = '1';
-        }, 50);
+        
+        // Start white wave effect on all text
+        startAIWaveEffect(textSpan);
+        
+        // Use the reusable CTA component
+        insertCTA('ai-content');
 
         // Keep cursor blinking
         cursor.style.animation = 'blink 1s infinite';
+    }
+
+    /**
+     * Wave effect for AI generated text
+     */
+    function startAIWaveEffect(textContainer) {
+        const letters = textContainer.querySelectorAll('.ai-letter');
+        if (letters.length === 0) return;
+        
+        // Build list of non-space indices
+        const validIndices = [];
+        letters.forEach((letter, index) => {
+            if (letter.textContent.trim() !== '') {
+                validIndices.push(index);
+            }
+        });
+        
+        if (validIndices.length === 0) return;
+        
+        // Create wave sequence
+        let wavePosition = 0;
+        const waveLength = 15; // How many letters are highlighted at once
+        
+        const intervalId = setInterval(() => {
+            // Clear all wave highlights
+            letters.forEach(letter => letter.classList.remove('ai-wave-active'));
+            
+            // Apply wave highlight
+            for (let i = 0; i < waveLength; i++) {
+                const index = (wavePosition + i) % validIndices.length;
+                const letterIndex = validIndices[index];
+                letters[letterIndex].classList.add('ai-wave-active');
+            }
+            
+            wavePosition = (wavePosition + 1) % validIndices.length;
+        }, 60); // Wave speed
+        
+        textContainer.dataset.waveInterval = intervalId;
     }

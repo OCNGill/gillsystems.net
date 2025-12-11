@@ -63,6 +63,7 @@
                 </div>
                 <div class="terminal-content hidden" id="cloud_wars-content">
                     <p class="cloud-wars-text" id="cloud-wars-text">Cloud Wars (2017-2023): Joined Tracy Chevrolet building a BDC that moved serious metal: $143K custom Corvette builds, $176K Escalade Vs, all sold remotely while architecting the Tekion conversion and managing the entire tech stack. When COVID hit, we'd already built the infrastructure to keep selling; saved $25K on system upgrades by knowing exactly where to invest. Proved that the best systems architect is one who understands both the backend AND the bottom line—tech excellence that directly drives revenue.</p>
+                    <div id="cloud-wars-cta-container"></div>
                 </div>
                 <div class="scanlines hidden" id="cloud_wars-scanlines"></div>
             </div>
@@ -89,5 +90,14 @@
         </div>
     </footer>
     <script src="era-boot.js"></script>
+    <script src="cta-component.js"></script>
+    <script>
+        // Insert CTA after content loads and effects complete
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                insertCTA('cloud-wars-cta-container');
+            }, 3000); // Wait for hash decode + wave
+        });
+    </script>
 </body>
 </html>
