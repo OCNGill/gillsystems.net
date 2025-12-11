@@ -469,6 +469,35 @@
     }
 }
 
+/* Sound Toggle Button */
+.cta-sound-toggle {
+    background: none;
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.35rem 0.5rem;
+    margin-left: 0.75rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2rem;
+}
+
+.cta-sound-toggle:hover {
+    background: rgba(0, 255, 136, 0.15);
+    box-shadow: 0 0 8px var(--accent-primary);
+    transform: scale(1.05);
+}
+
+.cta-sound-toggle:active {
+    transform: scale(0.95);
+}
+
 /* Portal effect on hover */
 .cta-emoji-portal {
     animation: emojiPortal 0.6s ease-out !important;
