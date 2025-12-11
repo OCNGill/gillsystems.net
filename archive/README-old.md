@@ -1,4 +1,4 @@
-# GillSystems.net - 2025 Reboot
+# GillSystems.net - 2025 Reboot (ARCHIVED)
 
 **"Systems Should Serve Humans"**
 
@@ -187,39 +187,56 @@ Small:    < 480px
 - [ ] Newsletter signup
 - [ ] Download resource (whitepaper/guide)
 
+## 🛠️ Build Commands
+
+```bash
+# No build process yet - pure HTML/CSS
+# Future: Add build pipeline if needed
+
+# Validate HTML
+npx html-validate index.html
+
+# Validate CSS
+npx stylelint styles.css
+
+# Check links
+npx hyperlink index.html
+```
+
+## 📝 Content Guidelines
+
+### Voice & Tone
+- **Direct, no BS:** Like original 2010 site
+- **Technically competent:** Show expertise without jargon
+- **Human-first:** Systems serve people
+- **Confident:** 30 years of experience backing it up
+
+### Writing Style
+- Short paragraphs (2-3 sentences)
+- Active voice
+- Concrete examples over abstractions
+- "You" language, not "we" or "I" (except Commander's Message)
+
+## 🎨 Asset Credits
+
+- **Logo:** Original design by Ronny Slater (2002)
+- **Typography:** System fonts for performance
+- **Icons:** Emoji for universal compatibility
+
+## 🔒 Important Notes
+
+**CRITICAL RULE:** If you get stuck anywhere during development - STOP IMMEDIATELY
+- Don't try to work around issues
+- Document the specific problem
+- Ask for help fixing it
+- Never push through errors
+
 ## 📞 Contact
 
 **Commander Stephen Gill**
 - Email: gillsystems@gmail.com
 - GitHub: @OCNGill
 - LinkedIn: https://www.linkedin.com/in/stephen-gill-66004b6/
-
----
-
-## 💖 Support / Donate
-
-If you find this project helpful, you can support ongoing work — thank you!
-
-<p align="center">
-	<img src="assets/Readme Donation files/qr-paypal.png" alt="PayPal QR code" width="180" style="margin:8px;">
-	<img src="assets/Readme Donation files/qr-venmo.png" alt="Venmo QR code" width="180" style="margin:8px;">
-</p>
-
-**Donate:**
-
-- [![PayPal](https://img.shields.io/badge/PayPal-Donate-009cde?logo=paypal&logoColor=white)](https://paypal.me/gillsystems) https://paypal.me/gillsystems
-- [![Venmo](https://img.shields.io/badge/Venmo-Donate-3d95ce?logo=venmo&logoColor=white)](https://venmo.com/Stephen-Gill-007) https://venmo.com/Stephen-Gill-007
-
----
-
-<p align="center">
-	<img src="assets/Readme Donation files/Gillsystems_logo_with_donation_qrcodes.png" alt="Gillsystems logo with QR codes and icons" width="800">
-</p>
-
-<p align="center">
-	<a href="https://paypal.me/gillsystems"><img src="assets/Readme Donation files/paypal_icon.png" alt="PayPal" width="32" style="vertical-align:middle;"></a>
-	<a href="https://venmo.com/Stephen-Gill-007"><img src="assets/Readme Donation files/venmo_icon.png" alt="Venmo" width="32" style="vertical-align:middle;"></a>
-</p>
 
 ---
 
