@@ -47,7 +47,7 @@
                     <span class="terminal-cursor" id="dt-terminal-cursor">_</span>
                 </div>
                 <div class="terminal-content hidden" id="dt-content">
-                    <p class="solution-text" id="dt-text"><white>What are your employees bitching about? The inventory system that takes five screens to find one part? The reports that eat half their morning?</white> <white><strong>2025</strong></white> doesn't care about your comfort zone—while competitors automate, standing still is moving backward.
+                    <p class="solution-text" id="dt-text"><white>What are your employees bitching about?</white> The inventory system that takes five screens to find one part? The reports that eat half their morning? <white><strong>2025</strong></white> doesn't care about your comfort zone—while competitors automate, standing still is moving backward.
 
 I transform what's <white>ACTUALLY BROKEN</white>. That Excel sheet running your business becomes a real database. Those manual processes bleeding money get automated without losing oversight. From AI that amplifies your expertise to systems that predict problems before they cost you, I modernize operations while respecting what works. No corporate transformation theater—just <white>PRACTICAL UPGRADES</white> that <span class="red-wave">stop the bleeding</span> and start you competing. Your newest hire and oldest employee both win.</p>
                     <!-- Restore original CTA container ID -->
@@ -128,19 +128,11 @@ I transform what's <white>ACTUALLY BROKEN</white>. That Excel sheet running your
     <script src="../solutions-pages.js"></script>
     <script src="../cta-component.js"></script>
     <script>
-        // Insert CTA immediately on page load
+        // Insert CTA after animations complete
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize audio system with user gesture listeners
-            setupPageGestureToInitAudio();
-            
-            // Enable sounds by default
-            if (!localStorage.getItem('soundsEnabled')) {
-                localStorage.setItem('soundsEnabled', 'true');
-                soundsEnabled = true;
-            }
-            
-            // Insert CTA immediately - no delay
-            insertCTA('dt-cta-container');
+            setTimeout(() => {
+                insertCTA('dt-cta-container');
+            }, 3000); // Wait for animations
         });
     </script>
 </body>
