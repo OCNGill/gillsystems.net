@@ -3,26 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Foundation Era (1992-2000) - Where Gillsystems began. Building battlestations and learning systems from the ground up.">
-    <title>Foundation Era (1992-2000) | Gillsystems</title>
+    <meta name="description" content="Radical Transparency - Mission control visibility across every project. Honest timelines, live dashboards, full-stack access.">
+    <title>Radical Transparency | Gillsystems</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="era-pages.css">
-    <style>
-        /* Foundation Era styling */
-        .foundation-text .letter {
-            color: #00ff88;
-        }
-        /* Keep "Foundation Era (1992-2000)" white - don't change during decode */
-        .foundation-text .keep-white {
-            color: white !important;
-        }
-        .foundation-text .decoded {
-            color: #00ff88 !important;
-        }
-        .foundation-text .hex-glow {
-            color: white !important;
-        }
-    </style>
+    <link rel="stylesheet" href="philosophy-pages.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -37,7 +21,7 @@
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="solutions.html">SOLUTIONS</a></li>
-                <li><a href="index.html#philosophy">PHILOSOPHY</a></li>
+                <li><a href="index.html#philosophy" class="active">PHILOSOPHY</a></li>
                 <li><a href="index.html#opensource">OPEN SOURCE</a></li>
                 <li><a href="index.html#connect">CONNECT</a></li>
             </ul>
@@ -47,31 +31,33 @@
     <!-- Era Hero -->
     <section class="era-hero">
         <div class="container">
-            <h1 class="era-title">Foundation Era</h1>
-            <p class="era-subtitle">1992-2000</p>
+            <h1 class="era-title">Radical Transparency</h1>
+            <p class="era-subtitle">Mission Control Visibility for Every Build</p>
         </div>
     </section>
 
     <!-- Era Terminal Content -->
     <section class="era-section">
         <div class="container">
-            <div class="era-terminal foundation-era" data-era="foundation">
+            <div class="era-terminal transparency-era" data-philosophy="transparency">
                 <div class="terminal-header">
                     <span class="terminal-prompt">C:\></span>
-                    <span class="terminal-text" id="foundation-loader">LOADING FOUNDATION_ERA.EXE...</span>
-                    <span class="terminal-typed-text" id="foundation-terminal-typed-text"></span>
-                    <span class="terminal-cursor" id="foundation-terminal-cursor">_</span>
+                    <span class="terminal-text" id="transparency-loader">LOADING RADICAL_TRANSPARENCY.EXE...</span>
+                    <span class="terminal-typed-text" id="transparency-terminal-typed-text"></span>
+                    <span class="terminal-cursor" id="transparency-terminal-cursor">_</span>
                 </div>
-                <div class="terminal-content hidden" id="foundation-content">
-                    <p class="foundation-text" id="foundation-text">Foundation Era (1992-2000): Built my first battlestation from Computer Show parts—two generations of Gills hunting deals every weekend when we could sneak money under Mom's purview (Dad, me, and my brother Roth). Spent hours hacking X-Com soldier names through hex editors (years later: discovered the click-to-edit feature). That's the Foundation Era truth: We learned by doing everything the hard way first. Even if 'doing' meant liberating Lechmere display PCs with strategic 'del c:' commands. Every overengineered solution taught me what actually mattered—making systems serve humans, not the other way around.</p>
-                    <div id="foundation-cta-container"></div>
+                <div class="terminal-content hidden" id="transparency-content">
+                    <p class="transparency-text" id="transparency-text">Every project gets <white>mission control visibility</white>. Live dashboards, actual progress, honest timelines&mdash;you see what I see. Full access to code repos, project boards, vendor communications. Whether you're a blue-collar business owner who built it with your hands or a CEO managing multiple locations, you deserve <white>informed partnership</white>. When we nail a deadline, you'll know why. When something's complex, I'll show you exactly where the challenge lives.
+
+Real partnership means no black boxes, no surprise bills, no tech-speak smokescreen. Every recommendation backed by <white>data you can verify</white>. Every process mapped, every win documented. Like having your own IT department's knowledge base, except I maintain it for you. Been building this way for years&mdash;<white>transparency creates speed</white>, not drag. Plymouth businesses deserve honesty that accelerates growth, not corporate doublespeak. Straight talk for people who value straight shooters.</p>
+                    <div id="transparency-cta-container"></div>
                 </div>
-                <div class="scanlines hidden" id="foundation-scanlines"></div>
+                <div class="scanlines hidden" id="transparency-scanlines"></div>
             </div>
 
             <div class="era-nav">
                 <a href="index.html#home" class="btn btn-secondary">← Back to Home</a>
-                <a href="expansion-era.html" class="btn btn-secondary">Next Era →</a>
+                <a href="solutions.html" class="btn btn-secondary">Explore Solutions →</a>
             </div>
         </div>
     </section>
@@ -128,14 +114,13 @@
         </div>
     </footer>
 
-    <script src="era-boot.js"></script>
+    <script src="philosophy.js"></script>
     <script src="cta-component.js"></script>
     <script>
-        // Insert CTA after hash decode + wave complete
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                insertCTA('foundation-cta-container');
-            }, 3000); // Wait for hash decode + wave
+                insertCTA('transparency-cta-container');
+            }, 3000);
         });
     </script>
 </body>

@@ -135,9 +135,9 @@ body {
 }
 
 .logo img {
-    height: 54px;
+    height: 91px;
     width: auto;
-    max-width: 150px;
+    max-width: 254px;
     object-fit: contain;
 }
 
@@ -214,7 +214,7 @@ body {
 }
 
 .hero-logo img {
-    max-width: 400px;
+    max-width: 624px;
     width: 100%;
     height: auto;
     filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3));
@@ -234,6 +234,26 @@ body {
 .hero-content {
     max-width: 800px;
     margin-bottom: var(--spacing-xl);
+}
+
+/* CTA Button Bounce Glow - synced with logo above */
+.hero-cta .btn-primary {
+    animation: btnGlowBounce 6s ease-in-out infinite;
+}
+
+.hero-cta .btn-secondary {
+    animation: btnGlowBounce 6s ease-in-out infinite;
+    animation-delay: 3s;
+}
+
+@keyframes btnGlowBounce {
+    0%, 100% { 
+        box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+    }
+    50% { 
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.6),
+                    0 0 60px rgba(0, 255, 136, 0.3);
+    }
 }
 
 .hero-title {
@@ -880,9 +900,9 @@ body {
 }
 
 .footer-logo {
-    height: 75px;
+    height: 131px;
     width: auto;
-    max-width: 200px;
+    max-width: 351px;
     object-fit: contain;
 }
 
@@ -1017,6 +1037,16 @@ body {
         font-size: 0.75rem;
     }
     
+    .logo img {
+        height: 60px;
+        max-width: 180px;
+    }
+    
+    .footer-logo {
+        height: 90px;
+        max-width: 240px;
+    }
+    
     .hero {
         min-height: auto;
         padding: var(--spacing-lg) 0;
@@ -1081,6 +1111,16 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.75rem;
+    }
+    
+    .logo img {
+        height: 50px;
+        max-width: 150px;
+    }
+    
+    .footer-logo {
+        height: 70px;
+        max-width: 190px;
     }
     
     .hero-logo img {
