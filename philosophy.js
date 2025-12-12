@@ -59,6 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 waveLength: 18,
                 waveSpeed: 70
             }
+        },
+        {
+            key: 'buildbusy',
+            loaderId: 'buildbusy-loader',
+            contentId: 'buildbusy-content',
+            scanlinesId: 'buildbusy-scanlines',
+            typedTextId: 'buildbusy-terminal-typed-text',
+            cursorId: 'buildbusy-terminal-cursor',
+            textId: 'buildbusy-text',
+            loaderMessages: [
+                'LOADING BUILD_VS_BUY.EXE...',
+                'BOOT COMPLETE.'
+            ],
+            decodeOptions: {
+                whiteTagSelector: 'white',
+                waveLength: 18,
+                waveSpeed: 70
+            }
         }
     ];
 
