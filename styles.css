@@ -34,6 +34,14 @@
     --transition-slow: 0.5s ease;
 }
 
+/* Minimal inline tag color rules
+   Only change: text color for <white>, <blue>, <yellow>
+   These correspond to the inline markers used in some solution pages.
+   Do not alter weights, layout, or other styles. */
+white { color: var(--text-primary); display: inline; }
+blue  { color: var(--accent-secondary); display: inline; }
+yellow{ color: var(--accent-warning); display: inline; }
+
 /* Reset & Base Styles */
 * {
     margin: 0;

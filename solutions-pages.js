@@ -25,6 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 redWaveSelector: 'red-wave'
             }
         }
+        ,
+        {
+            key: 'systemarchitecture',
+            loaderId: 'dt-loader',
+            contentId: 'dt-content',
+            scanlinesId: 'dt-scanlines',
+            typedTextId: 'dt-terminal-typed-text',
+            cursorId: 'dt-terminal-cursor',
+            textId: 'dt-text',
+            loaderMessages: [
+                'C:\\> LOADING SYSTEM_ARCHITECTURE.EXE...',
+                'BOOT COMPLETE.'
+            ],
+            decodeOptions: {
+                whiteTagSelector: 'white',
+                waveLength: 18,
+                waveSpeed: 70,
+                redWaveSelector: 'red-wave'
+            }
+        }
     ];
 
     configs.forEach(cfg => initSolutionTerminal(cfg));
