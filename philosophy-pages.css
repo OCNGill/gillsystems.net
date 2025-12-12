@@ -216,7 +216,8 @@
    ============================================ */
 .philosophy-text,
 .empowerment-text,
-.transparency-text {
+.transparency-text,
+.liberation-text {
     font-family: var(--font-mono);
     line-height: 1.8;
     color: var(--text-primary);
@@ -224,27 +225,31 @@
 
 .philosophy-text .letter,
 .empowerment-text .letter,
-.transparency-text .letter {
+.transparency-text .letter,
+.liberation-text .letter {
     display: inline;
     transition: color 0.2s ease;
 }
 
 .philosophy-text .hash-char,
 .empowerment-text .hash-char,
-.transparency-text .hash-char {
+.transparency-text .hash-char,
+.liberation-text .hash-char {
     color: var(--text-secondary);
     font-weight: bold;
 }
 
 .philosophy-text .decoded,
 .empowerment-text .decoded,
-.transparency-text .decoded {
+.transparency-text .decoded,
+.liberation-text .decoded {
     color: var(--accent-primary);
 }
 
 .philosophy-text .hex-glow,
 .empowerment-text .hex-glow,
-.transparency-text .hex-glow {
+.transparency-text .hex-glow,
+.liberation-text .hex-glow {
     color: white;
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
     font-weight: bold;

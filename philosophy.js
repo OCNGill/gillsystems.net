@@ -41,6 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 waveLength: 18,
                 waveSpeed: 70
             }
+        },
+        {
+            key: 'liberation',
+            loaderId: 'liberation-loader',
+            contentId: 'liberation-content',
+            scanlinesId: 'liberation-scanlines',
+            typedTextId: 'liberation-terminal-typed-text',
+            cursorId: 'liberation-terminal-cursor',
+            textId: 'liberation-text',
+            loaderMessages: [
+                'LOADING KNOWLEDGE_LIBERATION.EXE...',
+                'BOOT COMPLETE.'
+            ],
+            decodeOptions: {
+                whiteTagSelector: 'white',
+                waveLength: 18,
+                waveSpeed: 70
+            }
         }
     ];
 
