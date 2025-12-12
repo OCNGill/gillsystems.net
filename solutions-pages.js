@@ -40,9 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             decodeOptions: {
                 whiteTagSelector: 'white',
+                cyanTagSelector: 'blue',
+                yellowTagSelector: 'yellow',
                 waveLength: 18,
-                waveSpeed: 70,
-                redWaveSelector: 'red-wave'
+                waveSpeed: 70
             }
         }
     ];
@@ -189,6 +190,8 @@ function buildCharMetadata(textElement, options) {
         const textValue = node.textContent || '';
         const isReverse = Boolean(options.reverseClass && node.parentElement && node.parentElement.closest(`.${options.reverseClass}`));
         const isWhite = Boolean(options.whiteTagSelector && node.parentElement && node.parentElement.closest(options.whiteTagSelector));
+        const isCyan = Boolean(options.cyanTagSelector && node.parentElement && node.parentElement.closest(options.cyanTagSelector));
+        const isYellow = Boolean(options.yellowTagSelector && node.parentElement && node.parentElement.closest(options.yellowTagSelector));
         const isRedWave = Boolean(options.redWaveSelector && node.parentElement && node.parentElement.closest(`.${options.redWaveSelector}`));
 
         for (const char of Array.from(textValue)) {
@@ -196,6 +199,8 @@ function buildCharMetadata(textElement, options) {
                 char,
                 isReverse,
                 isWhite,
+                isCyan,
+                isYellow,
                 isRedWave
             });
         }
@@ -239,6 +244,18 @@ function rebuildTextWithHash(textElement, charMeta, options) {
             span.classList.add('white-word');
             span.classList.remove('hash-char');
             span.classList.add('decoded');
+            span.textContent = charValue;
+        } else if (meta.isCyan) {
+            span.classList.add('cyan-word');
+            span.classList.remove('hash-char');
+            span.classList.add('decoded');
+            span.style.color = '#00ffff';
+            span.textContent = charValue;
+        } else if (meta.isYellow) {
+            span.classList.add('yellow-word');
+            span.classList.remove('hash-char');
+            span.classList.add('decoded');
+            span.style.color = '#ffff00';
             span.textContent = charValue;
         } else if (meta.isRedWave) {
             // Red wave characters - keep as hash initially, will decode with wave
@@ -346,7 +363,7 @@ function startWaveEffect(paragraph, options = {}) {
 
     const validIndices = [];
     const redWaveIndices = [];
-    
+
     letters.forEach((letter, index) => {
         const original = letter.dataset.original || '';
         const isRedWave = letter.dataset.isRedWave === 'true';
