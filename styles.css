@@ -502,7 +502,7 @@ body {
    Solutions Section
    ============================================ */
 .solutions-preview {
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-sm) 0;
 }
 
 .section-title {
@@ -611,7 +611,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-sm);
 }
 
 .solution-card {

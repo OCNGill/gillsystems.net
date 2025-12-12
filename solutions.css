@@ -4,7 +4,7 @@
 
 /* Solutions Hero */
 .solutions-hero {
-    padding: var(--spacing-xl) 0 var(--spacing-lg);
+    padding: var(--spacing-xl) 0 var(--spacing-md);
     background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
     border-bottom: 1px solid var(--border-color);
 }

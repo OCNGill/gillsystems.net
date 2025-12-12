@@ -1,0 +1,472 @@
+/* ============================================
+   Solutions Pages - Terminal Aesthetic with Effects
+   (Independent from philosophy-pages.css)
+   Includes white wave, red wave, hash reveal
+   ============================================ */
+
+/* Solution Hero Section */
+.solution-hero {
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.solution-title {
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.solution-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+}
+
+/* Solution Section */
+.solution-section {
+    padding: var(--spacing-xl) 0;
+}
+
+/* Solution Terminal - Green Phosphor Glow */
+.solution-terminal {
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.4),
+                0 0 60px rgba(0, 255, 136, 0.2),
+                inset 0 0 30px rgba(0, 255, 136, 0.05);
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.solution-terminal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: var(--bg-primary);
+    padding: 1.2rem;
+    font-family: var(--font-mono);
+    border-bottom: 1px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+.terminal-prompt {
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+.terminal-text {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    animation: terminalGlow 2s ease-in-out infinite;
+}
+
+/* Terminal typing animation */
+.terminal-typed-text {
+    color: white;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.8);
+    font-family: var(--font-mono);
+    white-space: pre;
+    font-weight: bold;
+    display: none;
+}
+
+.terminal-cursor {
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: cursorBlink 1s ease-in-out infinite;
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Enter key animation */
+.enter-key {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    animation: enterKeyPulse 0.5s ease-in-out;
+}
+
+@keyframes enterKeyPulse {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.2); }
+}
+
+/* Terminal body with loader */
+.terminal-body {
+    padding: 2rem;
+    font-family: var(--font-mono);
+    min-height: 300px;
+    position: relative;
+}
+
+.terminal-loader {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    font-weight: bold;
+    margin-bottom: 1rem;
+    min-height: 2rem;
+}
+
+.terminal-content {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.terminal-content.hidden {
+    display: none;
+}
+
+/* Scanlines overlay */
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+.scanlines.hidden {
+    display: none;
+}
+
+/* Content area */
+.content-area {
+    position: relative;
+    z-index: 3;
+}
+
+/* Main content text styling */
+.solution-text {
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    color: var(--accent-primary);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+/* Letter for hash/decode effect */
+.letter {
+    display: inline;
+    transition: all 0.1s ease;
+    color: var(--accent-primary);
+}
+
+.letter.hash-char {
+    color: var(--accent-primary);
+}
+
+.letter.decoded {
+    color: inherit;
+}
+
+/* White word styling - permanent white */
+.white-word {
+    color: white !important;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.letter.white-word {
+    color: white !important;
+}
+
+/* Red wave character styling */
+.red-wave-char {
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Hex glow for white wave effect */
+.letter.hex-glow {
+    color: white;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+}
+
+/* Red glow for red wave effect */
+.letter.red-glow {
+    color: #FF3333 !important;
+    text-shadow: 0 0 12px rgba(255, 51, 51, 0.9), 0 0 20px rgba(255, 0, 0, 0.6);
+    font-weight: bold;
+}
+
+/* Terminal glow animation */
+@keyframes terminalGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); }
+    50% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.8); }
+}
+
+/* Keep white class for permanent white text */
+.keep-white {
+    color: white !important;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .solution-title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+
+    .solution-terminal {
+        margin: 0 -0.5rem;
+        border-radius: 0;
+    }
+
+    .terminal-body {
+        padding: 1.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .solution-text {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+}
+
+/* CTA Section */
+.solution-cta {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.solution-cta .btn {
+    margin: 0.5rem;
+}
+
+/* Back navigation */
+.back-nav {
+    margin-bottom: 2rem;
+}
+
+.back-nav a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent-primary);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.back-nav a:hover {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    text-shadow: none;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+/* ============================================
+   CTA COMPONENT STYLES - Pulsing Glow + Wave + Particles
+   ============================================ */
+
+.ai-cta {
+    margin-top: 2rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.cta-line {
+    font-family: var(--font-mono);
+    margin-bottom: 1rem;
+}
+
+.cta-text {
+    color: var(--accent-primary);
+    margin-left: 0.5rem;
+}
+
+.cta-links {
+    padding-left: 2rem;
+}
+
+.cta-link {
+    display: inline-block;
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent-primary);
+    transition: all 0.3s ease;
+}
+
+.cta-link:hover {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    box-shadow: 0 0 15px var(--accent-primary);
+}
+
+/* Pulsing neon glow on main text */
+.cta-glow-pulse {
+    animation: ctaPulseGlow 8s ease-in-out infinite;
+    text-shadow: 0 0 1px var(--accent-primary);
+}
+
+@keyframes ctaPulseGlow {
+    0%, 100% {
+        color: var(--accent-primary);
+        text-shadow: 0 0 1px var(--accent-primary);
+    }
+    50% {
+        color: #00ff88;
+        text-shadow: 0 0 2px var(--accent-primary);
+    }
+}
+
+/* Individual letters for wave effect */
+.cta-letter {
+    display: inline-block;
+    transition: all 0.2s ease;
+    color: var(--accent-primary);
+}
+
+/* Wave highlight on letters */
+.cta-letter.cta-wave-active {
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 4px var(--accent-primary);
+    font-weight: bold;
+    transform: scaleY(1.05);
+}
+
+/* Interactive emojis */
+.cta-emoji {
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin-left: 0.25rem;
+}
+
+.cta-emoji-interactive {
+    cursor: pointer;
+    animation: emojiPulse 8s ease-in-out infinite;
+}
+
+@keyframes emojiPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 1px var(--accent-primary));
+    }
+    50% {
+        transform: scale(1.04);
+        filter: drop-shadow(0 0 2px var(--accent-primary));
+    }
+}
+
+/* Sound Toggle Button */
+.cta-sound-toggle {
+    background: none;
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.35rem 0.5rem;
+    margin-left: 0.75rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2rem;
+}
+
+.cta-sound-toggle:hover {
+    background: rgba(0, 255, 136, 0.15);
+    box-shadow: 0 0 8px var(--accent-primary);
+    transform: scale(1.05);
+}
+
+.cta-sound-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Portal effect on hover */
+.cta-emoji-portal {
+    animation: emojiPortal 0.6s ease-out !important;
+}
+
+@keyframes emojiPortal {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: drop-shadow(0 0 8px var(--accent-primary));
+    }
+    50% {
+        transform: scale(1.3) rotate(180deg);
+        filter: drop-shadow(0 0 16px var(--accent-primary)) hue-rotate(60deg);
+    }
+    100% {
+        transform: scale(1.2) rotate(360deg);
+        filter: drop-shadow(0 0 12px var(--accent-primary));
+    }
+}
+
+/* Particle burst effect */
+.particle-burst {
+    position: fixed;
+    pointer-events: none;
+    font-size: 2rem;
+    z-index: 9999;
+    animation: particleFloat 1.5s ease-out forwards;
+}
+
+@keyframes particleFloat {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3) translateY(-100px);
+    }
+}
+
+/* ============================================
+   Terminal Links - Blue color (matches era-pages.css)
+   ============================================ */
+
+.terminal-content a {
+    color: #4A9EFF;
+    text-decoration: underline;
+    text-shadow: 0 0 5px rgba(74, 158, 255, 0.4);
+    transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+.terminal-content a:hover {
+    color: #6BB6FF;
+    text-shadow: 0 0 15px rgba(107, 182, 255, 0.8);
+}

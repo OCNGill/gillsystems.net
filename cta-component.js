@@ -45,17 +45,20 @@ async function initAudio() {
             }
 
             // Load and decode both audio clips
+            // Determine the correct path based on current page location
+            const pathPrefix = window.location.pathname.includes('/solutions/') ? '../' : '';
+            
             if (!audioBuffers.ohYeah) {
                 audioBuffers.ohYeah = await loadAndDecode(
-                    'assets/sounds/oh_yeah.ogg', 
-                    'assets/sounds/oh_yeah.mp3'
+                    `${pathPrefix}assets/sounds/oh_yeah.ogg`, 
+                    `${pathPrefix}assets/sounds/oh_yeah.mp3`
                 );
             }
             
             if (!audioBuffers.sweet) {
                 audioBuffers.sweet = await loadAndDecode(
-                    'assets/sounds/sweet.ogg', 
-                    'assets/sounds/sweet.mp3'
+                    `${pathPrefix}assets/sounds/sweet.ogg`, 
+                    `${pathPrefix}assets/sounds/sweet.mp3`
                 );
             }
             
@@ -174,6 +177,9 @@ function insertCTA(targetElementId) {
         return;
     }
     
+    // Determine the correct path based on current page location
+    const pathPrefix = window.location.pathname.includes('/solutions/') ? '../' : '';
+    
     // Create CTA container
     const ctaDiv = document.createElement('div');
     ctaDiv.className = 'ai-cta cta-component';
@@ -188,7 +194,7 @@ function insertCTA(targetElementId) {
             </button>
         </div>
         <div class="cta-links">
-            <a href="index.html#connect" class="cta-link">→ <strong>Get in Touch</strong> ✨</a>
+            <a href="${pathPrefix}index.html#connect" class="cta-link">→ <strong>Get in Touch</strong> ✨</a>
         </div>
     `;
     
@@ -293,9 +299,12 @@ function activateCTAEffects(ctaMainId, emoji1, emoji2) {
             // Particle burst effect
             createCTAParticleBurst(emoji);
             
+            // Determine the correct path based on current page location
+            const pathPrefix = window.location.pathname.includes('/solutions/') ? '../' : '';
+            
             // Navigate
             setTimeout(() => {
-                window.location.href = 'index.html#connect';
+                window.location.href = `${pathPrefix}index.html#connect`;
             }, 300);
         });
         
