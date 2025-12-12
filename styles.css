@@ -774,6 +774,14 @@ body {
     line-height: 1.7;
 }
 
+.principles-grid a.principle-card {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
 /* ============================================
    Connect Section
    ============================================ */

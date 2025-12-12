@@ -202,21 +202,26 @@ function insertCTA(targetElementId) {
         const enabled = await toggleSounds();
         soundToggleBtn.textContent = enabled ? '🔊' : '🔇';
 
-        // Because this click is a user gesture, ensure AudioContext is resumed
-        if (enabled && audioCtx && audioCtx.state === 'suspended') {
+        // If enabling sounds, initialize audio on this user gesture
+        if (enabled) {
             try {
-                await audioCtx.resume();
-                console.log('✅ AudioContext resumed via toggle button');
+                await initAudio();
+                console.log('✅ Audio initialized and ready');
             } catch (err) {
-                console.warn('Failed to resume AudioContext via toggle:', err);
+                console.warn('Failed to initialize audio:', err);
             }
         }
     });
 
     // If sounds were previously enabled (localStorage) on a previous page,
-    // prepare this page to initialize/resume audio on the next user gesture.
+    // immediately initialize audio (the page load/interaction counts as user gesture)
     if (soundsEnabled) {
-        setupPageGestureToInitAudio();
+        // Call initAudio immediately when CTA is inserted
+        initAudio().catch(err => {
+            console.warn('Could not auto-init audio, will retry on next interaction:', err);
+            // Fallback: set up gesture listener
+            setupPageGestureToInitAudio();
+        });
     }
     
     // Fade in and activate effects after brief delay

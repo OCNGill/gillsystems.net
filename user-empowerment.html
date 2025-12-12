@@ -3,26 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Foundation Era (1992-2000) - Where Gillsystems began. Building battlestations and learning systems from the ground up.">
-    <title>Foundation Era (1992-2000) | Gillsystems</title>
+    <meta name="description" content="User Empowerment - Technology that serves your vision. Transparent systems, clear explanations, and true partnership.">
+    <title>User Empowerment | Gillsystems</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="era-pages.css">
-    <style>
-        /* Foundation Era styling */
-        .foundation-text .letter {
-            color: #00ff88;
-        }
-        /* Keep "Foundation Era (1992-2000)" white - don't change during decode */
-        .foundation-text .keep-white {
-            color: white !important;
-        }
-        .foundation-text .decoded {
-            color: #00ff88 !important;
-        }
-        .foundation-text .hex-glow {
-            color: white !important;
-        }
-    </style>
+    <link rel="stylesheet" href="philosophy-pages.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -37,7 +21,7 @@
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="solutions.html">SOLUTIONS</a></li>
-                <li><a href="user-empowerment.html">EMPOWERMENT</a></li>
+                <li><a href="user-empowerment.html" class="active">EMPOWERMENT</a></li>
                 <li><a href="index.html#philosophy">PHILOSOPHY</a></li>
                 <li><a href="index.html#opensource">OPEN SOURCE</a></li>
                 <li><a href="index.html#connect">CONNECT</a></li>
@@ -48,31 +32,35 @@
     <!-- Era Hero -->
     <section class="era-hero">
         <div class="container">
-            <h1 class="era-title">Foundation Era</h1>
-            <p class="era-subtitle">1992-2000</p>
+            <h1 class="era-title">User Empowerment</h1>
+            <p class="era-subtitle">Technology That Serves You</p>
         </div>
     </section>
 
     <!-- Era Terminal Content -->
     <section class="era-section">
         <div class="container">
-            <div class="era-terminal foundation-era" data-era="foundation">
+            <div class="era-terminal empowerment-era" data-era="empowerment">
                 <div class="terminal-header">
                     <span class="terminal-prompt">C:\></span>
-                    <span class="terminal-text" id="foundation-loader">LOADING FOUNDATION_ERA.EXE...</span>
-                    <span class="terminal-typed-text" id="foundation-terminal-typed-text"></span>
-                    <span class="terminal-cursor" id="foundation-terminal-cursor">_</span>
+                    <span class="terminal-text" id="empowerment-loader">LOADING USER_EMPOWERMENT.EXE...</span>
+                    <span class="terminal-typed-text" id="empowerment-terminal-typed-text"></span>
+                    <span class="terminal-cursor" id="empowerment-terminal-cursor">_</span>
                 </div>
-                <div class="terminal-content hidden" id="foundation-content">
-                    <p class="foundation-text" id="foundation-text">Foundation Era (1992-2000): Built my first battlestation from Computer Show parts—two generations of Gills hunting deals every weekend when we could sneak money under Mom's purview (Dad, me, and my brother Roth). Spent hours hacking X-Com soldier names through hex editors (years later: discovered the click-to-edit feature). That's the Foundation Era truth: We learned by doing everything the hard way first. Even if 'doing' meant liberating Lechmere display PCs with strategic 'del c:' commands. Every overengineered solution taught me what actually mattered—making systems serve humans, not the other way around.</p>
-                    <div id="foundation-cta-container"></div>
+                <div class="terminal-content hidden" id="empowerment-content">
+                    <p class="empowerment-text" id="empowerment-text"><span class="reverse-sentence">Technology should SERVE your vision, not hold it hostage.</span> I build systems with TRANSPARENCY—you'll understand every piece, from the robots automating your inventory to the databases storing your legacy. No black boxes, no mystery fees, just clarity.
+
+Here's my promise: As your business GROWS, you grow too. I teach you what the big consultants hide—how to reset passwords, pull reports, even modify your automations. Not because I want you to do it alone, but because PARTNERSHIP means you're never helpless at 2 AM.
+
+When you understand your technology, we can build bigger things together. Your local IT guy who explains everything in plain English, builds robot workers that follow YOUR rules, and sticks around to help you SCALE. That's empowerment—knowing you chose the right partner, not fearing you need one.</p>
+                    <div id="empowerment-cta-container"></div>
                 </div>
-                <div class="scanlines hidden" id="foundation-scanlines"></div>
+                <div class="scanlines hidden" id="empowerment-scanlines"></div>
             </div>
 
             <div class="era-nav">
                 <a href="index.html#home" class="btn btn-secondary">← Back to Home</a>
-                <a href="expansion-era.html" class="btn btn-secondary">Next Era →</a>
+                <a href="solutions.html" class="btn btn-secondary">Explore Solutions →</a>
             </div>
         </div>
     </section>
@@ -129,14 +117,14 @@
         </div>
     </footer>
 
-    <script src="era-boot.js"></script>
+    <script src="user-empowerment.js"></script>
     <script src="cta-component.js"></script>
     <script>
-        // Insert CTA after hash decode + wave complete
+        // Insert CTA after animations complete
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                insertCTA('foundation-cta-container');
-            }, 3000); // Wait for hash decode + wave
+                insertCTA('empowerment-cta-container');
+            }, 3000); // Wait for animations
         });
     </script>
 </body>
