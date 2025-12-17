@@ -335,6 +335,8 @@ If you find this project helpful, you can support ongoing work — thank you!
 
 ---
 
-**Built with zero frameworks, maximum intent.**
+**Three decades of making technology work for humans, not against them.**
 
-*"A knowledgeable customer is a happy customer."*
+*Your system. Your rules. Your future.*
+
+*Systems should serve humans—and humans should understand their systems.*
