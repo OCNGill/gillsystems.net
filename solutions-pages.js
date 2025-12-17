@@ -46,6 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 waveSpeed: 70
             }
         }
+        ,
+        {
+            key: 'technicalsupport',
+            loaderId: 'dt-loader',
+            contentId: 'dt-content',
+            scanlinesId: 'dt-scanlines',
+            typedTextId: 'dt-terminal-typed-text',
+            cursorId: 'dt-terminal-cursor',
+            textId: 'dt-text',
+            loaderMessages: [
+                'C:\\> LOADING TECHNICAL_SUPPORT.EXE...',
+                'BOOT COMPLETE.'
+            ],
+            decodeOptions: {
+                whiteTagSelector: 'white',
+                waveLength: 18,
+                waveSpeed: 70
+            }
+        }
     ];
 
     configs.forEach(cfg => initSolutionTerminal(cfg));
