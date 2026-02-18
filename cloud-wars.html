@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cloud Wars Era (2017-2023) - Navigating vendor lock-in and fighting for user freedom.">
+    <meta name="description"
+        content="Cloud Wars Era (2017-2023) - Navigating vendor lock-in and fighting for user freedom.">
     <title>Cloud Wars (2017-2023) | Gillsystems</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="era-pages.css">
@@ -12,17 +14,21 @@
         .cloud-wars-text {
             color: white;
         }
+
         /* Keep "Cloud Wars (2017-2023)" white - don't change during decode */
         .cloud-wars-text .keep-white {
             color: white !important;
         }
+
         .cloud-wars-text .decoded {
             color: #00ff88;
         }
+
         .cloud-wars-text .hex-glow {
             color: white;
         }
     </style>
+
 <body>
     <!-- Navigation -->
     <nav class="main-nav">
@@ -37,7 +43,8 @@
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="solutions.html">SOLUTIONS</a></li>
                 <li><a href="index.html#philosophy">PHILOSOPHY</a></li>
-                <li><a href="index.html#opensource">OPEN SOURCE</a></li>
+                <li><a href="ai-era.html">AI-ROBOTS</a></li>
+                <li><a href="open-source.html">OPEN SOURCE</a></li>
                 <li><a href="index.html#connect">CONNECT</a></li>
             </ul>
         </div>
@@ -62,7 +69,13 @@
                     <span class="terminal-cursor" id="cloud-terminal-cursor">_</span>
                 </div>
                 <div class="terminal-content hidden" id="cloud_wars-content">
-                    <p class="cloud-wars-text" id="cloud-wars-text">Cloud Wars (2017-2023): Joined Tracy Chevrolet building a BDC that moved serious metal: $143K custom Corvette builds, $176K Escalade Vs, all sold remotely while architecting the Tekion conversion and managing the entire tech stack. When COVID hit, we'd already built the infrastructure to keep selling; saved $25K on system upgrades by knowing exactly where to invest. Proved that the best systems architect is one who understands both the backend AND the bottom line—tech excellence that directly drives revenue.</p>
+                    <p class="cloud-wars-text" id="cloud-wars-text">Cloud Wars (2017-2023): Joined Tracy Chevrolet
+                        building a BDC that moved serious metal: $143K custom Corvette builds, $176K Escalade Vs, all
+                        sold remotely while architecting the Tekion conversion and managing the entire tech stack. When
+                        COVID hit, we'd already built the infrastructure to keep selling; saved $25K on system upgrades
+                        by knowing exactly where to invest. Proved that the best systems architect is one who
+                        understands both the backend AND the bottom line—tech excellence that directly drives revenue.
+                    </p>
                     <div id="cloud-wars-cta-container"></div>
                 </div>
                 <div class="scanlines hidden" id="cloud_wars-scanlines"></div>
@@ -93,11 +106,12 @@
     <script src="cta-component.js"></script>
     <script>
         // Insert CTA after content loads and effects complete
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 insertCTA('cloud-wars-cta-container');
             }, 3000); // Wait for hash decode + wave
         });
     </script>
 </body>
+
 </html>

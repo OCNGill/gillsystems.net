@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Expansion Era (2000-2010) - Gillsystems grows with custom builds and community expertise.">
+    <meta name="description"
+        content="Expansion Era (2000-2010) - Gillsystems grows with custom builds and community expertise.">
     <title>Expansion Era (2000-2010) | Gillsystems</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="era-pages.css">
@@ -12,18 +14,22 @@
         .expansion-text .letter {
             color: #00ff88;
         }
+
         /* Keep "Expansion Era (2000-2010)" white - don't change during decode */
         .expansion-text .keep-white {
             color: white !important;
         }
+
         .expansion-text .decoded {
             color: #00ff88 !important;
         }
+
         .expansion-text .hex-glow {
             color: white !important;
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="main-nav">
@@ -38,7 +44,8 @@
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="solutions.html">SOLUTIONS</a></li>
                 <li><a href="index.html#philosophy">PHILOSOPHY</a></li>
-                <li><a href="index.html#opensource">OPEN SOURCE</a></li>
+                <li><a href="ai-era.html">AI-ROBOTS</a></li>
+                <li><a href="open-source.html">OPEN SOURCE</a></li>
                 <li><a href="index.html#connect">CONNECT</a></li>
             </ul>
         </div>
@@ -63,7 +70,13 @@
                     <span class="terminal-cursor" id="expansion-terminal-cursor">_</span>
                 </div>
                 <div class="terminal-content hidden" id="expansion-content">
-                    <p class="expansion-text" id="expansion-text">Expansion Era (2000-2010): PoliSci/Legal Studies degree, but spent nights unlocking Phenom 550BEs and building triple-GPU monsters. Started with law library databases, moved to Inmagic Software as Business Development, then discovered I could solve more problems in the car business. By 2010, I'd built the original Gillsystems site, mastered Linux, and was donating compute cycles to BOINC (should've mined Bitcoin, stayed altruistic instead). The decade taught me that real solutions come from understanding both the tech AND the business—a lesson that shaped everything since.</p>
+                    <p class="expansion-text" id="expansion-text">Expansion Era (2000-2010): PoliSci/Legal Studies
+                        degree, but spent nights unlocking Phenom 550BEs and building triple-GPU monsters. Started with
+                        law library databases, moved to Inmagic Software as Business Development, then discovered I
+                        could solve more problems in the car business. By 2010, I'd built the original Gillsystems site,
+                        mastered Linux, and was donating compute cycles to BOINC (should've mined Bitcoin, stayed
+                        altruistic instead). The decade taught me that real solutions come from understanding both the
+                        tech AND the business—a lesson that shaped everything since.</p>
                     <div id="expansion-cta-container"></div>
                 </div>
                 <div class="scanlines hidden" id="expansion-scanlines"></div>
@@ -95,11 +108,12 @@
     <script src="cta-component.js"></script>
     <script>
         // Insert CTA after hash decode + wave complete
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 insertCTA('expansion-cta-container');
             }, 3000); // Wait for hash decode + wave
         });
     </script>
 </body>
+
 </html>
