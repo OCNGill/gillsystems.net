@@ -1,0 +1,80 @@
+# =============================================================================
+# Caddy Server — gillsystems.net
+# =============================================================================
+# Serves the static site AND proxies WSS/HTTP traffic to the active Hermes
+# master node. Replaces GitHub Pages — Caddy handles everything.
+#
+# The active master is determined by node_registry_watcher.py which polls
+# the NodeRegistry API on each LAN node and writes conf/upstreams.conf.
+#
+# Usage:
+#   caddy run --config Caddyfile
+#   caddy reload --config Caddyfile  (graceful reload)
+#
+# Dependencies:
+#   - Caddy v2 (https://caddyserver.com/download)
+#   - node_registry_watcher.py (polls NodeRegistry, writes upstreams.conf)
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Global options
+# ---------------------------------------------------------------------------
+{
+    # Email for Let's Encrypt certificate notifications
+    email admin@gillsystems.net
+
+    # Admin API for dynamic config reload (used by node_registry_watcher.py)
+    # Listens on localhost only — not exposed to the internet.
+    admin 127.0.0.1:2019
+
+    # Enable debug logging during initial setup (comment out in production)
+    # log {
+    #     level DEBUG
+    # }
+}
+
+# ---------------------------------------------------------------------------
+# Main site — gillsystems.net
+# Serves static files from the repo root AND proxies API/WSS to Hermes.
+# ---------------------------------------------------------------------------
+gillsystems.net {
+    # TLS is automatic — Caddy obtains and renews Let's Encrypt certificates.
+    # For local testing with self-signed certs, add: tls internal
+
+    # ---- Root: serve static site files from this directory ----
+    root * .
+
+    # ---- Logging ----
+    log {
+        output file logs/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json
+    }
+
+    # ---- Import dynamically-generated upstream configuration ----
+    # This file is written by node_registry_watcher.py and contains the
+    # reverse_proxy directives targeting the current active master node.
+    # These paths are matched BEFORE file_server, so API/WSS traffic is
+    # proxied to Hermes instead of served as static files.
+    import conf/upstreams.conf
+
+    # ---- Serve static files (everything not matched by upstreams.conf) ----
+    # Cache headers for static assets.
+    @static {
+        path *.html *.css *.js *.png *.jpg *.jpeg *.gif *.svg *.ico *.mp3 *.ogg *.webp *.bmp *.json *.xml *.webmanifest
+    }
+    header @static Cache-Control "public, max-age=3600"
+
+    # Serve all remaining requests as static files.
+    # If no file matches, serve index.html (SPA-style fallback).
+    file_server {
+        index index.html
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Health endpoint — served by the Hermes API server at /health
+# (proxied via upstreams.conf, not a separate listener)
+# ---------------------------------------------------------------------------
