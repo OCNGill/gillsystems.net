@@ -1,5 +1,15 @@
 {
-  "last_successful_step": "track_001_complete",
+  "last_successful_step": "gateway_primary_deploy",
   "project_name": "Gillsystems.net",
-  "conductor_version": "1.0.0"
+  "conductor_version": "1.0.0",
+  "active_node": "Gillsystems-Laptop",
+  "active_node_ip": "10.0.0.93:2200",
+  "services": {
+    "hermes_gateway": "running",
+    "hermes_port": 2200,
+    "caddy": "running",
+    "caddy_port": 443,
+    "watcher": "running"
+  },
+  "notes": "Gillsystems-Laptop set as primary node. Gateway + Caddy + Watcher all running. Android app can connect via wss://gillsystems.net/hermes."
 }
