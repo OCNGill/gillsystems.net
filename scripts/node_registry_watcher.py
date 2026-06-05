@@ -4,7 +4,7 @@ node_registry_watcher.py — Poll Hermes NodeRegistry API and update Caddy upstr
 
 Polls GET /api/config/node on each LAN node, determines the active master node,
 writes conf/upstreams.conf with Caddy reverse_proxy directives, and triggers
-Caddy graceful reload via the admin API.
+Caddy graceful reload via the CLI.
 
 Usage:
     python scripts/node_registry_watcher.py
@@ -13,7 +13,8 @@ Environment variables (optional, override CLI args):
     NODE_IPS         Comma-separated LAN IPs (default: 10.0.0.164,10.0.0.42,10.0.0.93,10.0.0.139)
     NODE_PORT        Hermes API port on each node (default: 2200)
     POLL_INTERVAL    Seconds between polls (default: 30)
-    CADDY_ADMIN      Caddy admin API address (default: 127.0.0.1:2019)
+    CADDY_BIN        Path to the caddy binary (default: ./caddy.exe)
+    CADDYFILE        Caddyfile path (default: Caddyfile)
     UPSTREAMS_CONF   Path to Caddy upstreams config (default: conf/upstreams.conf)
     LOG_FILE         Optional log file path (default: stdout only)
     NODE_NAMES       Optional comma-separated node names matching IP order
@@ -41,6 +42,7 @@ LAN NODE REGISTRY — Authoritative node list (source: Gillsystems_local_configu
 import json
 import logging
 import os
+import subprocess
 import sys
 import time
 import urllib.error
@@ -56,7 +58,8 @@ from typing import Any, Dict, List, Optional, Tuple
 DEFAULT_NODE_IPS = "10.0.0.164,10.0.0.42,10.0.0.93,10.0.0.139"
 DEFAULT_NODE_PORT = 2200
 DEFAULT_POLL_INTERVAL = 30
-DEFAULT_CADDY_ADMIN = "127.0.0.1:2019"
+DEFAULT_CADDY_BIN = "./caddy.exe"
+DEFAULT_CADDYFILE = "Caddyfile"
 DEFAULT_UPSTREAMS_CONF = "conf/upstreams.conf"
 DEFAULT_NODE_NAMES = "Gillsystems-Main,Gillsystems-HTPC,Gillsystems-Laptop,Gillsystems-Steam-Deck"
 
@@ -288,27 +291,30 @@ def write_upstream_config(content: str, conf_path: str, logger: logging.Logger) 
         return False
 
 # ---------------------------------------------------------------------------
-# Caddy admin API reload
+# Caddy CLI reload
 # ---------------------------------------------------------------------------
 
-def reload_caddy(admin_addr: str, logger: logging.Logger) -> bool:
-    """Trigger Caddy graceful reload via POST /load on the admin API."""
-    url = f"http://{admin_addr}/load"
+def reload_caddy(caddy_bin: str, caddyfile: str, logger: logging.Logger) -> bool:
+    """Trigger Caddy graceful reload via the CLI."""
     try:
-        # Caddy's /load endpoint expects the new config as the body.
-        # We send an empty POST to trigger a reload of the current config file.
-        req = urllib.request.Request(url, method="POST")
-        req.add_header("Content-Type", "application/json")
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            status = resp.getcode()
-            if status == 200:
-                logger.info("Caddy reload triggered successfully (HTTP %d)", status)
-                return True
-            else:
-                logger.warning("Caddy reload returned HTTP %d", status)
-                return False
-    except urllib.error.URLError as e:
-        logger.error("Caddy reload failed: %s", e)
+        result = subprocess.run(
+            [caddy_bin, "reload", "--config", caddyfile],
+            capture_output=True, text=True, timeout=15,
+        )
+        if result.returncode == 0:
+            logger.info("Caddy reload triggered successfully")
+            return True
+        else:
+            logger.warning(
+                "Caddy reload failed (exit %d): %s",
+                result.returncode, result.stderr.strip(),
+            )
+            return False
+    except FileNotFoundError:
+        logger.error("caddy binary not found at %s", caddy_bin)
+        return False
+    except subprocess.TimeoutExpired:
+        logger.error("Caddy reload timed out")
         return False
     except Exception as e:
         logger.error("Caddy reload error: %s", e)
@@ -325,7 +331,8 @@ def main() -> None:
     node_names = [n.strip() for n in os.getenv("NODE_NAMES", DEFAULT_NODE_NAMES).split(",") if n.strip()]
     node_port = int(os.getenv("NODE_PORT", str(DEFAULT_NODE_PORT)))
     poll_interval = int(os.getenv("POLL_INTERVAL", str(DEFAULT_POLL_INTERVAL)))
-    caddy_admin = os.getenv("CADDY_ADMIN", DEFAULT_CADDY_ADMIN)
+    caddy_bin = os.getenv("CADDY_BIN", DEFAULT_CADDY_BIN)
+    caddyfile = os.getenv("CADDYFILE", DEFAULT_CADDYFILE)
     upstreams_conf = os.getenv("UPSTREAMS_CONF", DEFAULT_UPSTREAMS_CONF)
     log_file = os.getenv("LOG_FILE", None)
 
@@ -341,7 +348,8 @@ def main() -> None:
     logger.info("Nodes: %s", ", ".join(f"{n} ({ip})" for n, ip in zip(node_names, node_ips)))
     logger.info("Port: %d", node_port)
     logger.info("Poll interval: %ds", poll_interval)
-    logger.info("Caddy admin: %s", caddy_admin)
+    logger.info("Caddy bin: %s", caddy_bin)
+    logger.info("Caddyfile: %s", caddyfile)
     logger.info("Upstreams config: %s", upstreams_conf)
     logger.info("")
 
@@ -373,7 +381,7 @@ def main() -> None:
                 config_content = generate_upstream_config(master)
                 if write_upstream_config(config_content, upstreams_conf, logger):
                     # Trigger Caddy reload
-                    if reload_caddy(caddy_admin, logger):
+                    if reload_caddy(caddy_bin, caddyfile, logger):
                         last_master_key = current_key
                         logger.info("Failover complete — now routing to %s", current_key)
                     else:
