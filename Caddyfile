@@ -38,8 +38,10 @@
 # Serves static files from the repo root AND proxies API/WSS to Hermes.
 # ---------------------------------------------------------------------------
 gillsystems.net {
-    # TLS is automatic — Caddy obtains and renews Let's Encrypt certificates.
-    # For local testing with self-signed certs, add: tls internal
+    # TLS with self-signed cert for local/LAN testing.
+    # For production with Let's Encrypt, remove 'tls internal' and ensure
+    # DNS is configured for gillsystems.net. NO port 80 needed — use DNS-01 challenge.
+    tls internal
 
     # ---- Root: serve static site files from this directory ----
     root * .
