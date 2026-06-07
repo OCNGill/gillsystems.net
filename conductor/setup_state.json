@@ -1,7 +1,7 @@
 {
-  "last_successful_step": "gateway_primary_deploy",
+  "last_successful_step": "sovereign_bridge_deploy",
   "project_name": "Gillsystems.net",
-  "conductor_version": "1.0.0",
+  "conductor_version": "1.1.0",
   "active_node": "Gillsystems-Laptop",
   "active_node_ip": "10.0.0.93:2200",
   "services": {
@@ -9,7 +9,22 @@
     "hermes_port": 2200,
     "caddy": "running",
     "caddy_port": 443,
-    "watcher": "running"
+    "caddy_tls": "internal",
+    "watcher": "running",
+    "watcher_type": "Task Scheduler (NodeRegistryWatcher)",
+    "frp_tunnel": "running",
+    "frp_relay": "129.213.114.55:7000",
+    "openssh": "running",
+    "openssh_port": 22
   },
-  "notes": "Gillsystems-Laptop set as primary node. Gateway + Caddy + Watcher all running. Android app can connect via wss://gillsystems.net/hermes."
+  "wan_access": {
+    "method": "OCI Cloud Relay (Sovereign Bridge)",
+    "relay_host": "129.213.114.55",
+    "relay_ssh_port": 2222,
+    "relay_hermes_port": 2200,
+    "frp_tunnel": "frpc (Windows) → frps (OCI Ubuntu 20.04)",
+    "port_forwarding_required": false,
+    "ISP_independent": true
+  },
+  "notes": "Sovereign Bridge deployed 2026-06-06. OCI relay at 129.213.114.55. App connects to wss://129.213.114.55:2200/hermes directly. No port forwarding. gillsystems.net Caddy kept for LAN fallback with tls internal."
 }
