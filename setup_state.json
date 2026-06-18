@@ -1,0 +1,104 @@
+{
+  "format": "setup_state",
+  "description": "Current configuration state for gillsystems.net Caddy infrastructure. Use this to verify system health before making changes.",
+  "last_updated": "v1.1.0",
+  "caddy": {
+    "status": "running",
+    "port": 443,
+    "tls": "internal",
+    "config": "Caddyfile",
+    "static_root": "repo root",
+    "admin_api": "127.0.0.1:2019",
+    "notes": "gillsystems.net Caddy is LAN-only with tls internal. WAN access is via OCI relay. Static site replaces GitHub Pages."
+  },
+  "frp_tunnel": {
+    "status": "connected",
+    "server": "129.213.114.55:7000",
+    "relay_ssh_port": 2222,
+    "relay_hermes_port": 2200,
+    "local_port": 2200,
+    "protocol": "tcp",
+    "notes": "WAN path via OCI Cloud Relay. frpc on Windows → frps on OCI Ubuntu. No port forwarding required."
+  },
+  "wan_access": {
+    "method": "OCI Cloud Relay (Sovereign Bridge)",
+    "relay_host": "129.213.114.55",
+    "relay_ssh_port": 2222,
+    "relay_hermes_port": 2200,
+    "port_forwarding_required": false,
+    "isp_independent": true,
+    "notes": "Deployed 2026-06-06. App connects to wss://129.213.114.55:2200/hermes directly."
+  },
+  "node_registry_watcher": {
+    "status": "running",
+    "schedule": "Windows Task Scheduler (NodeRegistryWatcher)",
+    "config_output": "conf/upstreams.conf",
+    "caddy_reload": "via admin API (127.0.0.1:2019)",
+    "nodes_monitored": [
+      "Gillsystems-Main (10.0.0.164)",
+      "Gillsystems-HTPC (10.0.0.42)",
+      "Gillsystems-Laptop (10.0.0.93)",
+      "Gillsystems-Steam-Deck (10.0.0.139)"
+    ],
+    "active_master": "Gillsystems-Laptop (10.0.0.93:2200)"
+  },
+  "proxy_routes": {
+    "/hermes/*": {
+      "target": "ws://10.0.0.93:2200/hermes/*",
+      "type": "WebSocket",
+      "notes": "Android companion app primary endpoint"
+    },
+    "/ws/android/*": {
+      "target": "ws://10.0.0.93:2200/hermes/*",
+      "type": "WebSocket",
+      "proxy_config": "uri strip_prefix /ws/android",
+      "notes": "Caddy-proxied Android path with TLS termination / prefix stripping"
+    },
+    "/console/*": {
+      "target": "ws://10.0.0.93:2200/console/*",
+      "type": "WebSocket",
+      "notes": "Console streaming endpoint"
+    },
+    "/api/config/*": {
+      "target": "http://10.0.0.93:2200/api/config/*",
+      "type": "HTTP",
+      "notes": "Engine/node config REST API"
+    },
+    "/v1/*": {
+      "target": "http://10.0.0.93:2200/v1/*",
+      "type": "HTTP",
+      "notes": "OpenAI-compatible API proxy"
+    },
+    "/health": {
+      "target": "http://10.0.0.93:2200/health",
+      "type": "HTTP",
+      "notes": "Health check endpoint"
+    },
+    "/api/sessions/*": {
+      "target": "http://10.0.0.93:2200/api/sessions/*",
+      "type": "HTTP",
+      "notes": "Session management REST API"
+    },
+    "/v1/runs/*": {
+      "target": "http://10.0.0.93:2200/v1/runs/*",
+      "type": "HTTP",
+      "notes": "Run management endpoint"
+    },
+    "/google-chat-webhook*": {
+      "target": "http://127.0.0.1:8647/google-chat-webhook",
+      "type": "HTTP",
+      "proxy_config": "rewrite to /google-chat-webhook",
+      "notes": "Google Chat real-time push bridge webhook receiver"
+    }
+  },
+  "hermes_agent": {
+    "status": "active",
+    "gateway_port": 2200,
+    "host": "Gillsystems-Laptop (10.0.0.93)"
+  },
+  "pipeline": {
+    "current": "v1.1.0",
+    "mandatory": "7D — Define → Design → Develop → Debug → Document → Deliver → Deploy",
+    "notes": "No skipping phases. Version numbers are sacred. Never rename or renumber."
+  }
+}
