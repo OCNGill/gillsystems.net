@@ -1,0 +1,6 @@
+$env:CADDY_BIN = ".\caddy.exe"
+$env:CADDYFILE = "Caddyfile"
+$env:PYTHONIOENCODING = "utf-8"
+Set-Location "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net"
+Start-Process python -ArgumentList "scripts/node_registry_watcher.py" -WindowStyle Hidden -WorkingDirectory "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net"
+Write-Output "Watcher started in background"

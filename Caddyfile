@@ -62,6 +62,16 @@ gillsystems.net {
     # proxied to Hermes instead of served as static files.
     import conf/upstreams.conf
 
+    # ---- Google Chat webhook receiver (real-time push bridge) ----
+    handle_path /google-chat-webhook* {
+        rewrite * /google-chat-webhook
+        reverse_proxy 127.0.0.1:8647 {
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
     # ---- Serve static files (everything not matched by upstreams.conf) ----
     # Cache headers for static assets.
     @static {

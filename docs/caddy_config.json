@@ -1,0 +1,320 @@
+{
+  "admin": {
+    "listen": "127.0.0.1:2019"
+  },
+  "logging": {
+    "logs": {
+      "default": {
+        "exclude": ["http.log.access.log0"]
+      },
+      "log0": {
+        "writer": {
+          "filename": "logs/access.log",
+          "output": "file",
+          "roll_keep": 5,
+          "roll_size_mb": 10
+        },
+        "encoder": {
+          "format": "json"
+        },
+        "include": ["http.log.access.log0"]
+      }
+    }
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "srv0": {
+          "listen": [":443"],
+          "routes": [
+            {
+              "match": [{"host": ["gillsystems.net"]}],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [{"handler": "vars", "root": "."}]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "set": {"Cache-Control": ["public, max-age=3600"]}
+                          }
+                        }
+                      ],
+                      "match": [{"path": ["*.html","*.css","*.js","*.png","*.jpg","*.jpeg","*.gif","*.svg","*.ico","*.mp3","*.ogg","*.webp","*.bmp","*.json","*.xml","*.webmanifest"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/api/sessions"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/api/sessions/*"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/api/config"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/api/config/*"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/console"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "transport": {
+                                    "protocol": "http",
+                                    "read_buffer_size": 8192,
+                                    "write_buffer_size": 8192
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/console/*"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/v1/runs"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/v1/runs/*"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/hermes"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "transport": {
+                                    "protocol": "http",
+                                    "read_buffer_size": 8192,
+                                    "write_buffer_size": 8192
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/hermes/*"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/health"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/health"]}]
+                    },
+                    {
+                      "group": "group7",
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [{"handler": "rewrite", "strip_path_prefix": "/v1"}]
+                            },
+                            {
+                              "handle": [
+                                {
+                                  "handler": "reverse_proxy",
+                                  "headers": {
+                                    "request": {
+                                      "set": {
+                                        "X-Forwarded-For": ["{{http.request.remote.host}}"],
+                                        "X-Forwarded-Proto": ["{{http.request.scheme}}"],
+                                        "X-Real-Ip": ["{{http.request.remote.host}}"]
+                                      }
+                                    }
+                                  },
+                                  "upstreams": [{"dial": "10.0.0.164:2200"}]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "match": [{"path": ["/v1/*"]}]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "file_server",
+                          "hide": [".\\Caddyfile","c:\\Users\\Gillsystems Laptop\\source\\repos\\OCNGill\\gillsystems.net\\conf\\upstreams.conf"],
+                          "index_names": ["index.html"]
+                        }
+                      ]
+                    }
+                  ],
+                  "terminal": true
+                }
+              ]
+            }
+          ],
+          "logs": {
+            "logger_names": {
+              "gillsystems.net": ["log0"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "tls": {
+    "automation": {
+      "policies": [
+        {
+          "subjects": ["gillsystems.net"],
+          "issuers": [
+            {
+              "email": "admin@gillsystems.net",
+              "module": "acme"
+            },
+            {
+              "ca": "https://acme.zerossl.com/v2/DV90",
+              "email": "admin@gillsystems.net",
+              "module": "acme"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
