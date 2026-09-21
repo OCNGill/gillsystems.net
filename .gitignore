@@ -18,3 +18,4 @@ desktop.ini
 # --- Editor ---
 .vs/
 *.code-workspace
+memory/
