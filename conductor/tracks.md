@@ -10,6 +10,13 @@
 
 ## Active Track
 
+### Track 4: AI-Era Page Rebuild
+- **Status:** IN PROGRESS (content complete, pending post-edit verification)
+- **Phase:** Develop ✓ / Debug pending
+- **Objective:** Rebuild ai-era.html so the Sovereign AI Stack (4-node AMD llama.cpp cluster) is the hero and the current 18-agent fleet roster is highlighted
+- **Changes:** ai-era.html rewritten (node card grid, stats row, fleet roster, flagship open-source stack installer hook); ai-era.js reduced to footer-year script; doctrine quotes woven in
+- **Constraints:** Working-tree edits only — no commit, watcher not run
+
 ### Track 3: Sovereign Bridge
 - **Status:** COMPLETE
 - **Phase:** Deploy ✓

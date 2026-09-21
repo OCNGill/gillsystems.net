@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gillsystems — The Fleet in Action</title>
+<style>
+  html, body { margin: 0; padding: 0; overflow: hidden; background: #04060c; height: 100%; }
+  #app { position: fixed; inset: 0; }
+  #labels { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 2; }
+
+  /* Node CSS2D labels */
+  .node-label {
+    color: #cfe9f2; font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 11px; letter-spacing: 1.5px; font-weight: 600;
+    text-align: center; white-space: nowrap;
+    text-shadow: 0 0 8px rgba(0, 220, 220, 0.6);
+    pointer-events: none !important; user-select: none;
+  }
+  .node-spec {
+    display: block; margin-top: 2px; color: rgba(140, 190, 205, 0.75);
+    font-size: 9px; font-weight: 400; letter-spacing: 0.8px;
+  }
+  .hub-label {
+    color: #eafcff; font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 12px; letter-spacing: 2.5px; font-weight: 700; text-align: center;
+    text-shadow: 0 0 12px rgba(0, 230, 230, 0.8);
+    pointer-events: none !important; user-select: none; white-space: nowrap;
+  }
+
+  /* Hover tooltip for agent sparks */
+  #tooltip {
+    position: fixed; display: none; z-index: 10; pointer-events: none;
+    background: rgba(6, 14, 22, 0.92); border: 1px solid rgba(60, 220, 220, 0.45);
+    border-radius: 4px; padding: 4px 10px;
+    color: #d8f6f6; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px;
+    letter-spacing: 0.5px; box-shadow: 0 0 14px rgba(0, 200, 200, 0.25);
+  }
+  #tooltip .role { color: rgba(232, 184, 75, 0.9); font-size: 9px; letter-spacing: 1px; display: block; }
+
+  /* UI panel */
+  #ui {
+    position: fixed; top: 16px; left: 16px; z-index: 5;
+    font-family: 'Segoe UI', system-ui, sans-serif; user-select: none;
+  }
+  #ui h1 {
+    margin: 0 0 2px 0; font-size: 14px; letter-spacing: 3px; font-weight: 700;
+    color: #bfeef0; text-shadow: 0 0 10px rgba(0, 220, 220, 0.5);
+  }
+  #ui .sub { font-size: 9px; letter-spacing: 2px; color: rgba(130, 175, 190, 0.7); margin-bottom: 10px; }
+  #ui button {
+    background: rgba(8, 18, 28, 0.75); color: #9fdde2;
+    border: 1px solid rgba(60, 200, 210, 0.35); border-radius: 3px;
+    padding: 4px 12px; margin-right: 6px; font-size: 11px; letter-spacing: 1px;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  #ui button:hover { border-color: rgba(120, 240, 240, 0.8); color: #dffcff; }
+  #ui button.active { background: rgba(20, 70, 80, 0.85); color: #8ffcff; border-color: rgba(120, 240, 240, 0.7); }
+  #legend {
+    margin-top: 10px; font-size: 9px; letter-spacing: 1.2px; color: rgba(130, 175, 190, 0.75);
+    line-height: 1.9;
+  }
+  #legend .sw { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 6px; border-radius: 1px; }
+  #hint {
+    position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 5;
+    color: rgba(120, 160, 175, 0.45); font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 10px; letter-spacing: 1.5px; pointer-events: none;
+  }
+  #fatal {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    color: #e8b84b; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px;
+    letter-spacing: 1px; text-align: center; padding: 40px;
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app"></div>
+<div id="labels"></div>
+<div id="tooltip"><span id="tt-name"></span><span class="role" id="tt-role"></span></div>
+<div id="ui">
+  <h1>THE FLEET IN ACTION</h1>
+  <div class="sub">GILLSYSTEMS SOVEREIGN AI FLEET</div>
+  <button id="btn-pause">⏸ PAUSE</button>
+  <button id="btn-rotate" class="active">⟳ AUTO-ROTATE</button>
+  <div id="legend">
+    <span class="sw" style="background:#35e0e0"></span>MODEL PULLS &amp; HEARTBEATS<br>
+    <span class="sw" style="background:#2fa88f"></span>APP SESSIONS<br>
+    <span class="sw" style="background:#e8b84b"></span>NODE-TO-NODE SYNC
+  </div>
+</div>
+<div id="hint">DRAG TO ORBIT · SCROLL TO ZOOM · HOVER A SPARK FOR ITS NAME</div>
+<div id="fatal">three.js could not be loaded from CDN.<br>Check network or vendor the module locally (see README_v2.md).</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+// ─────────────────────────────────────────────────────────────
+// Gillsystems — The Fleet in Action (three.js v2)
+// Hub: Hermes Gateway (Commander). 4 GPU nodes on orbits,
+// arc data flows, 18 agent sparks. Cyan/teal + amber accents.
+// ─────────────────────────────────────────────────────────────
+
+const COL = {
+  bg:      0x04060c,
+  cyan:    0x35e0e0,
+  teal:    0x2fa88f,
+  amber:   0xe8b84b,
+  ice:     0x8fd8e8,
+};
+
+// Fleet node definitions: orbit radius, speed, tilt, size, shape, color
+const NODES = [
+  { id:'laptop', name:'LAPTOP',     spec:'VEGA UMA · 4B MODEL',                  color:0x35d0c5, radius:14, speed:0.16,  size:1.5, phase:0.0, tilt: 0.18, shape:'octa'   },
+  { id:'htpc',   name:'HTPC',       spec:'RX 7600 · 9B MODEL',                   color:0x2ea8d8, radius:19, speed:0.115, size:2.0, phase:2.1, tilt:-0.22, shape:'box'    },
+  { id:'main',   name:'MAIN',       spec:'7900 XTX 24GB · QWEN3.8 + VISION + MTP', color:0x4deede, radius:24, speed:0.08, size:3.1, phase:4.2, tilt: 0.30, shape:'dodeca' },
+  { id:'deck',   name:'STEAM DECK', spec:'HANDHELD · 9B MODEL',                  color:0xe8b84b, radius:29, speed:0.06,  size:2.2, phase:1.2, tilt:-0.38, shape:'deck'   },
+];
+
+// Arc types: hub↔node (cyan = model pulls / heartbeats, teal = app sessions),
+// node↔node (amber = sync)
+const ARCS = [
+  { a:'hub',     b:'laptop', color:COL.cyan,  kind:'MODEL PULL'    },
+  { a:'hub',     b:'main',   color:COL.cyan,  kind:'MODEL PULL'    },
+  { a:'hub',     b:'htpc',   color:COL.teal,  kind:'APP SESSION'   },
+  { a:'hub',     b:'deck',   color:COL.teal,  kind:'APP SESSION'   },
+  { a:'main',    b:'laptop', color:COL.amber, kind:'NODE SYNC'     },
+  { a:'main',    b:'htpc',   color:COL.amber, kind:'NODE SYNC'     },
+];
+
+// 17 named agents across 18 sparks (Hermes runs two seats)
+const AGENT_NAMES = ['Hermes','Theo','Adam','Orchestrator','Architect','Coder','Liara',
+  'Geordi','Medic','Scribe','Sentinel','EDI','Major Gaben','Spark','Courier','Scout','Lamp'];
+const AGENT_ROLES = ['gateway','planner','ops','orchestration','design','build','companion',
+  'engineering','repair','docs','watch','interface','hardware','energy','delivery','recon','light'];
+const SPARK_COUNT = 18;
+
+// ── Renderer / scene / camera ────────────────────────────────
+const app = document.getElementById('app');
+const renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+app.appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById('labels').appendChild(labelRenderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(COL.bg);
+scene.fog = new THREE.FogExp2(COL.bg, 0.0035);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 900);
+camera.position.set(30, 20, 38);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minDistance = 7;
+controls.maxDistance = 140;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.55;
+
+// ── Lights ───────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0x0a1a24, 1.2));
+const hubLight = new THREE.PointLight(COL.cyan, 900, 160, 1.8);
+scene.add(hubLight);
+const rim = new THREE.DirectionalLight(0x1a3a4a, 1.4);
+rim.position.set(-40, 30, -20);
+scene.add(rim);
+
+// ── Helpers ──────────────────────────────────────────────────
+function glowTexture(inner = 'rgba(160,255,255,1)', outer = 'rgba(0,180,200,0)') {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, inner);
+  grad.addColorStop(0.35, 'rgba(80,220,230,0.45)');
+  grad.addColorStop(1, outer);
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+const glowTex = glowTexture();
+
+function makeGlowSprite(colorHex, scale) {
+  const mat = new THREE.SpriteMaterial({
+    map: glowTex, color: colorHex, transparent: true, opacity: 0.55,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  const s = new THREE.Sprite(mat);
+  s.scale.setScalar(scale);
+  return s;
+}
+
+// Node position helper: circular orbit in XZ, then tilt around X
+function nodePosition(node, t, out) {
+  const a = node.phase + t * node.speed;
+  out.set(Math.cos(a) * node.radius, 0, Math.sin(a) * node.radius);
+  const ct = Math.cos(node.tilt), st = Math.sin(node.tilt);
+  const y = out.y * ct - out.z * st;
+  const z = out.y * st + out.z * ct;
+  out.y = y; out.z = z;
+  return out;
+}
+
+// ── Starfield (capped, single draw call) ─────────────────────
+{
+  const N = 900;
+  const pos = new Float32Array(N * 3);
+  const colArr = new Float32Array(N * 3);
+  const c1 = new THREE.Color(0x9fb8d0), c2 = new THREE.Color(0x6fd8d8);
+  for (let i = 0; i < N; i++) {
+    const r = 160 + Math.random() * 260;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    pos[i*3]   = r * Math.sin(ph) * Math.cos(th);
+    pos[i*3+1] = r * Math.cos(ph) * 0.6;
+    pos[i*3+2] = r * Math.sin(ph) * Math.sin(th);
+    const c = c1.clone().lerp(c2, Math.random() * 0.5);
+    const dim = 0.25 + Math.random() * 0.55;
+    colArr[i*3] = c.r * dim; colArr[i*3+1] = c.g * dim; colArr[i*3+2] = c.b * dim;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
+  const stars = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: 1.1, vertexColors: true, transparent: true, opacity: 0.8,
+    sizeAttenuation: true, depthWrite: false,
+  }));
+  scene.add(stars);
+}
+
+// ── Central hub: Hermes Gateway ──────────────────────────────
+const hub = new THREE.Group();
+scene.add(hub);
+
+const coreMat = new THREE.MeshStandardMaterial({
+  color: 0x06222a, emissive: COL.cyan, emissiveIntensity: 2.4, roughness: 0.25, metalness: 0.6,
+});
+const core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.7, 1), coreMat);
+hub.add(core);
+
+const shellMat = new THREE.MeshBasicMaterial({
+  color: 0x66f0f0, wireframe: true, transparent: true, opacity: 0.35,
+});
+const shell = new THREE.Mesh(new THREE.IcosahedronGeometry(2.3, 0), shellMat);
+hub.add(shell);
+
+hub.add(makeGlowSprite(0x35e0e0, 11));
+
+// Two thin gateway rings
+const rings = [];
+for (const [rad, tiltX, tiltZ, speed] of [[3.4, 1.1, 0.2, 0.4], [4.2, 0.5, -0.9, -0.28]]) {
+  const rMat = new THREE.MeshBasicMaterial({
+    color: COL.cyan, transparent: true, opacity: 0.35, side: THREE.DoubleSide,
+  });
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.02, 8, 96), rMat);
+  ring.rotation.set(tiltX, 0, tiltZ);
+  ring.userData.speed = speed;
+  hub.add(ring);
+  rings.push(ring);
+}
+
+// Hub label
+{
+  const div = document.createElement('div');
+  div.className = 'hub-label';
+  div.textContent = 'HERMES GATEWAY';
+  div.style.pointerEvents = 'none';
+  const lab = new CSS2DObject(div);
+  lab.position.set(0, 3.4, 0);
+  hub.add(lab);
+}
+
+// ── Fleet nodes ──────────────────────────────────────────────
+function buildNodeMesh(node) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0x0a1218, emissive: node.color, emissiveIntensity: 0.55,
+    roughness: 0.4, metalness: 0.5,
+  });
+  let mesh;
+  if (node.shape === 'octa')       mesh = new THREE.Mesh(new THREE.OctahedronGeometry(node.size, 0), mat);
+  else if (node.shape === 'dodeca')mesh = new THREE.Mesh(new THREE.DodecahedronGeometry(node.size * 0.8, 0), mat);
+  else if (node.shape === 'box')   mesh = new THREE.Mesh(new THREE.BoxGeometry(node.size * 1.4, node.size * 1.4, node.size * 1.4), mat);
+  else { // steam deck silhouette
+    const body = new THREE.Group();
+    const deckMat = new THREE.MeshStandardMaterial({
+      color: 0x12161c, emissive: node.color, emissiveIntensity: 0.3, roughness: 0.5, metalness: 0.4,
+    });
+    body.add(new THREE.Mesh(new THREE.BoxGeometry(node.size * 1.6, node.size * 0.32, node.size * 0.75), deckMat));
+    const screen = new THREE.Mesh(
+      new THREE.PlaneGeometry(node.size * 1.05, node.size * 0.6),
+      new THREE.MeshBasicMaterial({ color: 0x0d2a30 })
+    );
+    screen.rotation.x = -Math.PI / 2;
+    screen.position.y = node.size * 0.17;
+    body.add(screen);
+    const stickMat = new THREE.MeshBasicMaterial({ color: node.color });
+    for (const sx of [-1, 1]) {
+      const stick = new THREE.Mesh(new THREE.SphereGeometry(node.size * 0.09, 8, 8), stickMat);
+      stick.position.set(sx * node.size * 0.62, node.size * 0.2, 0);
+      body.add(stick);
+    }
+    mesh = body;
+  }
+  // thin wireframe overlay for the TRON edge look
+  const wire = new THREE.Mesh(
+    mesh.geometry,
+    new THREE.MeshBasicMaterial({ color: node.color, wireframe: true, transparent: true, opacity: 0.35 })
+  );
+  wire.scale.setScalar(1.02);
+  mesh.add(wire);
+  g.add(mesh);
+  g.add(makeGlowSprite(node.color, node.size * 3.4));
+  return g;
+}
+
+const nodeGroups = new Map();
+const orbitLines = [];
+for (const node of NODES) {
+  const grp = buildNodeMesh(node);
+  grp.userData.node = node;
+  scene.add(grp);
+  nodeGroups.set(node.id, grp);
+
+  // orbit ring in the node's tilted plane
+  const pts = [];
+  const v = new THREE.Vector3();
+  for (let i = 0; i <= 128; i++) {
+    nodePosition(node, i / 128 * (Math.PI * 2 / node.speed), v);
+    pts.push(v.clone());
+  }
+  const oGeo = new THREE.BufferGeometry().setFromPoints(pts);
+  const orbit = new THREE.Line(oGeo, new THREE.LineBasicMaterial({
+    color: node.color, transparent: true, opacity: 0.12,
+  }));
+  scene.add(orbit);
+  orbitLines.push(orbit);
+
+  // CSS2D label
+  const div = document.createElement('div');
+  div.className = 'node-label';
+  div.innerHTML = node.name + '<span class="node-spec">' + node.spec + '</span>';
+  div.style.pointerEvents = 'none';
+  const lab = new CSS2DObject(div);
+  lab.position.set(0, node.size * 0.5 + 1.9, 0);
+  grp.add(lab);
+}
+
+// ── Arc data flows ───────────────────────────────────────────
+// Each arc is a dynamic quadratic bezier hub/node → hub/node,
+// rebuilt per-frame from live node positions. Pulses ride the curve.
+const ARC_SEGMENTS = 28;
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), tmpMid = new THREE.Vector3();
+
+function arcEndpoint(id, t) {
+  if (id === 'hub') return tmpA.set(0, 0, 0);
+  return nodePosition(NODES.find(n => n.id === id), t, tmpA);
+}
+
+const arcObjs = ARCS.map(arc => {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((ARC_SEGMENTS + 1) * 3), 3));
+  const line = new THREE.Line(geo, new THREE.LineBasicMaterial({
+    color: arc.color, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false,
+  }));
+  scene.add(line);
+  return { def: arc, line, curve: new THREE.QuadraticBezierCurve3(new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()) };
+});
+
+// Pulse pool riding the arcs (capped at 14)
+const PULSE_MAX = 14;
+const pulses = [];
+for (let i = 0; i < PULSE_MAX; i++) {
+  const mat = new THREE.SpriteMaterial({
+    map: glowTex, color: 0xffffff, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  const spr = new THREE.Sprite(mat);
+  spr.scale.setScalar(1.5);
+  spr.visible = false;
+  scene.add(spr);
+  pulses.push({ spr, arc: null, t: 0, speed: 0.25, wait: Math.random() * 4 });
+}
+
+function assignPulse(p) {
+  p.arc = arcObjs[Math.floor(Math.random() * arcObjs.length)];
+  p.spr.material.color.setHex(p.arc.def.color);
+  p.t = 0;
+  p.speed = 0.18 + Math.random() * 0.25;
+  p.spr.visible = true;
+}
+
+// ── 18 agent sparks ──────────────────────────────────────────
+// One Points draw call; each spark orbits the hub on its own tilted
+// circle and occasionally darts out to a fleet node and back.
+const sparkGeo = new THREE.BufferGeometry();
+sparkGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(SPARK_COUNT * 3), 3));
+sparkGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(SPARK_COUNT * 3), 3));
+const sparkPts = new THREE.Points(sparkGeo, new THREE.PointsMaterial({
+  size: 0.85, vertexColors: true, transparent: true, opacity: 0.95,
+  blending: THREE.AdditiveBlending, depthWrite: false, map: glowTex,
+}));
+scene.add(sparkPts);
+
+const sparks = [];
+for (let i = 0; i < SPARK_COUNT; i++) {
+  const tilt = (Math.random() - 0.5) * 1.2;
+  const ct = Math.cos(tilt), st = Math.sin(tilt);
+  sparks.push({
+    idx: i,
+    name: AGENT_NAMES[i % AGENT_NAMES.length],
+    role: AGENT_ROLES[i % AGENT_ROLES.length],
+    color: i % 6 === 5 ? COL.amber : COL.cyan, // occasional amber accent
+    radius: 5.5 + Math.random() * 2.5,
+    speed: 0.5 + Math.random() * 0.5,
+    phase: Math.random() * Math.PI * 2,
+    ct, st,
+    state: 'orbit',        // orbit | out | dwell | back
+    stT: 0,
+    target: null,
+    from: new THREE.Vector3(),
+    to: new THREE.Vector3(),
+  });
+  const c = new THREE.Color(sparks[i].color);
+  sparkGeo.attributes.color.setXYZ(i, c.r, c.g, c.b);
+}
+sparkGeo.attributes.color.needsUpdate = true;
+
+const tmpSpark = new THREE.Vector3();
+function sparkOrbitPos(s, t, out) {
+  const a = s.phase + t * s.speed;
+  out.set(Math.cos(a) * s.radius, 0, Math.sin(a) * s.radius);
+  const y = out.y * s.ct - out.z * s.st;
+  const z = out.y * s.st + out.z * s.ct;
+  out.y = y; out.z = z;
+  return out;
+}
+
+const easeInOut = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+
+function updateSparks(t, dt) {
+  const pos = sparkGeo.attributes.position;
+  for (const s of sparks) {
+    if (s.state === 'orbit') {
+      sparkOrbitPos(s, t, tmpSpark);
+      // small chance to begin a dart to a node
+      if (Math.random() < dt * 0.06) {
+        s.target = NODES[Math.floor(Math.random() * NODES.length)];
+        s.from.copy(tmpSpark);
+        s.state = 'out'; s.stT = 0;
+      }
+    } else {
+      s.stT += dt;
+      const node = s.target;
+      nodePosition(node, t, tmpB);
+      tmpB.y += node.size + 1.0;
+      if (s.state === 'out') {
+        const k = easeInOut(Math.min(s.stT / 1.4, 1));
+        tmpSpark.lerpVectors(s.from, tmpB, k);
+        if (s.stT >= 1.4) { s.state = 'dwell'; s.stT = 0; }
+      } else if (s.state === 'dwell') {
+        tmpSpark.copy(tmpB);
+        // jiggle while inspecting
+        tmpSpark.x += Math.sin(t * 6 + s.idx) * 0.15;
+        tmpSpark.y += Math.cos(t * 5 + s.idx * 2) * 0.15;
+        if (s.stT >= 1.1 + Math.random() * 0.8) { s.state = 'back'; s.stT = 0; s.from.copy(tmpSpark); }
+      } else { // back
+        const k = easeInOut(Math.min(s.stT / 1.4, 1));
+        sparkOrbitPos(s, t, tmpA); // live orbit slot while returning
+        tmpSpark.lerpVectors(s.from, tmpA, k);
+        if (s.stT >= 1.4) s.state = 'orbit';
+      }
+    }
+    pos.setXYZ(s.idx, tmpSpark.x, tmpSpark.y, tmpSpark.z);
+  }
+  pos.needsUpdate = true;
+}
+
+// ── Hover: raycast agent sparks → tooltip ────────────────────
+const raycaster = new THREE.Raycaster();
+raycaster.params.Points.threshold = 1.0;
+const mouseNDC = new THREE.Vector2(-10, -10);
+const tooltip = document.getElementById('tooltip');
+const ttName = document.getElementById('tt-name');
+const ttRole = document.getElementById('tt-role');
+let hoveredIdx = -1;
+
+renderer.domElement.addEventListener('pointermove', e => {
+  mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  tooltip.style.left = (e.clientX + 14) + 'px';
+  tooltip.style.top  = (e.clientY + 10) + 'px';
+});
+renderer.domElement.addEventListener('pointerleave', () => { mouseNDC.set(-10, -10); });
+
+function updateHover() {
+  raycaster.setFromCamera(mouseNDC, camera);
+  const hits = raycaster.intersectObject(sparkPts);
+  const idx = hits.length ? hits[0].index : -1;
+  if (idx !== hoveredIdx) {
+    hoveredIdx = idx;
+    if (idx >= 0) {
+      const s = sparks[idx];
+      ttName.textContent = s.name.toUpperCase();
+      ttRole.textContent = 'AGENT · ' + s.role.toUpperCase();
+      tooltip.style.display = 'block';
+    } else {
+      tooltip.style.display = 'none';
+    }
+  }
+}
+
+// ── Post-processing: restrained bloom ────────────────────────
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight), 0.75, 0.55, 0.18
+);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// ── Resize ───────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ── Controls UI ──────────────────────────────────────────────
+let paused = false;
+const btnPause = document.getElementById('btn-pause');
+const btnRotate = document.getElementById('btn-rotate');
+btnPause.addEventListener('click', () => {
+  paused = !paused;
+  btnPause.textContent = paused ? '▶ RESUME' : '⏸ PAUSE';
+  btnPause.classList.toggle('active', paused);
+});
+btnRotate.addEventListener('click', () => {
+  controls.autoRotate = !controls.autoRotate;
+  btnRotate.classList.toggle('active', controls.autoRotate);
+});
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); btnPause.click(); }
+});
+
+// ── Main loop ────────────────────────────────────────────────
+const clock = new THREE.Clock();
+let simT = 0;
+const nodePosCache = new Map();
+for (const n of NODES) nodePosCache.set(n.id, new THREE.Vector3());
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (!paused) simT += dt;
+  const t = simT;
+
+  // hub life
+  const pulse = 0.85 + Math.sin(t * 1.6) * 0.15;
+  coreMat.emissiveIntensity = 2.4 * pulse;
+  core.scale.setScalar(0.96 + Math.sin(t * 1.6) * 0.05);
+  shell.rotation.y = t * 0.25;
+  shell.rotation.x = t * 0.11;
+  hubLight.intensity = 900 * pulse;
+  for (const r of rings) {
+    r.rotation.z += (paused ? 0 : r.userData.speed * dt);
+    r.rotation.x += (paused ? 0 : r.userData.speed * 0.35 * dt);
+  }
+
+  // nodes: update positions
+  for (const node of NODES) {
+    const grp = nodeGroups.get(node.id);
+    nodePosition(node, t, nodePosCache.get(node.id));
+    grp.position.copy(nodePosCache.get(node.id));
+    grp.rotation.y = t * 0.3 + node.phase;
+    grp.rotation.x = Math.sin(t * 0.2 + node.phase) * 0.1;
+  }
+
+  // arcs: rebuild bezier from live positions
+  for (const ao of arcObjs) {
+    const pA = arcEndpoint(ao.def.a, t).clone();
+    const pB = arcEndpoint(ao.def.b, t).clone();
+    tmpMid.addVectors(pA, pB).multiplyScalar(0.5);
+    const lift = pA.distanceTo(pB) * 0.28;
+    tmpMid.y += lift;
+    ao.curve.v0.copy(pA);
+    ao.curve.v1.copy(tmpMid);
+    ao.curve.v2.copy(pB);
+    const posAttr = ao.line.geometry.attributes.position;
+    for (let i = 0; i <= ARC_SEGMENTS; i++) {
+      ao.curve.getPoint(i / ARC_SEGMENTS, tmpA);
+      posAttr.setXYZ(i, tmpA.x, tmpA.y, tmpA.z);
+    }
+    posAttr.needsUpdate = true;
+    // subtle flicker
+    ao.line.material.opacity = 0.18 + Math.sin(t * 2.2 + ao.def.b.length) * 0.06;
+  }
+
+  // pulses
+  if (!paused) {
+    for (const p of pulses) {
+      if (p.spr.visible) {
+        p.t += p.speed * dt;
+        if (p.t >= 1) { p.spr.visible = false; p.wait = 0.5 + Math.random() * 3; continue; }
+        p.arc.curve.getPoint(p.t, tmpA);
+        p.spr.position.copy(tmpA);
+        p.spr.material.opacity = 0.9 * Math.sin(p.t * Math.PI); // fade in/out
+      } else {
+        p.wait -= dt;
+        if (p.wait <= 0) assignPulse(p);
+      }
+    }
+  }
+
+  updateSparks(t, paused ? 0 : dt);
+  updateHover();
+
+  controls.update();
+  composer.render();
+  labelRenderer.render(scene, camera);
+}
+
+animate();
+</script>
+</body>
+</html>

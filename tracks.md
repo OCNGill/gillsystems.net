@@ -87,7 +87,7 @@
 | Item | Priority | Notes |
 |------|----------|-------|
 | Solutions pages | Medium | Expand /solutions/ section |
-| AI Era page Update | Low | Update /ai-era.html |
+| AI Era page rebuild | High | IN PROGRESS — ai-era.html rebuilt (Sovereign AI Stack hero + 18-agent fleet roster); pending final verification |
 | Blog section | Low | Git-based static blog engine |
 
 ---
