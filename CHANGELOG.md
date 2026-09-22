@@ -35,3 +35,17 @@ All notable changes to this project.
 - Node Registry Watcher (node_registry_watcher.py) for dynamic Caddy upstreams
 - Upstream auto-detection from Hermes LAN nodes
 - DEPLOY.md with full deployment instructions
+---
+
+## [1.2.1] - 2026-09-22
+
+### Fixed
+- **index.html** — Removed the dead GAMES nav tab (404); all other navigation intact.
+- **open-source.html** — Deadwood card title now links to the in-site game (Deadwood_alien_shooter.html), openable directly from the Open Source page; GitHub button retained as secondary.
+- **ai-era.html** — Fleet animation iframe path corrected to absolute (`/animations/...`) so it renders from any page on the site.
+
+### Verified
+LAN (10.0.0.93) and GitHub Pages both serve identical content; animation serves at `/animations/fleet_animation_v2.html` (HTTP 200).
+
+> *"They went down to the sea in ships, doing business on the mighty waters... then were glad because they were quiet, and he brought them unto their desired haven." — Psalm 107:23, 30 (ESV)*
+> — The fleet ships from the harbor it already knows, into quiet waters, and comes home to the live site it was built for.
