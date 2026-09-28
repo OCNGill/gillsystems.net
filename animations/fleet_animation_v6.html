@@ -17,9 +17,9 @@ canvas{position:fixed;inset:0;width:100%;height:100%;cursor:grab;touch-action:no
 :focus-visible{outline:2px solid #5fe0da;outline-offset:2px}
 .hud{position:fixed;z-index:2}
 #top{top:14px;left:16px;pointer-events:none}
-#top small{letter-spacing:3px;font-size:9.5px;color:#7d9aa8}
+#top small{letter-spacing:3px;font-size:10px;color:#8fb6c4}
 #top h1{margin:3px 0;font-size:17px;letter-spacing:3px;color:#e2fbfb;font-weight:600}
-#top p{margin:0;font-size:9px;letter-spacing:1.5px;color:var(--dm)}
+#top p{margin:0;font-size:10px;letter-spacing:1.1px;color:#a6c9d6;line-height:1.5}
 #left{top:96px;left:16px;width:218px;max-height:calc(100% - 160px);overflow:auto}
 .pn{background:var(--pn);border:1px solid var(--ln);padding:10px 12px;margin-bottom:8px;backdrop-filter:blur(6px)}
 .pn h2{margin:0 0 7px;font-size:9.5px;letter-spacing:2.2px;color:#8fb6c4}
@@ -27,12 +27,14 @@ button{font:inherit;cursor:pointer}
 .tg{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 4px;padding:7px 9px;background:rgba(10,24,32,.85);border:1px solid var(--ln);color:#9fd3dc;font-size:9.5px;font-weight:600;letter-spacing:1.5px;text-align:left;min-height:32px}
 .tg i{width:8px;height:8px;border-radius:50%;background:var(--c,#3ae2e0);box-shadow:0 0 8px var(--c,#3ae2e0);flex:0 0 auto}
 .tg[aria-pressed=true]{background:rgba(16,48,54,.9);color:#e6fdfd;border-color:#2e7d86}
-.tg[aria-pressed=false]{opacity:.42;background:rgba(8,16,22,.6)}.tg[aria-pressed=false] i{opacity:.3;box-shadow:none}.tg[aria-pressed=true]{border-color:#2e7d86}
+.lay[aria-pressed=false]{opacity:.42;background:rgba(8,16,22,.6)}.lay[aria-pressed=false] i{opacity:.3;box-shadow:none}
+.tg.sel{background:rgba(16,48,54,.92);color:#e6fdfd;border-color:#2e7d86}
+.tg.sel i{box-shadow:0 0 12px var(--c,#3ae2e0),0 0 4px #fff}
 .tg small{margin-left:auto;font-weight:400;color:#527282;letter-spacing:.5px}
-.lg{display:flex;align-items:center;gap:9px;width:100%;padding:5px 2px;font-size:8.5px;letter-spacing:1px;color:#8fb6c4}
+.lg{display:flex;align-items:center;gap:9px;width:100%;padding:5px 2px;font-size:9px;letter-spacing:.8px;color:#a6c9d6}
 .lg i{flex:0 0 26px;height:0;border-top:2px solid var(--c,#3ae2e0)}
 .lg.dash i{border-top-style:dashed}
-.lg b{margin-left:auto;font-weight:400;color:#527282;font-size:8px;letter-spacing:.5px}
+.lg b{margin-left:auto;font-weight:400;color:#7d9aa8;font-size:8.5px;letter-spacing:.5px}
 #info{top:96px;right:16px;width:322px;max-height:calc(100% - 160px);overflow:auto}
 #info[hidden]{display:none}
 #info .tag{font-size:8.5px;letter-spacing:2px;color:var(--am)}
@@ -49,13 +51,15 @@ dd{margin:0;color:#bfe3ec;word-break:break-word}
 #bot{bottom:calc(12px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:10px;align-items:center;pointer-events:none;font-size:9.5px;letter-spacing:1.4px;color:#7d9aa8;flex-wrap:wrap;padding:0 8px}
 #bot button{pointer-events:auto;background:var(--pn);border:1px solid var(--ln);color:#9fd3dc;padding:6px 10px;font-size:9px;letter-spacing:1.5px;min-height:32px}
 #tip{position:fixed;z-index:3;pointer-events:none;background:var(--pn);border:1px solid var(--ln);padding:4px 8px;font-size:10px;letter-spacing:1px;display:none}
+#fps{position:fixed;top:14px;right:16px;z-index:2;font-size:9px;letter-spacing:1.2px;color:#7d9aa8;background:var(--pn);border:1px solid var(--ln);padding:4px 8px;pointer-events:none}
 @media(max-width:820px){#left{width:158px;top:88px}.tg{padding:6px;font-size:8.5px}#info{top:auto;bottom:48px;right:8px;left:8px;width:auto;max-height:44%}#top h1{font-size:14px;letter-spacing:2px}}
 @media(max-width:560px){#top p{display:none}}
 </style>
 </head>
 <body>
 <canvas id="c" role="img" aria-label="Interactive 3D map of the Gillsystems four-node AI fleet, Gillsystem's Commander Hermes Mesh. Use the buttons at left to inspect nodes, storage tiers, and communication channels."></canvas>
-<header class="hud" id="top"><small>GILLSYSTEMS · SOVEREIGN AI FLEET</small><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 18 AGENT THREADS (NAMED) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
+<header class="hud" id="top"><small>GILLSYSTEMS · SOVEREIGN AI FLEET</small><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 18 THREADS / 17 NAMES (HERMES HOLDS 2 SEATS) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
+<div id="fps" aria-hidden="true">FPS --</div>
 <div class="hud" id="left">
 <section class="pn"><h2>NODES · CLICK TO INSPECT</h2><div id="nb"></div></section>
 <section class="pn"><h2>LAYERS · SHOW/HIDE</h2><div id="lb"></div></section>
@@ -196,12 +200,13 @@ if(!st.pause){a.ang+=a.sp*dt;if(a.st==0){a.tm-=dt;if(a.tm<=0){a.st=1;a.u=0;a.ax=
 const hm=op(h.p,a.R,a.inc,a.rot,a.ang);let q=hm;if(a.u>0){const T2=pos[a.ax],o=[T2[0]+Math.cos(a.ang*2)*1.9,T2[1]+.5,T2[2]+Math.sin(a.ang*2)*1.9],e=sm(a.u);q=[0,1,2].map(i=>hm[i]+(o[i]-hm[i])*e);q[1]+=Math.sin(a.u*3.14)*2.6}
 const p=P(...q);a.tr.push([p.x,p.y]);if(a.tr.length>16)a.tr.shift();const id='a:'+a.i,r=(a.cls==='c'?.42:a.cls==='f'?.24:.32)*p.k,cc=a.cls==='c'?'#ffe9a8':a.cls==='f'?C.ice:col;
 items.push({d:p.z,f(){if(st.l.trails&&a.tr.length>2){g.beginPath();a.tr.forEach((t,i)=>i?g.lineTo(t[0],t[1]):g.moveTo(t[0],t[1]));g.strokeStyle=rg(col,.35*dm);g.lineWidth=Math.max(1,r*.6);g.stroke()}
-orb(p.x,p.y,Math.max(r,2),cc,dm);const on=st.sel===id||st.hov===id||(st.sel==='n:'+a.home);if((st.l.names||on)&&(on||!st.sel)){lab(a.nm,p.x,p.y-r-6,on?10.5:9,'#dff6fa',(on?1:.62)*dm*cl(1.1-p.z*.012,.35,1))}
+orb(p.x,p.y,Math.max(r,2),cc,dm);const on=st.sel===id||st.hov===id||(st.sel==='n:'+a.home);const nearCore=Math.hypot(p.x-hp.x,p.y-hp.y)<7.2*hp.k;
+if((st.l.names||on)&&(on||!st.sel)&&!(nearCore&&!on)){lab(a.nm,p.x,p.y-r-6,on?10.5:9,'#dff6fa',(on?1:.62)*dm*cl(1.1-p.z*.012,.35,1))}
 if(st.sel===id){g.strokeStyle='#fff';g.lineWidth=1.2;g.beginPath();g.arc(p.x,p.y,r*2.6+3,0,7);g.stroke()}
 hits.push({id:id,x:p.x,y:p.y,r:Math.max(r*2.2,9),pr:0,z:p.z})}})}
 items.sort((a,b)=>b.d-a.d);K0=FOC/cam.dist;for(const it of items)it.f();
 g.drawImage(vg,0,0);
-frame.n=(frame.n||0)+1;requestAnimationFrame(frame)}
+frame.n=(frame.n||0)+1;frame.acc=(frame.acc||0)+1;if(!frame.ft)frame.ft=ms;if(ms-frame.ft>=1000){const el=document.getElementById('fps');if(el)el.textContent='FPS '+Math.round(frame.acc*1000/(ms-frame.ft));frame.acc=0;frame.ft=ms}requestAnimationFrame(frame)}
 let drag=0,sx=0,sy=0,moved=0;
 const pick=(x,y)=>{let b=null,bs=1e9;for(const h of hits){const d=Math.hypot(h.x-x,h.y-y);if(d<=h.r+6){const s=d/h.r+h.pr*.5+h.z*.001;if(s<bs){bs=s;b=h}}}return b?b.id:null};
 cv.addEventListener('pointerdown',e=>{drag=1;moved=0;sx=e.clientX;sy=e.clientY;cv.setPointerCapture(e.pointerId)});
@@ -210,7 +215,7 @@ const h=pick(e.clientX,e.clientY);st.hov=h;cv.style.cursor=h?'pointer':'grab';co
 cv.addEventListener('pointerup',e=>{drag=0;if(!moved){const h=pick(e.clientX,e.clientY);h?show(h):show(null)}});
 cv.addEventListener('wheel',e=>{e.preventDefault();tg.dist=cl(tg.dist*(1+e.deltaY*.0011),24,90)},{passive:false});
 const title=id=>id.startsWith('n:')?N[id.slice(2)].nm:id.startsWith('a:')?ag[+id.slice(2)].nm+' · '+N[ag[+id.slice(2)].home].s:id.startsWith('tier:')?T.find(t=>'tier:'+t[0]===id)[1]:X[id].t;
-function show(id){st.sel=id;const el=$('#info');document.querySelectorAll('#nb .tg').forEach(b=>b.setAttribute('aria-pressed',id==='n:'+b.dataset.n));
+function show(id){st.sel=id;const el=$('#info');document.querySelectorAll('#nb .tg').forEach(b=>b.classList.toggle('sel',id==='n:'+b.dataset.n));
 if(!id){el.hidden=true;Object.assign(tg,{dist:50,tx:0,ty:1,tz:0});return}
 let h='<button class="x" onclick="show(null)">CLOSE</button>',row=r=>'<dl>'+r.map(x=>`<dt>${x[0].toUpperCase()}</dt><dd>${x[1]}</dd>`).join('')+'</dl>';
 if(id.startsWith('n:')){const k=id.slice(2),n=N[k],rs2=ag.filter(a=>a.home===k);h+=`<span class="tag">FLEET NODE · ${n.role.toUpperCase()}</span><h3>${n.nm}</h3><div style="font-size:9px;color:#527282;letter-spacing:1px">LLM INFERENCE · ${n.tps} TOKENS/SEC</div><div class="bar"><i style="width:${n.tps/130*100}%"></i></div>`+row([['OS',n.os],['GPU',n.gpu],['CPU',n.cpu],['RAM',n.ram],['Storage',n.disk],['Build',n.tgt],['Model',n.model]])+`<div style="font-size:9px;letter-spacing:2px;color:#527282;margin-top:8px">RESIDENT AGENTS · ${rs2.length}</div>`+rs2.map(a=>`<button class="chip" onclick="show('a:${a.i}')">${a.nm.toUpperCase()}${a.cls==='c'?' ★':''}</button>`).join('');const p=n.p;Object.assign(tg,{tx:p[0]*.7,ty:p[1],tz:p[2]*.7,dist:34})}
@@ -218,10 +223,10 @@ else if(id.startsWith('a:')){const a=ag[+id.slice(2)];h+=`<span class="tag">AGEN
 else if(id.startsWith('tier:')){const t=T.find(t=>'tier:'+t[0]===id);h+=`<span class="tag">STORAGE · ${t[2]}</span><h3>${t[1]}</h3><p>${t[6]}</p>`}
 else{const x=X[id];h+=`<span class="tag">${x.g}</span><h3>${x.t}</h3>`+row(x.rows)+`<p>${x.b}</p>`}
 el.innerHTML=h;el.hidden=false}
-$('#nb').innerHTML=Object.keys(N).map(k=>`<button class="tg" data-n="${k}" aria-pressed="false" style="--c:${C[k]}"><i></i>${N[k].s}<small>${ag.filter(a=>a.home===k).length} AGENTS</small></button>`).join('');
+$('#nb').innerHTML=Object.keys(N).map(k=>`<button class="tg nd" data-n="${k}" style="--c:${C[k]}"><i></i>${N[k].s}<small>${ag.filter(a=>a.home===k).length} AGENTS</small></button>`).join('');
 $('#nb').onclick=e=>{const b=e.target.closest('button');if(b)show(st.sel==='n:'+b.dataset.n?null:'n:'+b.dataset.n)};
 const LY=[['android','ANDROID APP',C.tl],['gchat','GOOGLE CHAT',C.tl],['sync','NODE SYNC',C.am],['storage','STORAGE',C.htpc],['cloud','CLOUD PATHS',C.gold],['names','AGENT NAMES',C.ice],['trails','AGENT TRAILS',C.main]];
-$('#lb').innerHTML=LY.map(l=>`<button class="tg" data-l="${l[0]}" aria-pressed="true" style="--c:${l[2]}"><i></i>${l[1]}</button>`).join('');
+$('#lb').innerHTML=LY.map(l=>`<button class="lay tg" data-l="${l[0]}" aria-pressed="true" style="--c:${l[2]}"><i></i>${l[1]}</button>`).join('');
 $('#lb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.l;st.l[k]=st.l[k]?0:1;b.setAttribute('aria-pressed',!!st.l[k])};
 $('#bp').onclick=e=>{st.pause=!st.pause;e.target.setAttribute('aria-pressed',st.pause);e.target.textContent=st.pause?'PLAY':'PAUSE'};
 $('#br').onclick=e=>{st.rot=!st.rot;e.target.setAttribute('aria-pressed',st.rot)};
