@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Gillsystem's Commander Hermes Mesh</title>
+<style>
+:root{
+  --bg:#03060c; --pn:rgba(5,12,20,.88); --ln:#1d4a55; --hi:#3ae2e0; --tx:#cfe9f2; --dm:#7fa4b2;
+  --am:#e0b45c; --gold:#c9a24a; --ice:#bfe3ee; --tl:#39b795;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:12px "Segoe UI",system-ui,-apple-system,sans-serif;overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+:focus-visible{outline:2px solid #5fe0da;outline-offset:2px}
+.hud{position:fixed;z-index:2}
+#top{top:14px;left:16px;pointer-events:none}
+#top small{letter-spacing:3px;font-size:9.5px;color:#7d9aa8}
+#top h1{margin:3px 0;font-size:17px;letter-spacing:3px;color:#e2fbfb;font-weight:600}
+#top p{margin:0;font-size:9px;letter-spacing:1.5px;color:var(--dm)}
+#left{top:96px;left:16px;width:218px;max-height:calc(100% - 160px);overflow:auto}
+.pn{background:var(--pn);border:1px solid var(--ln);padding:10px 12px;margin-bottom:8px;backdrop-filter:blur(6px)}
+.pn h2{margin:0 0 7px;font-size:9.5px;letter-spacing:2.2px;color:#8fb6c4}
+button{font:inherit;cursor:pointer}
+.tg{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 4px;padding:7px 9px;background:rgba(10,24,32,.85);border:1px solid var(--ln);color:#9fd3dc;font-size:9.5px;font-weight:600;letter-spacing:1.5px;text-align:left;min-height:32px}
+.tg i{width:8px;height:8px;border-radius:50%;background:var(--c,#3ae2e0);box-shadow:0 0 8px var(--c,#3ae2e0);flex:0 0 auto}
+.tg[aria-pressed=true]{background:rgba(16,48,54,.9);color:#e6fdfd;border-color:#2e7d86}
+.tg[aria-pressed=false]{opacity:.42;background:rgba(8,16,22,.6)}.tg[aria-pressed=false] i{opacity:.3;box-shadow:none}.tg[aria-pressed=true]{border-color:#2e7d86}
+.tg small{margin-left:auto;font-weight:400;color:#527282;letter-spacing:.5px}
+.lg{display:flex;align-items:center;gap:9px;width:100%;padding:5px 2px;font-size:8.5px;letter-spacing:1px;color:#8fb6c4}
+.lg i{flex:0 0 26px;height:0;border-top:2px solid var(--c,#3ae2e0)}
+.lg.dash i{border-top-style:dashed}
+.lg b{margin-left:auto;font-weight:400;color:#527282;font-size:8px;letter-spacing:.5px}
+#info{top:96px;right:16px;width:322px;max-height:calc(100% - 160px);overflow:auto}
+#info[hidden]{display:none}
+#info .tag{font-size:8.5px;letter-spacing:2px;color:var(--am)}
+#info h3{margin:6px 0;font-size:14px;letter-spacing:2px;color:#e2fbfb}
+#info button.x{float:right;background:none;border:1px solid var(--ln);color:var(--dm);font-size:8px;letter-spacing:1.5px;padding:4px 8px}
+dl{margin:8px 0;font-size:10px;display:grid;grid-template-columns:82px 1fr;gap:5px 8px}
+dt{color:#527282;letter-spacing:1px}
+dd{margin:0;color:#bfe3ec;word-break:break-word}
+.bar{height:6px;background:#0c1c26;border:1px solid var(--ln);margin:2px 0 8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#39b795,#3ae2e0)}
+#info p{font-size:10.5px;line-height:1.6;color:#a9ccd6;margin:6px 0}
+.chip{display:inline-block;margin:2px 3px 2px 0;padding:4px 8px;font-size:9px;letter-spacing:1px;background:rgba(10,24,32,.9);border:1px solid var(--ln);color:#9fd3dc;min-height:28px}
+.chip:hover{border-color:var(--hi);color:#fff}
+#bot{bottom:calc(12px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:10px;align-items:center;pointer-events:none;font-size:9.5px;letter-spacing:1.4px;color:#7d9aa8;flex-wrap:wrap;padding:0 8px}
+#bot button{pointer-events:auto;background:var(--pn);border:1px solid var(--ln);color:#9fd3dc;padding:6px 10px;font-size:9px;letter-spacing:1.5px;min-height:32px}
+#tip{position:fixed;z-index:3;pointer-events:none;background:var(--pn);border:1px solid var(--ln);padding:4px 8px;font-size:10px;letter-spacing:1px;display:none}
+@media(max-width:820px){#left{width:158px;top:88px}.tg{padding:6px;font-size:8.5px}#info{top:auto;bottom:48px;right:8px;left:8px;width:auto;max-height:44%}#top h1{font-size:14px;letter-spacing:2px}}
+@media(max-width:560px){#top p{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c" role="img" aria-label="Interactive 3D map of the Gillsystems four-node AI fleet, Gillsystem's Commander Hermes Mesh. Use the buttons at left to inspect nodes, storage tiers, and communication channels."></canvas>
+<header class="hud" id="top"><small>GILLSYSTEMS · SOVEREIGN AI FLEET</small><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 18 AGENT THREADS (NAMED) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
+<div class="hud" id="left">
+<section class="pn"><h2>NODES · CLICK TO INSPECT</h2><div id="nb"></div></section>
+<section class="pn"><h2>LAYERS · SHOW/HIDE</h2><div id="lb"></div></section>
+<section class="pn"><h2>FLOW LEGEND</h2>
+<div class="lg" style="--c:#3ae2e0"><i></i>Mesh &rarr; node<b>runtime</b></div>
+<div class="lg" style="--c:#39b795"><i></i>Android &middot; Chat<b>channels</b></div>
+<div class="lg" style="--c:#e0b45c"><i></i>HTPC &harr; node sync<b>SMB/CIFS</b></div>
+<div class="lg" style="--c:#39d08f"><i></i>ZFS storage<b>canonical</b></div>
+<div class="lg dash" style="--c:#c9a24a"><i></i>Optional cloud<b>fallback</b></div>
+<div class="lg" style="--c:#ffe9a8"><i></i>Active endpoint<b>one of three</b></div>
+</section>
+</div>
+<aside class="hud pn" id="info" hidden aria-live="polite"></aside>
+<div class="hud" id="bot"><span style="letter-spacing:2.6px;color:#3f5a68">SYSTEMS SHOULD SERVE HUMANS</span><button id="bp" aria-pressed="false">PAUSE</button><button id="br" aria-pressed="true">AUTO-ROTATE</button><span>DRAG ORBIT · SCROLL ZOOM · CLICK NODES, AGENTS, LAYERS · ESC CLOSES</span></div>
+<div id="tip"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s),cv=$('#c'),g=cv.getContext('2d');
+const C={main:'#3ae2e0',htpc:'#39d08f',laptop:'#8aa4ff',deck:'#e8b85c',gold:'#c9a24a',tl:'#39b795',ice:'#bfe3ee',am:'#e0b45c'};
+const rg=(h,a)=>{const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${n>>8&255},${n&255},${a})`};
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),sm=u=>u*u*(3-2*u);
+
+/* ---------- DATA ---------- */
+const N={
+main:{nm:"GILLSYSTEMS-MAIN",s:'MAIN',p:[-18,1.5,2],r:2.3,os:'Windows 11 Pro',role:'Orchestrator · primary compute · Tier 1',gpu:'Radeon 7900 XTX · 24 GB',cpu:'Ryzen 9 5900X · 12C/24T',ram:'48 GB',disk:'2 TB NVMe',tgt:'gfx1100 · ROCm/HIP — GPU mandatory',model:'Qwen3.8-27B + vision · MTP · 192K ctx',tps:130},
+htpc:{nm:'GILLSYSTEMS-HTPC',s:'HTPC',p:[9,1,9],r:1.8,os:'Kubuntu',role:'Storage authority · worker · Tier 1',gpu:'Radeon RX 7600 · 8 GB',cpu:'Ryzen 5 5600G · 6C/12T',ram:'16 GB',disk:'2 TB ZFS pool',tgt:'gfx1102 · ROCm — GPU mandatory',model:'Qwen3.5-9B · llama.cpp',tps:60},
+laptop:{nm:'GILLSYSTEMS-LAPTOP',s:'LAPTOP',p:[19,3,-4],r:1.6,os:'Windows 10',role:'Worker · gateway & ops hub · Tier 2',gpu:'Vega 6 iGPU (UMA)',cpu:'Ryzen 5 4500U · 6C/6T',ram:'20 GB',disk:'1 TB SSD',tgt:'gfx90c · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-4B · llama.cpp',tps:9},
+deck:{nm:'GILLSYSTEMS-STEAM-DECK',s:'STEAM DECK',p:[-8,-1,-10],r:1.9,os:'SteamOS (Arch)',role:'Worker · handheld · Tier 2',gpu:'RDNA 2 APU · 8 CUs (shared)',cpu:'Zen 2 · 4C/8T',ram:'16 GB unified',disk:'512 GB NVMe',tgt:'gfx1033 · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-9B · llama.cpp',tps:30}
+};
+const A=[['Hermes','Operational commander — seat 1','main','c',['mesh','n:htpc']],['Architect','System design','main','s',['n:laptop','mesh']],['Coder','Development','main','s',['n:laptop','n:deck']],['Liara','Research','main','s',['mesh','n:htpc']],['Scout','Fast-light agent','main','f',['mesh','n:deck']],
+['Hermes','Operational commander — seat 2','htpc','c',['mesh','n:main']],['Orchestrator','Workflow coordination','htpc','s',['mesh','n:main','n:laptop']],['Scribe','Documentation','htpc','s',['n:main','n:deck']],['Courier','Fast-light agent','htpc','f',['mesh','n:laptop']],
+['Geordi','Android development','laptop','s',['phone','n:main']],['Sentinel','Security','laptop','s',['relay','mesh']],['EDI','Network oversight','laptop','s',['relay','mesh']],['Adam','Agent architect / gatekeeper','laptop','s',['mesh','n:htpc']],['Lamp','Fast-light agent','laptop','f',['mesh','n:main']],
+['Major Gaben','SteamOS operations','deck','s',['n:htpc','mesh']],['Spark','Fast-light agent','deck','f',['mesh','n:main']],['Medic','Incident response','deck','s',['n:main','n:htpc','n:laptop']],['Theo','Theologian','deck','s',['mesh','n:htpc']]];
+const X={mesh:{p:[0,3,0],t:'COMMANDER HERMES MESH',g:'FLEET COORDINATION LAYER · PEER MESH',rows:[['Topology','Distributed peer mesh — no central gateway'],['Endpoints','3 peer endpoints, one active at a time (illustrative rotation)'],['Watchdog','Promotes a standby peer if the active one stops responding'],['Roster','18 threads · 17 names (Hermes holds two seats)']],b:'Peers coordinate work; the active endpoint rotates to illustrate failover while the watchdog promotes a standby if one stops responding.'},
+phone:{p:[-14,13,-1],t:'ANDROID APP',g:'COMMAND SURFACE · CHANNEL A',c:C.tl,l:'android',rows:[['Path','Direct WebSocket via Oracle/FRP relay'],['Delivery','Real-time console · full responses'],['Capability','Remote command · sudo requests']],b:'Private Commander Hermes app — 30+ releases. Independent of Google Chat.'},
+relay:{p:[-7,8.5,-4],t:'ORACLE FRP RELAY',g:'WAN INFRASTRUCTURE · ALWAYS-FREE',c:C.tl,l:'android',rows:[['Role','Relay / tunnel — WAN reachability'],['Hosts','No agents · no primary inference']],b:'A path, not a brain. Primary inference stays on your hardware.'},
+gchat:{p:[14,13,-1],t:'GOOGLE CHAT DM',g:'DM BRIDGE · CHANNEL B',c:C.tl,l:'gchat',rows:[['Path','Google Chat DM · native adapter'],['Delivery','Full responses to the thread']],b:'A second, independent door into the same runtime mesh.'},
+bridge:{p:[7,8.5,-4],t:'CHAT BRIDGE',g:'NATIVE ADAPTER',c:C.tl,l:'gchat',rows:[['Role','Carries DM threads into the mesh']],b:'Adapts Google Chat DMs to the mesh and returns full responses.'},
+cloud:{p:[0,15,-9],t:'OPENROUTER',g:'OPTIONAL CLOUD FALLBACK',c:C.gold,l:'cloud',rows:[['Status','Only when explicitly selected'],['Visual','Muted gold · dashed']],b:'Local-first, cloud-assisted when needed.'}};
+const T=[['nvme','NVMe / SSD','LOCAL WORKING TIER',-2.2,2.9,C.ice,'Active I/O and staging before changes commit to canonical storage.'],['fast','ZFS FAST','CANONICAL · FLEET MEMORY',-4.2,3.5,C.htpc,'Fleet memory, scripts and shared state. Nodes pull at startup, push at shutdown, sync continuously over SMB/CIFS. The HTPC is the canonical source of truth.'],['cold','ZFS COLD','SNAPSHOT / ARCHIVAL',-6.1,3.1,'#5d7f8f','Snapshots are a tier of the same pool — not a separate device.']];
+
+/* ---------- setup ---------- */
+let W,H,K0,FOC,DPR,vg,off=0,yb=.12;const cam={yaw:.12,pitch:.40,dist:50,tx:0,ty:1,tz:0},tg={dist:50,tx:0,ty:1,tz:0};
+function rs(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;g.setTransform(DPR,0,0,DPR,0,0);FOC=Math.max(H*1.4,W*.72);vg=document.createElement('canvas');vg.width=W;vg.height=H;const x=vg.getContext('2d'),v=x.createRadialGradient(W/2,H*.5,Math.min(W,H)*.4,W/2,H*.5,Math.max(W,H)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(1,3,7,.6)');x.fillStyle=v;x.fillRect(0,0,W,H)}
+addEventListener('resize',rs);rs();
+function P(x,y,z){x-=cam.tx;y-=cam.ty;z-=cam.tz;const cy=Math.cos(cam.yaw),sy=Math.sin(cam.yaw),cp=Math.cos(cam.pitch),sp=Math.sin(cam.pitch);
+const a=x*cy-z*sy,b=x*sy+z*cy,c=y*cp-b*sp,d=y*sp+b*cp,dz=Math.max(2,cam.dist+d),k=FOC/dz;return{x:W/2-off+a*k,y:H*.53-c*k,k,z:d}}
+const pos={};for(const k in N)pos['n:'+k]=N[k].p;for(const k in X)pos[k]=X[k].p;
+const st={l:{android:1,gchat:1,sync:1,storage:1,cloud:1,names:1,trails:1},sel:null,hov:null,pause:matchMedia('(prefers-reduced-motion:reduce)').matches,rot:!matchMedia('(prefers-reduced-motion:reduce)').matches};
+const ag=A.map((a,i)=>{const hn=a[2],idx=A.filter((b,j)=>j<i&&b[2]===hn).length;return{nm:a[0],role:a[1],home:hn,cls:a[3],anc:a[4],i,R:N[hn].r*1.5+1.5+(idx%3)*.9,inc:.45+(idx*.83)%1.7,rot:idx*1.3+i,sp:(.32+(idx%4)*.1)*(idx%2?1:-1),ang:i*2.1,st:0,u:0,tm:1+Math.random()*12,tr:[]}});
+const agByHome={};for(const a of ag)(agByHome[a.home]=agByHome[a.home]||[]).push(a);
+const LK=[];for(const k in N){LK.push({a:'mesh',b:'n:'+k,lift:3,c:C[k],n:3,sp:.22,ly:0});if(k!=='htpc')LK.push({a:'n:htpc',b:'n:'+k,lift:-3.5,c:C.am,n:2,sp:.14,ly:'sync',bi:1})}
+LK.push({a:'phone',b:'relay',lift:1,c:C.tl,n:2,sp:.25,ly:'android',bi:1},{a:'relay',b:'mesh',lift:2,c:C.tl,n:2,sp:.25,ly:'android',bi:1},{a:'gchat',b:'bridge',lift:1,c:C.tl,n:2,sp:.25,ly:'gchat',bi:1},{a:'bridge',b:'mesh',lift:2,c:C.tl,n:2,sp:.25,ly:'gchat',bi:1},{a:'cloud',b:'mesh',lift:4,c:C.gold,n:2,sp:.12,ly:'cloud',dash:1});
+const bz=(a,b,l,t)=>{const m=[(a[0]+b[0])/2,(a[1]+b[1])/2+l,(a[2]+b[2])/2],u=1-t;return[0,1,2].map(i=>u*u*a[i]+2*u*t*m[i]+t*t*b[i])};
+const op=(c,R,inc,rot,t)=>{const x=Math.cos(t)*R,z0=Math.sin(t)*R,y=z0*Math.sin(inc),z=z0*Math.cos(inc);return[c[0]+x*Math.cos(rot)-z*Math.sin(rot),c[1]+y,c[2]+x*Math.sin(rot)+z*Math.cos(rot)]};
+const stars=[...Array(150)].map(()=>{const u=Math.random()*6.283,v=Math.random()*2-1,q=Math.sqrt(1-v*v),R=110+Math.random()*80;return{p:[q*Math.cos(u)*R,v*R,q*Math.sin(u)*R],s:Math.random()*1.4+.4,f:Math.random()*3+.5,ph:Math.random()*6}});
+const dust=[...Array(44)].map(()=>({x:Math.random()*90-45,y:Math.random()*40-12,z:Math.random()*90-45,v:.5+Math.random()*1.2,ph:Math.random()*6}));
+let hits=[],time=0;
+const dimN=id=>{const s=st.sel;if(!s||!s.startsWith('n:'))return 1;return id===s?1:.3};
+const GC=new Map();
+function gq(key,make){let q=GC.get(key);if(!q){q=make();if(GC.size>500)GC.clear();GC.set(key,q)}return q}
+function orb(x,y,r,col,a=1){if(r<=0||a<=.02)return;const R=r*3.6;
+let q=gq(col+'|'+Math.round(R),()=>{const o=g.createRadialGradient(0,0,0,0,0,R);o.addColorStop(0,rg(col,.5));o.addColorStop(.4,rg(col,.12));o.addColorStop(1,rg(col,0));return o});
+g.globalCompositeOperation='lighter';g.globalAlpha=a;g.save();g.translate(x,y);g.fillStyle=q;g.beginPath();g.arc(0,0,R,0,7);g.fill();g.restore();g.globalCompositeOperation='source-over';
+const R2=Math.max(r,1);q=gq(col+'|i'+Math.round(R2),()=>{const o=g.createRadialGradient(-R2*.35,-R2*.4,R2*.08,0,0,R2);o.addColorStop(0,'rgba(255,255,255,.95)');o.addColorStop(.4,rg(col,.95));o.addColorStop(1,rg(col,.2));return o});
+g.fillStyle=q;g.beginPath();g.arc(x,y,R2,0,7);g.fill();g.globalAlpha=1}
+function ring(c,R,inc,rot,col,a,w,dash,n=56){g.beginPath();for(let i=0;i<=n;i++){const q=op(c,R,inc,rot,i/n*6.283),p=P(...q);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=rg(col,a);g.lineWidth=w;g.setLineDash(dash||[]);g.stroke();g.setLineDash([])}
+function lab(t,x,y,sz,col,a,al){if(a<=.02)return;g.font=`600 ${sz}px "Segoe UI",system-ui,sans-serif`;g.textAlign=al||'center';g.lineWidth=3;g.strokeStyle='rgba(2,6,11,.85)';g.strokeText(t,x,y);g.fillStyle=rg(col,a);g.fillText(t,x,y)}
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.lineTo(x+w-r,y);g.quadraticCurveTo(x+w,y,x+w,y+r);g.lineTo(x+w,y+h-r);g.quadraticCurveTo(x+w,y+h,x+w-r,y+h);g.lineTo(x+r,y+h);g.quadraticCurveTo(x,y+h,x,y+h-r);g.lineTo(x,y+r);g.quadraticCurveTo(x,y,x+r,y);g.closePath()}
+/* device mockup: kind 'android' = console stream, 'gchat' = DM thread with bubbles */
+function dev(p,sc,col,kind,dim,on){
+  const w=58*sc,h=112*sc,r=9*sc,x=p.x-w/2,y=p.y-h/2;
+  g.globalCompositeOperation='lighter';
+  let q=g.createRadialGradient(p.x,p.y,0,p.x,p.y,w*1.9);q.addColorStop(0,rg(col,.20*dim));q.addColorStop(1,rg(col,0));
+  g.fillStyle=q;g.beginPath();g.arc(p.x,p.y,w*1.9,0,7);g.fill();g.globalCompositeOperation='source-over';
+  rr(x,y,w,h,r);g.fillStyle='rgba(4,11,18,.94)';g.fill();
+  g.strokeStyle=rg(col,on?.95:.5*dim);g.lineWidth=Math.max(1,1.3*sc);g.stroke();
+  const sx=x+4*sc,sy=y+9*sc,sw=w-8*sc;
+  rr(sx,sy,sw,h-17*sc,3*sc);g.fillStyle=rg(col,.07*dim);g.fill();
+  g.fillStyle=rg(col,on?.9:.6*dim);g.fillRect(sx+sw*.18,y+4*sc,sw*.64,1.8*sc); /* earpiece */
+  if(kind==='android'){
+    g.fillStyle=rg(col,on?.95:.55*dim);
+    for(let i=0;i<4;i++){const bw=sw*(.30+.42*Math.abs(Math.sin(time*.7+i*1.9)));g.fillRect(sx+3*sc,sy+9*sc+i*8*sc,bw,2.6*sc)}
+    const cy2=sy+9*sc+4*8*sc;
+    rr(sx+3*sc,cy2,sw-6*sc,17*sc,2.5*sc);g.fillStyle=rg(col,.16*dim);g.fill();
+    g.fillStyle=rg('#eaffff',on?1:.6*dim);
+    const rows=Math.floor((time*.9)%3);
+    for(let i=0;i<=rows;i++)g.fillRect(sx+6*sc,cy2+5*sc+i*4*sc,(sw-14*sc)*(.55+.3*Math.abs(Math.sin(time*1.3+i))),1.7*sc);
+    if(!st.pause&&Math.sin(time*4)>0){g.fillStyle=rg('#eaffff',on?1:.5*dim);g.fillRect(sx+6*sc+(sw-14*sc)*.88,cy2+5*sc,1.8*sc,3*sc)}
+  } else {
+    const bub=(bx,by,bw,bh,fill,a)=>{rr(bx,by,bw,bh,bh/2.4);g.fillStyle=rg(fill,a);g.fill()};
+    const t1=(time*.5)%3;
+    bub(sx+3*sc,sy+8*sc,sw*.52,11*sc,col,on?.28:.12*dim);
+    bub(sx+3*sc,sy+23*sc,sw*.66,11*sc,col,on?.22:.10*dim);
+    const by2=sy+38*sc+Math.sin(time*.9)*1.5*sc;
+    bub(sx+sw*.40,by2,sw*.57,14*sc,'#e8fbff',on?.20:.09*dim);
+    g.fillStyle=rg('#dff6fa',on?.85:.4*dim);
+    for(let i=0;i<2;i++)g.fillRect(sx+sw*.45,by2+5*sc+i*4*sc,(sw*.47)*(.6+.3*Math.abs(Math.sin(time*1.1+i))),1.7*sc);
+    if(!st.pause&&Math.sin(time*3.4)>0){g.fillStyle=rg(col,on?.9:.4*dim);g.fillRect(sx+sw*.40+sw*.57-4*sc,by2+11*sc,2*sc,2*sc)}
+  }
+  g.fillStyle=rg(col,on?.5:.25*dim);rr(p.x-9*sc,y+h-4.5*sc,18*sc,1.8*sc,.9*sc);g.fill();
+}
+const ac=document.createElement('canvas');ac.width=160;ac.height=100;const a2=ac.getContext('2d');
+function aur(){const w=160,h=100;a2.clearRect(0,0,w,h);a2.globalCompositeOperation='lighter';[['#1f9c9a',.13],['#5b3fd8',.11],['#2fb58a',.09],['#c9973a',.06]].forEach((c,i)=>{const x=w*(.5+.42*Math.sin(time*.06+i*1.9)),y=h*(.4+.3*Math.cos(time*.045+i*2.4)),R=160*(.42+.1*Math.sin(time*.1+i)),r=a2.createRadialGradient(x,y,0,x,y,R);r.addColorStop(0,rg(c[0],c[1]*1.6));r.addColorStop(1,rg(c[0],0));a2.fillStyle=r;a2.fillRect(0,0,w,h)})}
+function bg(){let q=g.createLinearGradient(0,0,0,H);q.addColorStop(0,'#02050a');q.addColorStop(.6,'#051019');q.addColorStop(1,'#071722');g.fillStyle=q;g.fillRect(0,0,W,H);
+if(!frame.n||frame.n%4===0)aur();g.globalCompositeOperation='lighter';g.imageSmoothingEnabled=true;g.drawImage(ac,0,0,W,H);
+for(const s of stars){const p=P(s.p[0],s.p[1],s.p[2]);if(p.z>150||p.x<0||p.x>W||p.y<0||p.y>H)continue;g.fillStyle=`rgba(150,190,205,${.10+.22*Math.abs(Math.sin(time*s.f*.4+s.ph))})`;g.fillRect(p.x,p.y,s.s*.75,s.s*.75)}
+for(const d of dust){const y=((d.y+time*d.v)%52)-14;const p=P(d.x+Math.sin(time*.3+d.ph)*2,y,d.z);if(p.z>60)continue;const a=Math.sin(cl((y+14)/52,0,1)*3.14)*.5;g.fillStyle=`rgba(90,230,225,${a})`;g.beginPath();g.arc(p.x,p.y,Math.max(.6,p.k*.09),0,7);g.fill()}
+g.globalCompositeOperation='source-over';
+const fy=-10;g.lineWidth=1;for(let i=-6;i<=6;i++){const w=i*8,ar=.16*(1-Math.abs(i)/8);g.strokeStyle=`rgba(58,226,224,${ar})`;let a=P(w,fy,-48),b=P(w,fy,48);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();a=P(-48,fy,w);b=P(48,fy,w);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
+for(let k=0;k<3;k++){const r=((time*7+k*14)%42);g.beginPath();for(let i=0;i<=44;i++){const t=i/44*6.283,p=P(Math.cos(t)*r,fy,Math.sin(t)*r);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=`rgba(58,226,224,${.13*(1-r/42)})`;g.lineWidth=1;g.stroke()}}
+function frame(ms){if(document.hidden){requestAnimationFrame(frame);return}const dt=st.pause?0:Math.min(.05,(ms-(frame.l||ms))/1000);frame.l=ms;time+=dt;off+=((W>760?(st.sel?165:-70):0)-off)*.08;cam.yaw=yb+(st.rot?Math.sin(time*.11)*.32:0);
+for(const k of['dist','tx','ty','tz'])cam[k]+=(tg[k]-cam[k])*.07;
+hits=[];bg();const items=[];
+if(st.l.storage){const hp=N.htpc.p;T.forEach((t,i)=>{const c=[hp[0]+5,hp[1]+t[3]+1.4,hp[2]-1],id='tier:'+t[0],a=dimN('n:htpc')*(st.sel===id?1:.7);ring(c,t[4]*.82,0,0,t[5],.62*a,st.sel===id?2.6:1.5);const p=P(...c);items.push({d:p.z,f(){g.globalCompositeOperation='lighter';const q=g.createRadialGradient(p.x,p.y,0,p.x,p.y,t[4]*p.k);q.addColorStop(0,rg(t[5],.16*a));q.addColorStop(1,rg(t[5],0));g.fillStyle=q;g.beginPath();g.ellipse(p.x,p.y,t[4]*p.k,t[4]*p.k*Math.sin(cam.pitch)+2,0,0,7);g.fill();g.globalCompositeOperation='source-over';lab(t[1],p.x+t[4]*p.k+8,p.y+3,9.5,t[5],.85*a,'left');if(i===0){lab('STORAGE TIERS · ANCHORED TO HTPC',p.x,p.y-t[4]*p.k*Math.sin(cam.pitch)-16,10,C.ice,.85*a,'center')}hits.push({id:id,x:p.x,y:p.y,r:t[4]*p.k*.7,pr:3,z:p.z})}})})}
+for(const l of LK){if(l.ly&&!st.l[l.ly])continue;const A_=pos[l.a],B_=pos[l.b];const sl=st.sel,dm=(sl&&(sl===l.a||sl===l.b))?1:(sl&&sl.startsWith('n:')?.3:1);g.beginPath();for(let i=0;i<=28;i++){const p=P(...bz(A_,B_,l.lift,i/28));i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=rg(l.c,.26*dm);g.lineWidth=1.1;g.setLineDash(l.dash?[6,6]:[]);g.stroke();g.setLineDash([]);
+g.globalCompositeOperation='lighter';for(let i=0;i<l.n*(l.bi?2:1);i++){const rev=l.bi&&i%2,t=((time*l.sp+i/l.n)%1),q=P(...bz(A_,B_,l.lift,rev?1-t:t)),r=Math.max(1.4,q.k*.2);g.fillStyle=rg(l.c,.95*dm);g.beginPath();g.arc(q.x,q.y,r,0,7);g.fill();g.fillStyle=rg(l.c,.2*dm);g.beginPath();g.arc(q.x,q.y,r*3,0,7);g.fill()}g.globalCompositeOperation='source-over'}
+const hc=X.mesh.p,hp=P(...hc),act=Math.floor(time/6)%3;items.push({d:hp.z,f(){const sc=hp.k/K0;
+for(let i=0;i<2;i++)ring(hc,3.4+i*1.3,.6+i*.5,time*(.22+i*.08),C.ice,.28,1.1,null,44);
+orb(hp.x,hp.y,2.15*hp.k,'#e8fbff',dimN('mesh')*.85+.15);lab('COMMANDER HERMES MESH',hp.x,hp.y-7.6*hp.k-20,12*Math.max(.85,Math.min(1.4,sc)),'#e2fbfb',.98,'center');lab('FLEET COORDINATION · PEER MESH · ONE ENDPOINT ACTIVE AT A TIME',hp.x,hp.y-7.6*hp.k-6,8.5,'#8fb6c4',.9);
+for(let i=0;i<3;i++){const q=op(hc,5.2,.34,0,time*.22+i*2.094),p=P(...q),on=i===act;orb(p.x,p.y,(on?.42:.3)*p.k,on?'#ffe9a8':'#7fa4b2',on?1:.55);g.strokeStyle=rg(on?'#ffe9a8':'#7fa4b2',on?.9:.4);g.lineWidth=1.2;g.beginPath();g.arc(p.x,p.y,(on?1.5:1.1)*p.k,0,7);g.stroke();lab(on?'ACTIVE ENDPOINT':'STANDBY PEER',p.x,p.y-2.2*p.k-6,on?8.5:7.5,on?'#ffe9a8':'#7fa4b2',on?1:.72)}
+hits.push({id:'mesh',x:hp.x,y:hp.y,r:2.4*hp.k,pr:2,z:hp.z})}});
+for(const k of['phone','relay','gchat','bridge','cloud']){const e=X[k];if(!st.l[e.l])continue;const p=P(...e.p);items.push({d:p.z,f(){const on=st.sel===k||st.hov===k;
+if(k==='phone'||k==='gchat'){const sc=cl(p.k/K0,.85,1.5);dev(p,sc,e.c,k==='phone'?'android':'gchat',on?1:.72,on);
+lab(e.t,p.x,p.y+56*sc+13,9,e.c==='#c9a24a'?'#e0c57a':'#a9ecd9',on?1:.9);
+lab(e.g,p.x,p.y+56*sc+26,8,'#6d8a98',.95);
+hits.push({id:k,x:p.x,y:p.y,r:34*p.k,pr:2,z:p.z})}
+else{const r=(k==='relay'||k==='bridge'?.7:.9)*p.k;orb(p.x,p.y,r,e.c,on?1:.85);
+lab(e.t,p.x,p.y+r+13,9,e.c==='#c9a24a'?'#e0c57a':'#a9ecd9',on?1:.9);lab(e.g,p.x,p.y+r+25,8,'#6d8a98',.9);
+hits.push({id:k,x:p.x,y:p.y,r:r*2,pr:2,z:p.z})}}})}
+for(const k in N){const n=N[k],id='n:'+k,p=P(...n.p),dm=dimN(id),col=C[k];items.push({d:p.z,f(){const r=n.r*p.k,sc=Math.max(.8,Math.min(1.35,p.k/K0));
+agByHome[k].forEach((a,j)=>{if(a.cls!=='c'&&a.cls!=='f')return;ring(n.p,a.R,a.inc,a.rot,col,.09*dm+(st.sel===id?.08:0),1,null,32)});
+ring(n.p,n.r*1.3,.3,time*.5,col,.34*dm,1.3,null,44);
+g.strokeStyle=rg(col,.42*dm);g.lineWidth=1;g.beginPath();g.arc(p.x,p.y,r*1.12,0,7);g.stroke();orb(p.x,p.y,r,col,dm*.72);if(st.sel===id||st.hov===id){g.strokeStyle=rg('#ffffff',.85);g.lineWidth=1.5;g.setLineDash([5,5]);g.lineDashOffset=-time*20;g.beginPath();g.arc(p.x,p.y,r*1.9,0,7);g.stroke();g.setLineDash([])}
+lab(n.s,p.x,p.y+r*1.9+16*sc,13*sc,'#e8fbff',dm);lab(n.tps+' TOK/S · '+n.gpu.split('·')[0].trim(),p.x,p.y+r*1.9+29*sc,9.5*sc,col,dm);hits.push({id:id,x:p.x,y:p.y,r:r*1.5,pr:1,z:p.z})}})}
+for(const a of ag){const h=N[a.home],col=C[a.home],dm=dimN('n:'+a.home);
+if(!st.pause){a.ang+=a.sp*dt;if(a.st==0){a.tm-=dt;if(a.tm<=0){a.st=1;a.u=0;a.ax=a.anc[Math.random()*a.anc.length|0]}}else if(a.st==1){a.u+=dt/2.4;if(a.u>=1){a.u=1;a.st=2;a.tm=1.5}}else if(a.st==2){a.tm-=dt;if(a.tm<=0)a.st=3}else{a.u-=dt/2.4;if(a.u<=0){a.u=0;a.st=0;a.tm=6+Math.random()*12}}}
+const hm=op(h.p,a.R,a.inc,a.rot,a.ang);let q=hm;if(a.u>0){const T2=pos[a.ax],o=[T2[0]+Math.cos(a.ang*2)*1.9,T2[1]+.5,T2[2]+Math.sin(a.ang*2)*1.9],e=sm(a.u);q=[0,1,2].map(i=>hm[i]+(o[i]-hm[i])*e);q[1]+=Math.sin(a.u*3.14)*2.6}
+const p=P(...q);a.tr.push([p.x,p.y]);if(a.tr.length>16)a.tr.shift();const id='a:'+a.i,r=(a.cls==='c'?.42:a.cls==='f'?.24:.32)*p.k,cc=a.cls==='c'?'#ffe9a8':a.cls==='f'?C.ice:col;
+items.push({d:p.z,f(){if(st.l.trails&&a.tr.length>2){g.beginPath();a.tr.forEach((t,i)=>i?g.lineTo(t[0],t[1]):g.moveTo(t[0],t[1]));g.strokeStyle=rg(col,.35*dm);g.lineWidth=Math.max(1,r*.6);g.stroke()}
+orb(p.x,p.y,Math.max(r,2),cc,dm);const on=st.sel===id||st.hov===id||(st.sel==='n:'+a.home);if((st.l.names||on)&&(on||!st.sel)){lab(a.nm,p.x,p.y-r-6,on?10.5:9,'#dff6fa',(on?1:.62)*dm*cl(1.1-p.z*.012,.35,1))}
+if(st.sel===id){g.strokeStyle='#fff';g.lineWidth=1.2;g.beginPath();g.arc(p.x,p.y,r*2.6+3,0,7);g.stroke()}
+hits.push({id:id,x:p.x,y:p.y,r:Math.max(r*2.2,9),pr:0,z:p.z})}})}
+items.sort((a,b)=>b.d-a.d);K0=FOC/cam.dist;for(const it of items)it.f();
+g.drawImage(vg,0,0);
+frame.n=(frame.n||0)+1;requestAnimationFrame(frame)}
+let drag=0,sx=0,sy=0,moved=0;
+const pick=(x,y)=>{let b=null,bs=1e9;for(const h of hits){const d=Math.hypot(h.x-x,h.y-y);if(d<=h.r+6){const s=d/h.r+h.pr*.5+h.z*.001;if(s<bs){bs=s;b=h}}}return b?b.id:null};
+cv.addEventListener('pointerdown',e=>{drag=1;moved=0;sx=e.clientX;sy=e.clientY;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{if(drag){const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>3)moved=1;yb-=dx*.006;cam.pitch=cl(cam.pitch+dy*.004,-.15,1.15);sx=e.clientX;sy=e.clientY;return}
+const h=pick(e.clientX,e.clientY);st.hov=h;cv.style.cursor=h?'pointer':'grab';const t=$('#tip');if(h){t.style.display='block';t.style.left=e.clientX+14+'px';t.style.top=e.clientY+10+'px';t.textContent=title(h)}else t.style.display='none'});
+cv.addEventListener('pointerup',e=>{drag=0;if(!moved){const h=pick(e.clientX,e.clientY);h?show(h):show(null)}});
+cv.addEventListener('wheel',e=>{e.preventDefault();tg.dist=cl(tg.dist*(1+e.deltaY*.0011),24,90)},{passive:false});
+const title=id=>id.startsWith('n:')?N[id.slice(2)].nm:id.startsWith('a:')?ag[+id.slice(2)].nm+' · '+N[ag[+id.slice(2)].home].s:id.startsWith('tier:')?T.find(t=>'tier:'+t[0]===id)[1]:X[id].t;
+function show(id){st.sel=id;const el=$('#info');document.querySelectorAll('#nb .tg').forEach(b=>b.setAttribute('aria-pressed',id==='n:'+b.dataset.n));
+if(!id){el.hidden=true;Object.assign(tg,{dist:50,tx:0,ty:1,tz:0});return}
+let h='<button class="x" onclick="show(null)">CLOSE</button>',row=r=>'<dl>'+r.map(x=>`<dt>${x[0].toUpperCase()}</dt><dd>${x[1]}</dd>`).join('')+'</dl>';
+if(id.startsWith('n:')){const k=id.slice(2),n=N[k],rs2=ag.filter(a=>a.home===k);h+=`<span class="tag">FLEET NODE · ${n.role.toUpperCase()}</span><h3>${n.nm}</h3><div style="font-size:9px;color:#527282;letter-spacing:1px">LLM INFERENCE · ${n.tps} TOKENS/SEC</div><div class="bar"><i style="width:${n.tps/130*100}%"></i></div>`+row([['OS',n.os],['GPU',n.gpu],['CPU',n.cpu],['RAM',n.ram],['Storage',n.disk],['Build',n.tgt],['Model',n.model]])+`<div style="font-size:9px;letter-spacing:2px;color:#527282;margin-top:8px">RESIDENT AGENTS · ${rs2.length}</div>`+rs2.map(a=>`<button class="chip" onclick="show('a:${a.i}')">${a.nm.toUpperCase()}${a.cls==='c'?' ★':''}</button>`).join('');const p=n.p;Object.assign(tg,{tx:p[0]*.7,ty:p[1],tz:p[2]*.7,dist:34})}
+else if(id.startsWith('a:')){const a=ag[+id.slice(2)];h+=`<span class="tag">AGENT THREAD · ${a.cls==='c'?'COMMAND':a.cls==='f'?'FAST-LIGHT':'STANDARD'}</span><h3>${a.nm.toUpperCase()}</h3>`+row([['Role',a.role],['Home node',N[a.home].nm],['Dispatch to',a.anc.map(x=>x.startsWith('n:')?N[x.slice(2)].s:x.toUpperCase()).join(' · ')]])+`<p>Sparks orbit their home node, then dispatch, dwell and return. Motion is simulated. Home assignment is illustrative.</p><button class="chip" onclick="show('n:${a.home}')">◂ ${N[a.home].s}</button>`}
+else if(id.startsWith('tier:')){const t=T.find(t=>'tier:'+t[0]===id);h+=`<span class="tag">STORAGE · ${t[2]}</span><h3>${t[1]}</h3><p>${t[6]}</p>`}
+else{const x=X[id];h+=`<span class="tag">${x.g}</span><h3>${x.t}</h3>`+row(x.rows)+`<p>${x.b}</p>`}
+el.innerHTML=h;el.hidden=false}
+$('#nb').innerHTML=Object.keys(N).map(k=>`<button class="tg" data-n="${k}" aria-pressed="false" style="--c:${C[k]}"><i></i>${N[k].s}<small>${ag.filter(a=>a.home===k).length} AGENTS</small></button>`).join('');
+$('#nb').onclick=e=>{const b=e.target.closest('button');if(b)show(st.sel==='n:'+b.dataset.n?null:'n:'+b.dataset.n)};
+const LY=[['android','ANDROID APP',C.tl],['gchat','GOOGLE CHAT',C.tl],['sync','NODE SYNC',C.am],['storage','STORAGE',C.htpc],['cloud','CLOUD PATHS',C.gold],['names','AGENT NAMES',C.ice],['trails','AGENT TRAILS',C.main]];
+$('#lb').innerHTML=LY.map(l=>`<button class="tg" data-l="${l[0]}" aria-pressed="true" style="--c:${l[2]}"><i></i>${l[1]}</button>`).join('');
+$('#lb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.l;st.l[k]=st.l[k]?0:1;b.setAttribute('aria-pressed',!!st.l[k])};
+$('#bp').onclick=e=>{st.pause=!st.pause;e.target.setAttribute('aria-pressed',st.pause);e.target.textContent=st.pause?'PLAY':'PAUSE'};
+$('#br').onclick=e=>{st.rot=!st.rot;e.target.setAttribute('aria-pressed',st.rot)};
+addEventListener('keydown',e=>{if(e.key==='Escape')show(null)});
+$('#bp').setAttribute('aria-pressed',st.pause);$('#br').setAttribute('aria-pressed',st.rot);
+window.__f={hits:()=>hits,show,frames:()=>frame.n,ag,N,st};
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
