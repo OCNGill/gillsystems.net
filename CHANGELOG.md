@@ -49,3 +49,17 @@ LAN (10.0.0.93) and GitHub Pages both serve identical content; animation serves 
 
 > *"They went down to the sea in ships, doing business on the mighty waters... then were glad because they were quiet, and he brought them unto their desired haven." — Psalm 107:23, 30 (ESV)*
 > — The fleet ships from the harbor it already knows, into quiet waters, and comes home to the live site it was built for.
+
+## 2026-09-28 — Fleet Animation v6 Live; Rotate-Crash Fixed; AI Page Copy Corrected
+- **Crash fix (critical):** both v6 and the previous Claude build died after a few seconds of rotation.
+  Root cause was a negative `ellipse()` minor-radius on the storage-tier glow (`t[4]*k*sin(pitch)+2` goes
+  negative when the camera tilts below the horizon), which throws `IndexSizeError` and kills the whole
+  `requestAnimationFrame` render loop. Fixed by taking `|sin(pitch)|`, clamping pitch above the horizon
+  (`0.02..1.15`), adding safe radial/ellipse helpers, and wrapping the frame loop in a guard that re-schedules
+  instead of dying. Verified: 5,860-frame headless render sweep (full rotation + zoom extremes + all select
+  states) → 0 fatal canvas violations, 0 render-guard trips.
+- **AI page copy:** the AI Era lede no longer says "one gateway hub" (that was wrong — the mesh is a peer
+  mesh, not a central gateway). Now: "distributed peer mesh ... four AMD nodes and eighteen named agent threads."
+- **Live-embed single source:** the AI page now references ONLY `/animations/fleet_animation_v6.html`. The old
+  v2 reference is gone from the page (kept only in this changelog as history).
+- Verified on LAN (curl --resolve 10.0.0.93) and pushed to origin/main.
