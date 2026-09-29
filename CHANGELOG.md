@@ -63,3 +63,15 @@ LAN (10.0.0.93) and GitHub Pages both serve identical content; animation serves 
 - **Live-embed single source:** the AI page now references ONLY `/animations/fleet_animation_v6.html`. The old
   v2 reference is gone from the page (kept only in this changelog as history).
 - Verified on LAN (curl --resolve 10.0.0.93) and pushed to origin/main.
+## 2026-09-28 — Animation v7: solid 3D node models, real agent roster, mobile
+Per Commander Gill's iteration requests, all live on the AI Era page:
+- **Solid 3D models** per real node (face-shaded, projected): Main = desktop tower, HTPC = small-form-factor
+  cube, Steam Deck = handheld slab, Laptop = clamshell with a red duct-tape strip on the front edge.
+- **Real agent data** — 19 threads / 18 names sourced from `Agents/ROSTER.md` (real roles and classes),
+  replacing generic labels. Ebert (Zero Trust Critic) is on the Laptop ops seat; Hermes honestly holds two seats.
+- **Speed control** defaulting to 45%, **RESET**, **BLOOM** (additive blur post-pass), and **DATA FLOW** toggles.
+- **Logo** in the header, via a relative path so it resolves on the site and in local preview.
+- **Mobile**: collapsible controls drawer + responsive layout at <=820px; orbit is rotation-only.
+- Rotate-crash fix retained (negative ellipse minor-radius on the storage glow; canvas throws, it never clamps).
+- Verified: 7,745-frame headless crash sweep = 0 fatal canvas violations, 0 render-guard trips. Zero IP/path
+  leaks, zero external dependencies. Build success on commit 88afcd5.
