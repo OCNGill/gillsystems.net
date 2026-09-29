@@ -82,7 +82,7 @@ dd{margin:0;color:#bfe3ec;word-break:break-word}
 </head>
 <body>
 <canvas id="c" role="img" aria-label="Interactive 3D map of the Gillsystems four-node AI fleet, Gillsystem's Commander Hermes Mesh. Use the buttons at left to inspect nodes, storage tiers, and communication channels."></canvas>
-<header class="hud" id="top"><div id="brand"><img src="../assets/Gill%20Systems%20Logo.png" alt="Gillsystems" onerror="this.style.display='none'"><span>GILLSYSTEMS · SOVEREIGN AI FLEET</span></div><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 18 THREADS / 17 NAMES (HERMES HOLDS 2 SEATS) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
+<header class="hud" id="top"><div id="brand"><img src="../assets/Gill%20Systems%20Logo.png" alt="Gillsystems" onerror="this.style.display='none'"><span>GILLSYSTEMS · SOVEREIGN AI FLEET</span></div><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 19 THREADS / 18 NAMES (HERMES HOLDS 2 SEATS) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
 <div id="fps" aria-hidden="true">FPS --</div>
 <button id="drawerBtn" aria-expanded="false" aria-controls="left">☰ CONTROLS</button>
 <div class="hud" id="left">
@@ -133,11 +133,12 @@ const A=[
 ['EDI','Network oversight · defense protocol','laptop','s',['relay','mesh']],
 ['Adam','Agent architect · sole gatekeeper','laptop','s',['mesh','n:htpc']],
 ['Lamp','Fast-light · monitoring','laptop','f',['mesh','n:main']],
+ ['Ebert','Zero Trust Critic · artifact gate','laptop','s',['mesh','n:deck']],
 ['Major Gaben','SteamOS expert','deck','s',['n:htpc','mesh']],
 ['Spark','Fast-light · quick edits','deck','f',['mesh','n:main']],
 ['Medic','Debug / incident response','deck','s',['n:main','n:htpc','n:laptop']],
 ['Theo','Theologian · Christian worldview','deck','s',['mesh','n:htpc']]];
-const X={mesh:{p:[0,3,0],t:'COMMANDER HERMES MESH',g:'FLEET COORDINATION LAYER · PEER MESH',rows:[['Topology','Distributed peer mesh — no central gateway'],['Endpoints','3 peer endpoints, one active at a time (illustrative rotation)'],['Watchdog','Promotes a standby peer if the active one stops responding'],['Roster','18 threads · 17 names (Hermes holds two seats)']],b:'Peers coordinate work; the active endpoint rotates to illustrate failover while the watchdog promotes a standby if one stops responding.'},
+const X={mesh:{p:[0,3,0],t:'COMMANDER HERMES MESH',g:'FLEET COORDINATION LAYER · PEER MESH',rows:[['Topology','Distributed peer mesh — no central gateway'],['Endpoints','3 peer endpoints, one active at a time (illustrative rotation)'],['Watchdog','Promotes a standby peer if the active one stops responding'],['Roster','19 threads · 18 names (Hermes holds two seats)']],b:'Peers coordinate work; the active endpoint rotates to illustrate failover while the watchdog promotes a standby if one stops responding.'},
 phone:{p:[-14,13,-1],t:'ANDROID APP',g:'COMMAND SURFACE · CHANNEL A',c:C.tl,l:'android',rows:[['Path','Direct WebSocket via Oracle/FRP relay'],['Delivery','Real-time console · full responses'],['Capability','Remote command · sudo requests']],b:'Private Commander Hermes app — 30+ releases. Independent of Google Chat.'},
 relay:{p:[-7,8.5,-4],t:'ORACLE FRP RELAY',g:'WAN INFRASTRUCTURE · ALWAYS-FREE',c:C.tl,l:'android',rows:[['Role','Relay / tunnel — WAN reachability'],['Hosts','No agents · no primary inference']],b:'A path, not a brain. Primary inference stays on your hardware.'},
 gchat:{p:[14,13,-1],t:'GOOGLE CHAT DM',g:'DM BRIDGE · CHANNEL B',c:C.tl,l:'gchat',rows:[['Path','Google Chat DM · native adapter'],['Delivery','Full responses to the thread']],b:'A second, independent door into the same runtime mesh.'},
