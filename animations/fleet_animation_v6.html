@@ -63,6 +63,10 @@ dd{margin:0;color:#bfe3ec;word-break:break-word}
 .ctl button[aria-pressed=true]{background:rgba(16,48,54,.9);color:#e6fdfd;border-color:#2e7d86}
 #drawerBtn{display:none;position:fixed;top:12px;left:12px;z-index:6;background:var(--pn);border:1px solid var(--ln);color:#9fd3dc;padding:9px 11px;font-size:10px;letter-spacing:1.6px}
 #left.hidden,#info.hidden{display:none}
+/* ---- responsive: one consolidated set, no duplicate overrides ----
+   Geordi measured: 844x390 landscape fell through the 820px breakpoint and rendered the
+   desktop layout, so the panel never collapsed and ate ~45% of the screen. Height-based
+   queries now catch landscape phones, which are WIDE but SHORT. */
 @media(max-width:820px){
   #left{position:fixed;top:56px;left:10px;right:10px;width:auto;max-height:52%;overflow:auto;z-index:5;
         background:rgba(3,7,13,.96);padding:10px;border:1px solid var(--ln);border-radius:10px;backdrop-filter:blur(10px)}
@@ -75,14 +79,38 @@ dd{margin:0;color:#bfe3ec;word-break:break-word}
   #bot span:last-child{display:none}
   .ctl{flex-wrap:wrap}
 }
-@media(max-width:560px){#top p{display:none}#top small{font-size:8px;letter-spacing:2px}#brand img{height:20px}}
-@media(max-width:820px){#left{width:158px;top:88px}.tg{padding:6px;font-size:8.5px}#info{top:auto;bottom:48px;right:8px;left:8px;width:auto;max-height:44%}#top h1{font-size:14px;letter-spacing:2px}}
-@media(max-width:560px){#top p{display:none}}
+/* landscape phone: short viewport, wide. Collapse everything, keep the scene. */
+@media(max-height:560px) and (orientation:landscape){
+  #left{top:8px;left:8px;right:8px;width:auto;max-height:74%;z-index:5;
+        background:rgba(3,7,13,.96);padding:8px;border:1px solid var(--ln);border-radius:8px}
+  #drawerBtn{display:block;top:6px;left:6px;padding:6px 9px;font-size:9px;min-height:28px}
+  #top{top:6px;left:auto;right:8px;max-width:50%;text-align:right}
+  #top h1{font-size:11px;letter-spacing:1.4px}
+  #top p,#top small{display:none}
+  #brand img{height:18px}
+  #bot{gap:5px;font-size:8px;bottom:4px}
+  #bot span{display:none}
+  #bot button{min-height:28px;padding:4px 8px;font-size:8.5px}
+  #fps{display:none}
+  #info{bottom:38px;max-height:58%}
+  .pn{padding:7px 9px;margin-bottom:6px}
+  .pn h2{font-size:8.5px;margin-bottom:5px}
+  .tg{min-height:30px;padding:5px 7px;font-size:8.5px}
+  .lg{font-size:8px;padding:3px 2px}
+}
+@media(max-width:560px){
+  #top p{display:none}
+  #top small{font-size:8px;letter-spacing:2px}
+  #brand img{height:20px}
+  #top h1{font-size:12px;letter-spacing:1.6px}
+  #bot{gap:6px;padding:0 6px}
+  #bot button{min-height:30px;padding:5px 8px;font-size:8.5px;letter-spacing:1px}
+}
 </style>
 </head>
 <body>
 <canvas id="c" role="img" aria-label="Interactive 3D map of the Gillsystems four-node AI fleet, Gillsystem's Commander Hermes Mesh. Use the buttons at left to inspect nodes, storage tiers, and communication channels."></canvas>
-<header class="hud" id="top"><div id="brand"><img src="../assets/Gill%20Systems%20Logo.png" alt="Gillsystems" onerror="this.style.display='none'"><span>GILLSYSTEMS · SOVEREIGN AI FLEET</span></div><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 19 THREADS / 18 NAMES (HERMES HOLDS 2 SEATS) · LOCAL-FIRST · CLOUD-ASSISTED<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
+<header class="hud" id="top"><div id="brand"><img src="../assets/Gill%20Systems%20Logo.png" alt="Gillsystems" onerror="this.style.display='none'"><span>GILLSYSTEMS · SOVEREIGN AI FLEET</span></div><h1>COMMANDER HERMES MESH</h1><p>4 AMD NODES · 50 THREADS · 19 AGENTS (HERMES HOLDS 2 SEATS) · 99 GB SYSTEM RAM · 32 GB DEDICATED VRAM* · LOCAL-FIRST · CLOUD-ASSISTED<br>*DEDICATED = MAIN 24 GB + HTPC 8 GB. DECK APU (8 GB) &amp; LAPTOP VGA DRAW FROM SYSTEM RAM — SHARED, NOT ADDITIVE<br>CONCEPTUAL VISUALIZATION · SIMULATED MOTION — NOT LIVE TELEMETRY</p></header>
 <div id="fps" aria-hidden="true">FPS --</div>
 <button id="drawerBtn" aria-expanded="false" aria-controls="left">☰ CONTROLS</button>
 <div class="hud" id="left">
@@ -113,10 +141,10 @@ const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),sm=u=>u*u*(3-2*u);
 
 /* ---------- DATA ---------- */
 const N={
-main:{nm:"GILLSYSTEMS-MAIN",s:'MAIN',p:[-18,1.5,2],r:2.3,os:'Windows 11 Pro',role:'Orchestrator · primary compute · Tier 1',gpu:'Radeon 7900 XTX · 24 GB',cpu:'Ryzen 9 5900X · 12C/24T',ram:'48 GB',disk:'2 TB NVMe',tgt:'gfx1100 · ROCm/HIP — GPU mandatory',model:'Qwen3.8-27B + vision · MTP · 192K ctx',tps:130},
-htpc:{nm:'GILLSYSTEMS-HTPC',s:'HTPC',p:[9,1,9],r:1.8,os:'Kubuntu',role:'Storage authority · worker · Tier 1',gpu:'Radeon RX 7600 · 8 GB',cpu:'Ryzen 5 5600G · 6C/12T',ram:'16 GB',disk:'2 TB ZFS pool',tgt:'gfx1102 · ROCm — GPU mandatory',model:'Qwen3.5-9B · llama.cpp',tps:60},
-laptop:{nm:'GILLSYSTEMS-LAPTOP',s:'LAPTOP',p:[19,3,-4],r:1.6,os:'Windows 10',role:'Worker · gateway & ops hub · Tier 2',gpu:'Vega 6 iGPU (UMA)',cpu:'Ryzen 5 4500U · 6C/6T',ram:'20 GB',disk:'1 TB SSD',tgt:'gfx90c · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-4B · llama.cpp',tps:9},
-deck:{nm:'GILLSYSTEMS-STEAM-DECK',s:'STEAM DECK',p:[-8,-1,-10],r:1.9,os:'SteamOS (Arch)',role:'Worker · handheld · Tier 2',gpu:'RDNA 2 APU · 8 CUs (shared)',cpu:'Zen 2 · 4C/8T',ram:'16 GB unified',disk:'512 GB NVMe',tgt:'gfx1033 · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-9B · llama.cpp',tps:30}
+main:{nm:"GILLSYSTEMS-MAIN",s:'MAIN',p:[-18,1.5,2],r:2.3,os:'Windows 11 Pro',role:'Orchestrator · primary compute · Tier 1',gpu:'Radeon 7900 XTX · 24 GB dedicated',cpu:'Ryzen 9 5950X · 16C/32T',ram:'48 GB',disk:'2 TB NVMe',tgt:'gfx1100 · ROCm/HIP — GPU mandatory',model:'Qwen3.8-27B + vision · MTP · 192K ctx',tps:130,thr:24,chassis:'ASUS TUF Gaming full-tower · RX 7900 XTX',dw:21,dh:50,dd:47},
+htpc:{nm:'GILLSYSTEMS-HTPC',s:'HTPC',p:[9,1,9],r:1.8,os:'Kubuntu',role:'Storage authority · worker · Tier 1',gpu:'Radeon RX 7600 · 8 GB dedicated',cpu:'Ryzen 5 5600G · 6C/12T',ram:'16 GB',disk:'2 TB ZFS pool',tgt:'gfx1102 · ROCm — GPU mandatory',model:'Qwen3.5-9B · llama.cpp',tps:60,thr:12,chassis:'SFF long-box · RX 7600',dw:20,dh:13,dd:32},
+laptop:{nm:'GILLSYSTEMS-LAPTOP',s:'LAPTOP',p:[19,3,-4],r:1.6,os:'Windows 10',role:'Worker · gateway & ops hub · Tier 2',gpu:'Vega 6 iGPU · UMA (shared, no dedicated VRAM)',cpu:'Ryzen 5 4500U · 6C/6T',ram:'19 GB',disk:'1 TB SSD',tgt:'gfx90c · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-4B · llama.cpp',tps:9,thr:8,chassis:'Acer Aspire 5 15.6in numpad laptop',dw:39,dh:27,dd:26},
+deck:{nm:'GILLSYSTEMS-STEAM-DECK',s:'STEAM DECK',p:[-8,-1,-10],r:1.9,os:'SteamOS (Arch)',role:'Worker · handheld · Tier 2',gpu:'RDNA 2 APU · 8 CUs · 8 GB unified (shared)',cpu:'Zen 2 · 4C/8T',ram:'16 GB unified',disk:'512 GB NVMe',tgt:'gfx1033 · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-9B · llama.cpp',tps:30,thr:6,chassis:'Handheld thin-slab · VanGogh APU',dw:30,dh:11,dd:3.5}
 };
 const A=[
 ['Hermes','Operational commander · seat 1','main','c',['mesh','n:htpc']],
@@ -138,7 +166,7 @@ const A=[
 ['Spark','Fast-light · quick edits','deck','f',['mesh','n:main']],
 ['Medic','Debug / incident response','deck','s',['n:main','n:htpc','n:laptop']],
 ['Theo','Theologian · Christian worldview','deck','s',['mesh','n:htpc']]];
-const X={mesh:{p:[0,3,0],t:'COMMANDER HERMES MESH',g:'FLEET COORDINATION LAYER · PEER MESH',rows:[['Topology','Distributed peer mesh — no central gateway'],['Endpoints','3 peer endpoints, one active at a time (illustrative rotation)'],['Watchdog','Promotes a standby peer if the active one stops responding'],['Roster','19 threads · 18 names (Hermes holds two seats)']],b:'Peers coordinate work; the active endpoint rotates to illustrate failover while the watchdog promotes a standby if one stops responding.'},
+const X={mesh:{p:[0,3,0],t:'COMMANDER HERMES MESH',g:'FLEET COORDINATION LAYER · PEER MESH',rows:[['Topology','Distributed peer mesh — no central gateway'],['Endpoints','3 peer endpoints, one active at a time (illustrative rotation)'],['Watchdog','Promotes a standby peer if the active one stops responding'],['Roster','50 agent threads (24+12+8+6) · 19 agents · Hermes holds two seats'],['Memory','99 GB system RAM · 32 GB dedicated VRAM* — *Deck APU 8 GB + Laptop VGA are shared from system RAM, not additive']],b:'Peers coordinate work; the active endpoint rotates to illustrate failover while the watchdog promotes a standby if one stops responding.'},
 phone:{p:[-14,13,-1],t:'ANDROID APP',g:'COMMAND SURFACE · CHANNEL A',c:C.tl,l:'android',rows:[['Path','Direct WebSocket via Oracle/FRP relay'],['Delivery','Real-time console · full responses'],['Capability','Remote command · sudo requests']],b:'Private Commander Hermes app — 30+ releases. Independent of Google Chat.'},
 relay:{p:[-7,8.5,-4],t:'ORACLE FRP RELAY',g:'WAN INFRASTRUCTURE · ALWAYS-FREE',c:C.tl,l:'android',rows:[['Role','Relay / tunnel — WAN reachability'],['Hosts','No agents · no primary inference']],b:'A path, not a brain. Primary inference stays on your hardware.'},
 gchat:{p:[14,13,-1],t:'GOOGLE CHAT DM',g:'DM BRIDGE · CHANNEL B',c:C.tl,l:'gchat',rows:[['Path','Google Chat DM · native adapter'],['Delivery','Full responses to the thread']],b:'A second, independent door into the same runtime mesh.'},
@@ -158,46 +186,222 @@ const ag=A.map((a,i)=>{const hn=a[2],idx=A.filter((b,j)=>j<i&&b[2]===hn).length;
 const agByHome={};for(const a of ag)(agByHome[a.home]=agByHome[a.home]||[]).push(a);
 const LK=[];for(const k in N){LK.push({a:'mesh',b:'n:'+k,lift:3,c:C[k],n:3,sp:.22,ly:0});if(k!=='htpc')LK.push({a:'n:htpc',b:'n:'+k,lift:-3.5,c:C.am,n:2,sp:.14,ly:'sync',bi:1})}
 LK.push({a:'phone',b:'relay',lift:1,c:C.tl,n:2,sp:.25,ly:'android',bi:1},{a:'relay',b:'mesh',lift:2,c:C.tl,n:2,sp:.25,ly:'android',bi:1},{a:'gchat',b:'bridge',lift:1,c:C.tl,n:2,sp:.25,ly:'gchat',bi:1},{a:'bridge',b:'mesh',lift:2,c:C.tl,n:2,sp:.25,ly:'gchat',bi:1},{a:'cloud',b:'mesh',lift:4,c:C.gold,n:2,sp:.12,ly:'cloud',dash:1});
-// ---- v7 solid 3D node models (face-shaded boxes, projected) ----
 const MODELS={
- main:{w:1.55,d:1.15,hh:2.05,col:'#7fd4ff'},      // desktop tower
- htpc:{w:1.25,d:1.25,hh:1.15,col:'#9fe8c8'},     // htpc / small form factor cube
- deck:{w:2.0,d:.62,hh:.34,col:'#c9b6ff'},        // steam deck handheld slab
- laptop:{w:1.85,d:1.15,hh:.16,col:'#ffd08a',lid:1.05,tape:1} // laptop clamshell + duct tape
+ main:{key:'tower',col:'#7fd4ff'},    // ASUS TUF full-tower 21x50x47 - open side, no glass
+ htpc:{key:'sff',  col:'#9fe8c8'},    // SFF long low box 20x13x32 - NOT a cube
+ deck:{key:'deck', col:'#c9b6ff'},    // handheld thin slab 30x11x3.5
+ laptop:{key:'laptop',col:'#ffd08a'}  // Acer Aspire 5 clamshell 39x27x26 open
 };
-function model3d(cen,M,rot,alpha,hot){
-  const w=M.w/2,d=M.d/2,hh=M.hh/2;
-  // 8 corners, local, y-up
-  let V=[[-w,-hh,-d],[w,-hh,-d],[w,-hh,d],[-w,-hh,d],[-w,hh,-d],[w,hh,-d],[w,hh,d],[-w,hh,d]];
-  // laptop: add a raised lid panel
-  const faces=[[0,1,2,3,'top'],[4,5,6,7,'top'],[0,1,5,4,'front'],[2,3,7,6,'back'],[1,2,6,5,'right'],[0,3,7,4,'left']];
-  const shade={top:.95,bottom:.35,front:.78,back:.55,right:.66,left:.5};
-  const P3=[];
+// ---- v9 node models: dimensions + features verified against the real hardware photos ----
+const SC=.085;
+// label density: small viewports get decluttered so the scene stays readable
+let DENSE=true;
+function setDense(){DENSE=(innerWidth>=700&&innerHeight>=520)}
+// shaded prism from local corners, painter-sorted
+function prism(cen,dim,rot,alpha,col,opt){
+  opt=opt||{};
+  const w=dim[0]/2,h=dim[1]/2,d=dim[2]/2;
+  let V=[[-w,-h,-d],[w,-h,-d],[w,-h,d],[-w,-h,d],[-w,h,-d],[w,h,-d],[w,h,d],[-w,h,d]];
+  const sp=[],cos=Math.cos(rot),sin=Math.sin(rot);
   for(const v of V){
-    const x=v[0]*Math.cos(rot)-v[2]*Math.sin(rot), z=v[0]*Math.sin(rot)+v[2]*Math.cos(rot);
-    P3.push(P(cen[0]+x,cen[1]+v[1],cen[2]+z));
+    const x=v[0]*cos-v[2]*sin,z=v[0]*sin+v[2]*cos;
+    sp.push(P(cen[0]+x,cen[1]+v[1],cen[2]+z));
   }
-  const ff=[];
-  faces.forEach((f,idx)=>{
-    const pts=f.slice(0,4).map(i=>P3[i]);
-    const zAvg=pts.reduce((s,q)=>s+q.z,0)/4;
-    ff.push({pts,z:zAvg,s:shade[f[4]]||.6,i:idx});
-  });
+  const F=[[0,1,2,3,.30],[4,5,6,7,.95],[0,1,5,4,.74],[2,3,7,6,.52],[1,2,6,5,.64],[0,3,7,4,.42]];
+  const ff=F.map(f=>({q:f.slice(0,4).map(i=>sp[i]),z:f.slice(0,4).reduce((s,i)=>s+sp[i].z,0)/4,s:f[4]}));
   ff.sort((a,b)=>b.z-a.z);
   for(const f of ff){
-    g.beginPath();f.pts.forEach((q,i)=>i?g.lineTo(q.x,q.y):g.moveTo(q.x,q.y));g.closePath();
-    g.fillStyle=rg(M.col,f.s*.46*alpha);g.fill();
-    g.strokeStyle=rg(hot?'#ffffff':M.col,(hot?.95:.62)*alpha);g.lineWidth=1.2;g.stroke();
+    g.beginPath();f.q.forEach((q,i)=>i?g.lineTo(q.x,q.y):g.moveTo(q.x,q.y));g.closePath();
+    g.fillStyle=opt.ghost?rg(col,.09*f.s*alpha):rg(col,.40*f.s*alpha);
+    g.fill();
+    g.strokeStyle=rg(opt.hot?'#ffffff':col,(opt.hot?.95:.55)*alpha);
+    g.lineWidth=opt.lw||1.15;g.stroke();
   }
-  // duct tape accent strip on laptop front edge
-  if(M.tape){
-    const tp=[];
-    for(const sx of [-w*.42,w*.42]){
-      const x=sx*Math.cos(rot)-(-d)*Math.sin(rot), z=sx*Math.sin(rot)+(-d)*Math.cos(rot);
-      tp.push(P(cen[0]+x,cen[1]-hh*.2,cen[2]+z));
+  return sp;
+}
+// project a point on a front-facing plane
+function fp(cen,rot,u,v,z,sc){const cos=Math.cos(rot),sin=Math.sin(rot);
+  return P(cen[0]+u*cos-z*sin,cen[1]+v,cen[2]+u*sin+z*cos);}
+function dot2(cen,rot,u,v,z,R,alpha,col,sc){
+  const c=fp(cen,rot,u,v,z,sc), k=c.k, Rr=Math.max(.6,R*k);
+  g.beginPath();g.arc(c.x,c.y,Rr,0,7);
+  g.fillStyle=rg(col,.5*alpha);g.fill();
+  g.strokeStyle=rg(col,.85*alpha);g.lineWidth=.9;g.stroke();
+}
+// louver strip (HTPC rails / PSU grilles)
+function louvers(cen,rot,W,H,z,alpha,col,n,sc){
+  for(let i=0;i<n;i++){
+    const v=-H/2+H*(i+.5)/n;
+    const a=fp(cen,rot,-W/2,v,z,sc), b=fp(cen,rot,W/2,v,z,sc);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+    g.strokeStyle=rg(col,.42*alpha);g.lineWidth=1;g.stroke();
+  }
+}
+function model3d(cen,M,rot,alpha,hot){
+  const S=SC,opt={hot:hot,lw:1.15};
+  if(M.key==='tower'){
+    // ASUS TUF full-tower: 21 W x 50 H x 47 D, OPEN left side, 6 fans, no RGB
+    const W=21*S,H=50*S,D=47*S;
+    // PSU shroud with slotted vent
+    prism([cen[0],cen[1]-H*.30,cen[2]],[W*.94,H*.26,D*.90],rot,alpha,'#39434c',opt);
+    louvers([cen[0],cen[1]-H*.19,cen[2]+D*.45],rot,W*.70,H*.14,0,alpha,'#cfe9f2',5,1);
+    // motherboard tray (back plane) - visible because the side is open
+    prism([cen[0]-W*.40,cen[1]+H*.08,cen[2]],[1.0,H*.66,D*.86],rot,alpha,'#2b5a3c',{ghost:true,lw:.7});
+    // ASUS TUF board + CPU tower cooler
+    prism([cen[0]-W*.18,cen[1]+H*.10,cen[2]+D*.06],[2.4,H*.52,D*.62],rot,alpha,'#3a4a58',{ghost:true,lw:.7});
+    prism([cen[0]-W*.02,cen[1]+H*.26,cen[2]+D*.06],[5.5,7.0,5.5],rot,alpha,'#8d9aa6',{ghost:true,lw:.8});
+    // long thick GPU
+    prism([cen[0]+W*.02,cen[1]+H*.02,cen[2]+D*.20],[W*.44,5.5,D*.72],rot,alpha,'#4a5a68',{ghost:true,lw:.8});
+    // 3 top fans in a row (360mm radiator mount)
+    for(let i=0;i<3;i++)fanDisc([cen[0]-(W*.42)+i*(W*.42),cen[1]+H/2+.2,cen[2]],6.4*S,rot,alpha,'#cfe9f2',7);
+    // rear exhaust + lower-front intake
+    fanDisc([cen[0]-W/2,cen[1]+H*.30,cen[2]-D*.20],5.2*S,rot,alpha,'#cfe9f2',7);
+    fanDisc([cen[0]+W/2,cen[1]-H*.10,cen[2]+D*.30],5.2*S,rot,alpha,'#cfe9f2',7);
+    // faceted front fascia + sparkly silver lower accent
+    prism([cen[0]+W/2,cen[1]+H*.18,cen[2]],[1.2,H*.52,D*.94],rot,alpha,'#1a1e24',opt);
+    prism([cen[0]+W/2,cen[1]-H*.18,cen[2]],[1.2,H*.28,D*.94],rot,alpha,'#9aa6b0',{ghost:true,lw:.8});
+    // case shell
+    prism(cen,[W,H,D],rot,alpha,M.col,{ghost:true,lw:1.2});
+    // 2 round black feet
+    for(const sx of [-W*.30,W*.30]){
+      const q=P(cen[0]+sx,cen[1]-H/2,cen[2]+D*.42);
+      g.beginPath();g.ellipse(q.x,q.y,Math.max(.8,1.5*q.k),Math.max(.5,.8*q.k),0,0,7);
+      g.fillStyle=rg('#0d1014',.85*alpha);g.fill();
     }
-    g.beginPath();g.moveTo(tp[0].x,tp[0].y);g.lineTo(tp[1].x,tp[1].y);
-    g.strokeStyle=rg('#e0533a',.85*alpha);g.lineWidth=Math.max(1.6,2.4*tp[0].k);g.stroke();
+  }
+  else if(M.key==='sff'){
+    // HTPC SFF: long low box 20 W x 13 H x 32 D, louvers, big lower-right fan
+    const W=20*S,H=13*S,D=32*S;
+    prism(cen,[W,H,D],rot,alpha,M.col,opt);
+    // long row of narrow louvers along the upper rails
+    louvers([cen[0],cen[1]+H*.34,cen[2]+D*.50],rot,W*.80,H*.20,0,alpha,'#cfe9f2',8,1);
+    louvers([cen[0],cen[1]+H*.34,cen[2]-D*.30],rot,W*.80,H*.20,0,alpha,'#cfe9f2',6,1);
+    // large axial fan lower-right
+    fanDisc([cen[0]+W*.16,cen[1]-H*.14,cen[2]+D/2],6.0*S,rot,alpha,'#cfe9f2',9);
+    // dense perforated PSU grille
+    louvers([cen[0]-W*.18,cen[1]-H*.30,cen[2]+D/2],rot,W*.42,H*.26,0,alpha,'#b8c6d0',7,1);
+    // silver heatsink fins visible inside
+    prism([cen[0]-W*.24,cen[1],cen[2]-D*.10],[W*.26,H*.55,D*.40],rot,alpha,'#c2ccd4',{ghost:true,lw:.7});
+    // rounded-rect openings right side wall
+    for(let i=0;i<3;i++){
+      const c=fp(cen,rot,W/2,0,0,0);
+      const a=fp(cen,rot,W/2,-H*.16+i*H*.16,D/2,1), b=fp(cen,rot,W/2,-H*.16+i*H*.16,0,1);
+      g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+      g.strokeStyle=rg('#0d1014',.5*alpha);g.lineWidth=2;g.stroke();
+    }
+    // rubber bumpers
+    for(const sx of [-W*.36,W*.36]){
+      const q=P(cen[0]+sx,cen[1]-H/2,cen[2]+D*.30);
+      g.beginPath();g.ellipse(q.x,q.y,Math.max(.7,1.2*q.k),Math.max(.5,.7*q.k),0,0,7);
+      g.fillStyle=rg('#0d1014',.8*alpha);g.fill();
+    }
+  }
+  else if(M.key==='deck'){
+    // Handheld: 30 W x 11 H x 3.5 D - very thin slab, D-pad UL, dual sticks, ABXY, dual trackpads
+    const W=30*S,H=11*S,D=3.5*S;
+    prism(cen,[W,H,D],rot,alpha,M.col,opt);
+    // screen, offset left of centre (right cluster is wider)
+    prism([cen[0]-W*.13,cen[1]+H*.10,cen[2]+D/2+.15],[W*.46,H*.62,.3],rot,alpha,'#7ff0ff',{ghost:true,lw:.85});
+    const fz=D/2+.3;
+    // LEFT cluster: cross D-pad upper-left
+    const dpx=-W*.40,dpy=H*.22;
+    g.save();
+    let c=fp(cen,rot,dpx,dpy,fz,1);
+    const dk=Math.max(1,1.1*c.k);
+    g.strokeStyle=rg('#b9c2cc',.8*alpha);g.lineWidth=dk;
+    g.beginPath();g.moveTo(c.x-dk,c.y);g.lineTo(c.x+dk,c.y);g.moveTo(c.x,c.y-dk);g.lineTo(c.x,c.y+dk);g.stroke();
+    g.restore();
+    // left stick below-right of d-pad
+    dot2(cen,rot,-W*.31,-H*.02,fz,1.5,alpha,'#9aa4ae',1);
+    // left trackpad (rounded square) + STEAM button
+    let a=fp(cen,rot,-W*.40,-H*.26,fz,1), b=fp(cen,rot,-W*.26,-H*.42,fz,1);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+    g.strokeStyle=rg('#7f8b96',.6*alpha);g.lineWidth=1;g.stroke();
+    dot2(cen,rot,-W*.40,-H*.46,fz,.7,alpha,'#6fd0e8',1);
+    // RIGHT cluster: right stick + ABXY diamond
+    dot2(cen,rot,W*.16,H*.24,fz,1.5,alpha,'#c2ccd6',1);
+    const ab=[[-1.15,0,'X'],[0,1.15,'Y'],[1.15,0,'B'],[0,-1.15,'A']];
+    for(let i=0;i<4;i++){
+      // X left, Y top, B right, A bottom - the real Deck/GPD face layout
+      dot2(cen,rot,W*.26+ab[i][0],H*.22+ab[i][1],fz,1.0,alpha,(ab[i][2]==='A'||ab[i][2]==='B')?'#6ad0a0':'#e06a6a',1);
+    }
+    // right trackpad + 3-dot pill
+    a=fp(cen,rot,W*.20,-H*.26,fz,1); b=fp(cen,rot,W*.36,-H*.42,fz,1);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+    g.strokeStyle=rg('#7f8b96',.6*alpha);g.lineWidth=1;g.stroke();
+    // speaker grilles lower corners
+    louvers([cen[0]-W*.44,cen[1]-H*.44,fz],rot,W*.06,H*.16,0,alpha,'#8b96a0',3,1);
+    louvers([cen[0]+W*.44,cen[1]-H*.44,fz],rot,W*.06,H*.16,0,alpha,'#8b96a0',3,1);
+    // shoulder bumpers along the top edge
+    for(const sx of [-W*.40,W*.40]){
+      prism([cen[0]+sx,cen[1]+H/2+.3,cen[2]],[W*.16,1.2,D*.9],rot,alpha,'#2a2f36',{ghost:true,lw:.8});
+    }
+  }
+  else if(M.key==='laptop'){
+    // Acer Aspire 5: 39 W, open ~27 tall, 26 deep. Dark deck + SILVER lid edge/hinge trim
+    const W=39*S,D=26*S,Bd=2.4*S,Lh=25*S;
+    const baseY=cen[1]-Lh*.36;
+    // base / keyboard deck (dark charcoal, satin)
+    prism([cen[0],baseY,cen[2]],[W,Bd,D],rot,alpha,'#1e2226',opt);
+    // numpad outline on the right of the deck
+    for(let i=0;i<3;i++){
+      const a=fp([cen[0],baseY,cen[2]],rot,W*.30-i*W*.10,Bd/2+.1,-D*.06,1);
+      const b=fp([cen[0],baseY,cen[2]],rot,W*.30-i*W*.10,Bd/2+.1,D*.30,1);
+      g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+      g.strokeStyle=rg('#59636d',.45*alpha);g.lineWidth=.8;g.stroke();
+    }
+    // clickpad offset LEFT of centre (real Aspire layout)
+    a=fp([cen[0],baseY,cen[2]],rot,-W*.16,Bd/2+.1,-D*.02,1);
+    b=fp([cen[0],baseY,cen[2]],rot,0,Bd/2+.1,D*.20,1);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+    g.strokeStyle=rg('#6d7781',.55*alpha);g.lineWidth=1;g.stroke();
+    // lid, hinged at back, tilted
+    const lidY=baseY+Bd/2+Lh/2, lidZ=cen[2]-D/2+Lh*.15;
+    prism([cen[0],lidY,lidZ],[W,Lh,1.6],rot,alpha,'#2a2f34',opt);
+    // SILVER outer lid edge + hinge trim (the two-tone signature)
+    prism([cen[0],lidY,lidZ],[W*1.005,Lh*1.005,1.7],rot,alpha,'#b9c2cb',{ghost:true,lw:1.0});
+    // display with thick bezels + pronounced lower chin
+    prism([cen[0],lidY+Lh*.05,lidZ+1.0],[W*.90,Lh*.76,.3],rot,alpha,'#7ff0ff',{ghost:true,lw:.85});
+    // webcam in the top bezel
+    dot2([cen[0],lidY,lidZ+1.1],rot,0,Lh*.44,0,.42,alpha,'#1a2026',1);
+    // Acer logo on the bottom bezel
+    a=fp([cen[0],lidY,lidZ+1.1],rot,-W*.03,-Lh*.44,0,1); b=fp([cen[0],lidY,lidZ+1.1],rot,W*.03,-Lh*.44,0,1);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);
+    g.strokeStyle=rg('#cfd8e0',.5*alpha);g.lineWidth=1.4;g.stroke();
+    // two broad silver hinges on a long trim strip
+    for(const sx of [-W*.28,W*.28]){
+      prism([cen[0]+sx,baseY+Bd/2+.4,cen[2]-D/2+Lh*.06],[W*.10,1.8,2.4],rot,alpha,'#b9c2cb',{ghost:true,lw:.9});
+    }
+    // genuine Duck Tape repair across the lower front edge - classic silver-gray cloth,
+    // woven texture, torn end. (The brand is literally Duck Tape.)
+    const tz=cen[2]+D/2+.2, ty=baseY-Bd*.10;
+    const tA=P(cen[0]-W*.40,ty,tz), tB=P(cen[0]+W*.26,ty,tz);
+    const tw=Math.max(2.0,3.0*tA.k), ang=Math.atan2(tB.y-tA.y,tB.x-tA.x);
+    g.save();g.translate(tA.x,tA.y);g.rotate(ang);
+    const tl=tB.x-tA.x, gd=g.createLinearGradient(0,-tw/2,0,tw/2);
+    gd.addColorStop(0,rg('#c8ccd0',.92*alpha));gd.addColorStop(.45,rg('#a7adb2',.95*alpha));gd.addColorStop(1,rg('#8e9499',.9*alpha));
+    g.fillStyle=gd;g.beginPath();g.moveTo(0,-tw/2);g.lineTo(tl,-tw/2);g.lineTo(tl,tw/2);g.lineTo(0,tw/2);g.closePath();g.fill();
+    g.strokeStyle=rg('#6f757a',.34*alpha);g.lineWidth=.6;
+    for(let i=0;i<tl;i+=Math.max(2,2.4*tA.k)){g.beginPath();g.moveTo(i,-tw/2);g.lineTo(i,tw/2);g.stroke();}
+    g.fillStyle=rg('#b6bbc0',.95*alpha);
+    g.beginPath();g.moveTo(tl,-tw/2);g.lineTo(tl+tw*.34,-tw*.22);g.lineTo(tl+tw*.12,tw*.06);
+    g.lineTo(tl+tw*.40,tw*.30);g.lineTo(tl,tw/2);g.closePath();g.fill();
+    g.strokeStyle=rg('#5f666b',.5*alpha);g.lineWidth=.7;g.stroke();
+    g.restore();
+  }
+}
+// flat fan disc used by tower / sff
+function fanDisc(cen,R,rot,alpha,col,blades){
+  const q=P(cen[0],cen[1],cen[2]);const k=q.k;
+  g.strokeStyle=rg(col,.5*alpha);g.lineWidth=1.1;g.beginPath();g.arc(q.x,q.y,Math.max(1,R*k),0,7);g.stroke();
+  g.strokeStyle=rg(col,.30*alpha);g.lineWidth=.9;g.beginPath();g.arc(q.x,q.y,Math.max(.6,R*.62*k),0,7);g.stroke();
+  const spin=rot*3.2;
+  for(let i=0;i<blades;i++){
+    const a0=spin+i*6.283/blades, Rr=Math.max(1,R*k);
+    g.beginPath();g.moveTo(q.x,q.y);
+    g.quadraticCurveTo(q.x+Math.cos(a0+.5)*Rr*.9,q.y+Math.sin(a0+.5)*Rr*.9,
+                       q.x+Math.cos(a0)*Rr*.55,q.y+Math.sin(a0)*Rr*.55);
+    g.stroke();
   }
 }
 const bz=(a,b,l,t)=>{const m=[(a[0]+b[0])/2,(a[1]+b[1])/2+l,(a[2]+b[2])/2],u=1-t;return[0,1,2].map(i=>u*u*a[i]+2*u*t*m[i]+t*t*b[i])};
@@ -260,7 +464,7 @@ for(const d of dust){const y=((d.y+time*d.v)%52)-14;const p=P(d.x+Math.sin(time*
 g.globalCompositeOperation='source-over';
 const fy=-10;g.lineWidth=1;for(let i=-6;i<=6;i++){const w=i*8,ar=.16*(1-Math.abs(i)/8);g.strokeStyle=`rgba(58,226,224,${ar})`;let a=P(w,fy,-48),b=P(w,fy,48);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();a=P(-48,fy,w);b=P(48,fy,w);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
 for(let k=0;k<3;k++){const r=((time*7+k*14)%42);g.beginPath();for(let i=0;i<=44;i++){const t=i/44*6.283,p=P(Math.cos(t)*r,fy,Math.sin(t)*r);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=`rgba(58,226,224,${.13*(1-r/42)})`;g.lineWidth=1;g.stroke()}}
-function frame(ms){if(document.hidden){requestAnimationFrame(frame);return}
+function frame(ms){setDense();if(document.hidden){requestAnimationFrame(frame);return}
 try{stepFrame(ms);requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}requestAnimationFrame(frame)}
 function stepFrame(ms){const dt=(st.pause?0:Math.min(.05,(ms-(frame.l||ms))/1000))*(st.speed||1);frame.l=ms;time+=dt;off+=((W>760?(st.sel?165:-70):0)-off)*.08;cam.yaw=yb+(st.rot?Math.sin(time*.11)*.32:0);
 for(const k of['dist','tx','ty','tz'])cam[k]+=(tg[k]-cam[k])*.07;
@@ -285,14 +489,14 @@ for(const k in N){const n=N[k],id='n:'+k,p=P(...n.p),dm=dimN(id),col=C[k];items.
 agByHome[k].forEach((a,j)=>{if(a.cls!=='c'&&a.cls!=='f')return;ring(n.p,a.R,a.inc,a.rot,col,.09*dm+(st.sel===id?.08:0),1,null,32)});
 model3d(n.p,MODELS[k],time*.16+.6,dm,st.sel===id||st.hov===id);ring(n.p,n.r*1.3,.3,time*.5,col,.34*dm,1.3,null,44);
 g.strokeStyle=rg(col,.42*dm);g.lineWidth=1;g.beginPath();g.arc(p.x,p.y,r*1.12,0,7);g.stroke();orb(p.x,p.y,r,col,dm*.72);if(st.sel===id||st.hov===id){g.strokeStyle=rg('#ffffff',.85);g.lineWidth=1.5;g.setLineDash([5,5]);g.lineDashOffset=-time*20;g.beginPath();g.arc(p.x,p.y,r*1.9,0,7);g.stroke();g.setLineDash([])}
-lab(n.s,p.x,p.y+r*1.9+16*sc,13*sc,'#e8fbff',dm);lab(n.tps+' TOK/S · '+n.gpu.split('·')[0].trim(),p.x,p.y+r*1.9+29*sc,9.5*sc,col,dm);hits.push({id:id,x:p.x,y:p.y,r:r*1.5,pr:1,z:p.z})}})}
+lab(n.s,p.x,p.y+r*1.9+16*sc,13*sc,'#e8fbff',dm);if(DENSE){lab(n.tps+' TOK/S · '+n.gpu.split('·')[0].trim(),p.x,p.y+r*1.9+31*sc,9.5*sc,col,dm);lab(n.chassis,p.x,p.y+r*1.9+45*sc,8.6*sc,'#a6c9d6',dm*.95,'center');lab(n.gpu+' \u00b7 '+n.ram+' RAM \u00b7 '+n.thr+' threads',p.x,p.y+r*1.9+57*sc,8.6*sc,'#7fd4ff',dm*.9,'center')}hits.push({id:id,x:p.x,y:p.y,r:r*1.5,pr:1,z:p.z})}})}
 for(const a of ag){const h=N[a.home],col=C[a.home],dm=dimN('n:'+a.home);
 if(!st.pause){a.ang+=a.sp*dt;if(a.st==0){a.tm-=dt;if(a.tm<=0){a.st=1;a.u=0;a.ax=a.anc[Math.random()*a.anc.length|0]}}else if(a.st==1){a.u+=dt/2.4;if(a.u>=1){a.u=1;a.st=2;a.tm=1.5}}else if(a.st==2){a.tm-=dt;if(a.tm<=0)a.st=3}else{a.u-=dt/2.4;if(a.u<=0){a.u=0;a.st=0;a.tm=6+Math.random()*12}}}
 const hm=op(h.p,a.R,a.inc,a.rot,a.ang);let q=hm;if(a.u>0){const T2=pos[a.ax],o=[T2[0]+Math.cos(a.ang*2)*1.9,T2[1]+.5,T2[2]+Math.sin(a.ang*2)*1.9],e=sm(a.u);q=[0,1,2].map(i=>hm[i]+(o[i]-hm[i])*e);q[1]+=Math.sin(a.u*3.14)*2.6}
 const p=P(...q);a.tr.push([p.x,p.y]);if(a.tr.length>16)a.tr.shift();const id='a:'+a.i,r=(a.cls==='c'?.42:a.cls==='f'?.24:.32)*p.k,cc=a.cls==='c'?'#ffe9a8':a.cls==='f'?C.ice:col;
 items.push({d:p.z,f(){if(st.l.trails&&a.tr.length>2){g.beginPath();a.tr.forEach((t,i)=>i?g.lineTo(t[0],t[1]):g.moveTo(t[0],t[1]));g.strokeStyle=rg(col,.35*dm);g.lineWidth=Math.max(1,r*.6);g.stroke()}
 orb(p.x,p.y,Math.max(r,2),cc,dm);const on=st.sel===id||st.hov===id||(st.sel==='n:'+a.home);const nearCore=Math.hypot(p.x-hp.x,p.y-hp.y)<7.2*hp.k;
-if((st.l.names||on)&&(on||!st.sel)&&!(nearCore&&!on)){lab(a.nm,p.x,p.y-r-6,on?10.5:9,'#dff6fa',(on?1:.62)*dm*cl(1.1-p.z*.012,.35,1))}
+if(DENSE&&(st.l.names||on)&&(on||!st.sel)&&!(nearCore&&!on)){lab(a.nm,p.x,p.y-r-6,on?10.5:9,'#dff6fa',(on?1:.62)*dm*cl(1.1-p.z*.012,.35,1))}
 if(st.sel===id){g.strokeStyle='#fff';g.lineWidth=1.2;g.beginPath();g.arc(p.x,p.y,r*2.6+3,0,7);g.stroke()}
 hits.push({id:id,x:p.x,y:p.y,r:Math.max(r*2.2,9),pr:0,z:p.z})}})}
 items.sort((a,b)=>b.d-a.d);K0=FOC/cam.dist;for(const it of items)it.f();
@@ -346,7 +550,9 @@ function resetAll(){
 }
 // mobile drawer
 const drawerBtn=$('#drawerBtn'),leftPanel=$('#left');
-if(matchMedia('(max-width:820px)').matches){leftPanel.classList.add('hidden');drawerBtn.setAttribute('aria-expanded','false')}
+const compactQ=matchMedia('(max-width:820px), (max-height:560px) and (orientation:landscape)');
+if(compactQ.matches){leftPanel.classList.add('hidden');drawerBtn.setAttribute('aria-expanded','false')}
+if(compactQ.addEventListener)compactQ.addEventListener('change',e=>{if(e.matches){leftPanel.classList.add('hidden');drawerBtn.setAttribute('aria-expanded','false')}});
 drawerBtn.addEventListener('click',()=>{
   const hid=leftPanel.classList.toggle('hidden');
   drawerBtn.setAttribute('aria-expanded',String(!hid));
