@@ -15,14 +15,14 @@ STATIC GATES (all passed):
 
 ICON SET (26 hand-authored single-stroke SVG symbols, marine/instrument/hardware motif):
   ic-helm                → Hermes (Commander)            [ship's wheel]
-  ic-lectern             → Theo (Theologian)              [open book/lectern]
-  ic-drafting-compass    → Adam (Agent Architect)         [dividers]
+  ic-book             → Theo (Theologian)              [open book/lectern]
+  ic-dividers    → Adam (Agent Architect)         [dividers]
   ic-blueprint           → Architect (Sys Architecture)   [blueprint sheet]
   ic-chevrons            → Coder (Meta-Engineer)          [angle brackets]
   ic-device              → Geordi (Android)               [mobile + signal arcs]
   ic-magnifier           → Liara (Research)               [loupe over chart line]
-  ic-flow-lanes          → Orchestrator (Coordination)    [sequenced work lanes + nodes]
-  ic-shield-keyhole      → Sentinel (Security)            [shield + keyhole]
+  ic-lanes          → Orchestrator (Coordination)    [sequenced work lanes + nodes]
+  ic-shield      → Sentinel (Security)            [shield + keyhole]
   ic-radar               → EDI (Network Oversight)        [radar dish + sweep]
   ic-likert              → Ebert (Critic)                 [7-tick scale + pointer]
   ic-stethoscope         → Medic (Debug)                  [stethoscope]
@@ -37,12 +37,12 @@ ICON SET (26 hand-authored single-stroke SVG symbols, marine/instrument/hardware
   ic-laptop              → Node: Laptop (gateway/ops)     [laptop chassis]
   ic-tower               → Node: Main (brain)             [full-tower case]
   ic-stb                 → Node: HTPC (media)             [set-top box]
-  ic-deck                → Node: Steam Deck               [handheld with sticks]
+  ic-handheld                → Node: Steam Deck               [handheld with sticks]
   ic-stack               → Section: Sovereign Stack       [layered plates]
   ic-helm-section        → Section: The Fleet            [anchor/helm]
-  ic-chip-device         → Chip: Private Android App
-  ic-chip-clock          → Chip: Cron
-  ic-chip-ledger         → Chip: Documentation
+  ic-device         → Chip: Private Android App
+  ic-clock          → Chip: Cron
+  ic-nets         → Chip: Documentation
   ic-chip-nets           → Chip: 4 Nodes
 
 CREW ORDER (Command → Super → Specialist → Fast-Light):
@@ -78,7 +78,7 @@ INTERACTION MODEL:
 - 2-3 sentence full synopsis per agent (from canonical AGENT.md summaries)
 
 ANIMATION SECTION HONESTY:
-- Embeds fleet_animation_v6.html (Conceptual Mesh Visualization)
+- Embeds Gillsystems_Commander_Hermes_Animation_v7.html (Conceptual Mesh Visualization)
 - Caption explicitly notes: "thread and seat counts shown inside the mesh reflect that build's snapshot; the canonical roster is the 20 agents listed above"
 - No contradiction created between iframe (19 threads) and page (20 agents)
 
@@ -95,3 +95,9 @@ Score this page against zero_trust_likert_rubric.md. Return:
    axis_notes: {axis: "specific justification"},
    specific_deltas: ["actionable fix 1", "actionable fix 2", ...]}
 Be exacting. No generosity.
+
+---
+
+## CORRECTION 2026-09-30
+Icon ids above were reconciled against the shipped page: all 26 resolve (0 missing, 0 unused).
+Embed target is now animations/Gillsystems_Commander_Hermes_Animation_v7.html (v6 superseded and deleted).
