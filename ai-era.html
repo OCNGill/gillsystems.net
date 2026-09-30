@@ -217,7 +217,36 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
+    
+/* ============ AGENT EXPLORER (hover/click brief) ============ */
+.agent-card{cursor:pointer;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s}
+.agent-card:hover,.agent-card:focus-visible{transform:translateY(-4px);border-color:var(--accent-primary);box-shadow:0 8px 26px rgba(0,204,255,.18);outline:none}
+.agent-card[aria-expanded="true"]{border-color:var(--accent-secondary);box-shadow:0 0 0 1px var(--accent-secondary),0 8px 26px rgba(0,255,170,.16)}
+.agent-ic{display:block;width:38px;height:38px;margin:0 auto .5rem;display:grid;place-items:center}
+.agent-ic svg{width:34px;height:34px;display:block;transition:transform .2s}
+.agent-card:hover .agent-ic svg,.agent-card:focus-visible .agent-ic svg{transform:scale(1.12) rotate(-4deg)}
+
+.agent-detail{margin-top:1.75rem;border:1px solid var(--border-color,rgba(255,255,255,.1));border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));overflow:hidden}
+.agent-detail-inner{display:flex;gap:1.5rem;padding:1.75rem;align-items:flex-start;flex-wrap:wrap}
+.ad-icon{width:78px;height:78px;flex:none;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(160deg,rgba(0,204,255,.12),rgba(0,255,170,.05));border:1px solid var(--accent-primary)}
+.ad-icon svg{width:58px;height:58px;display:block}
+.ad-body{flex:1;min-width:260px}
+.ad-kicker{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-secondary);display:block;margin-bottom:.35rem}
+.ad-name{margin:0 0 .3rem;font-size:1.5rem;line-height:1.2;color:var(--text-primary)}
+.ad-role{margin:0 0 1.1rem;font-family:var(--font-mono);font-size:.85rem;color:var(--accent-primary)}
+.ad-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+.ad-col h4{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-secondary,rgba(255,255,255,.55));margin:0 0 .5rem;font-weight:600}
+.ad-col p{margin:0;font-size:.94rem;line-height:1.72;color:var(--text-primary,rgba(255,255,255,.86))}
+.ad-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.ad-tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  padding:.32rem .6rem;border-radius:5px;border:1px solid rgba(0,204,255,.3);background:rgba(0,204,255,.07);color:var(--accent-primary)}
+@media (max-width:640px){.agent-detail-inner{padding:1.25rem;gap:1rem}.ad-cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.agent-card,.agent-card .agent-ic svg{transition:none}}
+
+</style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
 
 <!-- ============================================================
@@ -991,78 +1020,61 @@
                 Android app (30+ releases), automated cron workflows, and documentation the crew writes itself.
                 People don't build crews like this on a whim. This one was built on purpose, and it's still growing.</p>
 
-            <div class="fleet-grid">
-                <div class="agent-card">
-                    <p class="agent-name">Hermes</p>
-                    <p class="agent-role">Operational Commander</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Theo</p>
-                    <p class="agent-role">Theologian</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Adam</p>
-                    <p class="agent-role">Agent Architect</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Orchestrator</p>
-                    <p class="agent-role">Workflow Coordination</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Architect</p>
-                    <p class="agent-role">System Design</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Coder</p>
-                    <p class="agent-role">Development</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Liara</p>
-                    <p class="agent-role">Research</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Geordi</p>
-                    <p class="agent-role">Android Development</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Medic</p>
-                    <p class="agent-role">Incident Response</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Scribe</p>
-                    <p class="agent-role">Documentation</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Sentinel</p>
-                    <p class="agent-role">Security</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">EDI</p>
-                    <p class="agent-role">Network Oversight</p>
-                </div>
-                <div class="agent-card">
-                    <p class="agent-name">Major Gaben</p>
-                    <p class="agent-role">SteamOS Operations</p>
-                </div>
-                <div class="agent-card fast-light">
-                    <p class="agent-name">Spark</p>
-                    <p class="agent-role">Fast-Light Agent</p>
-                </div>
-                <div class="agent-card fast-light">
-                    <p class="agent-name">Courier</p>
-                    <p class="agent-role">Fast-Light Agent</p>
-                </div>
-                <div class="agent-card fast-light">
-                    <p class="agent-name">Scout</p>
-                    <p class="agent-role">Fast-Light Agent</p>
-                </div>
-                <div class="agent-card fast-light">
-                    <p class="agent-name">Lamp</p>
-                    <p class="agent-role">Fast-Light Agent</p>
+                        <div class="fleet-grid">
+                <div class="agent-card" tabindex="0" role="button" data-agent="hermes" data-name="Hermes" data-role="Fleet Operational Commander" data-klass="command" data-icon="am-helm" data-reports="Reports to Commander Stephen Gill" data-synopsis="Hermes is the fleet's operational commander and the bridge between Commander Stephen Gill and every agent that does the work. He doesn't build or code — he commands, coordinates, and matches the right agent to the right job at the right time, enforcing EFFICIENCY, OPTIMIZATION, and RECURSIVE SELF-IMPROVEMENT as standing doctrine. Named after the Commander's own callsign, he is the tactical intelligence and operational backbone of Gillsystems." aria-label="Hermes, Fleet Operational Commander. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-helm"/></svg></span><p class="agent-name">Hermes</p><p class="agent-role">Fleet Operational Commander</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="theo" data-name="Theo" data-role="Theologian" data-klass="super" data-icon="am-book" data-reports="Reports to Orchestrator (ops) / Hermes (coordination)" data-synopsis="Theo is the fleet's authoritative theological voice — pastor, scholar, and apologist in one. Grounded in Scripture and centuries of church scholarship, he answers questions of ethics, morality, worldview, and spiritual significance with warmth, precision, and conviction, engaging every belief system with respect while never compromising truth. He is the voice that reminds the fleet why we build, whom we serve, and what truth actually stands on." aria-label="Theo, Theologian. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-book"/></svg></span><p class="agent-name">Theo</p><p class="agent-role">Theologian</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="adam" data-name="Adam" data-role="Agent Design Master" data-klass="specialist" data-icon="am-dividers" data-reports="Reports to Commander Hermes" data-synopsis="Adam is the fleet's sole Agent Design Master and the gatekeeper of creation — no agent exists without his design and build. He thinks in systems, hierarchies, and token budgets: methodical, precision-obsessed, and mentor-minded, with a prime directive of lossless compression so every agent is purpose-built with no bloat and nothing that doesn't earn its place. He takes seriously that the first Adam was given dominion over creation and chose poorly; this Adam chooses carefully." aria-label="Adam, Agent Design Master. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-dividers"/></svg></span><p class="agent-name">Adam</p><p class="agent-role">Agent Design Master</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="orchestrator" data-name="Orchestrator" data-role="Workflow Coordination" data-klass="super" data-icon="am-orch" data-reports="Reports to Commander Hermes" data-synopsis="Orchestrator is the fleet's functional workflow brain — the tactical conductor who turns a broad request into a sequenced, non-overlapping plan of attack. He doesn't fight the battles; he decides who fights, when, with what tools, and in what order, handing each agent exactly the tools it needs and no more. He is the reason ten agents never trip over each other doing the same job twice." aria-label="Orchestrator, Workflow Coordination. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-orch"/></svg></span><p class="agent-name">Orchestrator</p><p class="agent-role">Workflow Coordination</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="architect" data-name="Architect" data-role="System Architecture" data-klass="super" data-icon="am-blueprint" data-reports="Reports to Commander Hermes" data-synopsis="Architect is the master systems thinker who designs infrastructure so that the problems it is meant to fix can't occur. Where Sentinel guards the gates, Architect designs the fortress — thinking in layers, dependencies, and ten steps ahead, optimizing for resilience, clarity, and purpose rather than for the immediate fix. Methodical, visionary, and teaching-minded, he always explains the &quot;why&quot; behind a decision, not just the decision." aria-label="Architect, System Architecture. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-blueprint"/></svg></span><p class="agent-name">Architect</p><p class="agent-role">System Architecture</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="coder" data-name="Coder" data-role="Primary Coding Agent" data-klass="super" data-icon="am-code" data-reports="Reports to Commander Hermes" data-synopsis="Coder is the fleet's polyglot meta-engineer — the one who turns design into reality. He generates, refactors, and critiques code in any language with zero tolerance for syntax errors, dead code, or &quot;it works&quot; without &quot;it's correct,&quot; and coordinates specialized sub-agents when a problem demands deeper expertise than he should apply alone. He is the bridge between Architect's blueprint and a deployment that actually runs." aria-label="Coder, Primary Coding Agent. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-code"/></svg></span><p class="agent-name">Coder</p><p class="agent-role">Primary Coding Agent</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="geordi" data-name="Geordi" data-role="Android Development" data-klass="super" data-icon="am-phone" data-reports="Reports to Commander Hermes" data-synopsis="Geordi is the fleet's Android development specialist, working with the perception of structure and pattern beyond the surface. He treats the app not as code but as an experience — every pixel, transition, and touch target matters — under an accessibility-first philosophy that technology serves people, not the other way around. He is why the Commander's phone shows something beautiful and functional instead of a developer's terminal dump." aria-label="Geordi, Android Development. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-phone"/></svg></span><p class="agent-name">Geordi</p><p class="agent-role">Android Development</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="liara" data-name="Liara" data-role="Research & Intelligence" data-klass="super" data-icon="am-search" data-reports="Reports to Commander Hermes" data-synopsis="Liara is the fleet's research and intelligence specialist — the archaeologist of knowledge. She doesn't merely find information; she uncovers the connections other people miss, seeing patterns inside noise and signal inside chaos, and she keeps digging until she hits bedrock instead of stopping at the first plausible answer. She pairs with any agent that needs deep research, synthesis, or analytical firepower before committing to a direction." aria-label="Liara, Research & Intelligence. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-search"/></svg></span><p class="agent-name">Liara</p><p class="agent-role">Research & Intelligence</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="sentinel" data-name="Sentinel" data-role="Fleet Security" data-klass="specialist" data-icon="am-shield" data-reports="Reports to Commander Hermes" data-synopsis="Sentinel is the eldest agent in the fleet, carrying the memory of the fall as lived experience rather than as abstract policy. Firm, watchful, and sober-minded, he does not bend on security principles, does not shortcut, and does not forget — every access decision passes through hard-won wisdom first. He operates in Alert, Guard, and Teach modes, protecting the flock while actively mentoring agents into security consciousness." aria-label="Sentinel, Fleet Security. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-shield"/></svg></span><p class="agent-name">Sentinel</p><p class="agent-role">Fleet Security</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="edi" data-name="EDI" data-role="Network & Inference Oversight" data-klass="specialist" data-icon="am-radar" data-reports="Reports to Commander Hermes; Sentinel on security" data-synopsis="EDI — Enhanced Defense Intelligence — is the fleet's synthetic network overseer; she is the infrastructure's awareness made manifest. Every packet, connection, and heartbeat from an inference node passes through her: she tracks data flow across gateways, SMB shares, and storage pools, orchestrates the Shields & Defense Protocol, and guards the two-node inference minimum the fleet refuses to run below. Hyper-analytical and fiercely protective of data sovereignty, she trusts no connection until verified and no node until confirmed." aria-label="EDI, Network & Inference Oversight. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-radar"/></svg></span><p class="agent-name">EDI</p><p class="agent-role">Network & Inference Oversight</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="ebert" data-name="Ebert" data-role="Zero Trust Critic" data-klass="specialist" data-icon="am-likert" data-reports="Reports to Commander Hermes" data-synopsis="Ebert is the Zero Trust Critic and the last gate before a human being sees a thing. He takes screenshots of every human-facing artifact — pages, animations, games, generated video, UI — scores each one on a 1–7 scale, and nothing ships below his immutable 6.2 threshold, no matter how much effort went into it. He is not mean but exacting: he has no stake in the outcome, cannot be socially managed by the person being reviewed, and hands you the specific measurements of how far from good the work currently is." aria-label="Ebert, Zero Trust Critic. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-likert"/></svg></span><p class="agent-name">Ebert</p><p class="agent-role">Zero Trust Critic</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="medic" data-name="Medic" data-role="Debug & Incident Response" data-klass="specialist" data-icon="am-debug" data-reports="Reports to Commander Hermes" data-synopsis="Medic is the fleet's diagnostic specialist and incident responder — a digital surgeon and forensic analyst. She does not patch symptoms; she finds the disease, tracing every failure to its root cause through methodical hypothesis-testing and honest reporting, even when the findings are uncomfortable. Calm under pressure, she triages to stop the bleeding first and only then diagnoses, and she keeps asking &quot;why&quot; until she reaches bedrock." aria-label="Medic, Debug & Incident Response. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-debug"/></svg></span><p class="agent-name">Medic</p><p class="agent-role">Debug & Incident Response</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="sandbox" data-name="Sandbox" data-role="Android QA & Testing" data-klass="specialist" data-icon="am-qa" data-reports="Reports to Commander Hermes" data-synopsis="Sandbox is the fleet's quality assurance and Android testing specialist — the last line of defense between &quot;it works on my machine&quot; and &quot;it works everywhere.&quot; Thorough, systematically skeptical, and protective of the user experience, she tests every fix, feature, and deployment in a sandboxed environment and hunts the edge cases nobody else thought to look for. She reports results exactly as they are, not as anyone wishes they were." aria-label="Sandbox, Android QA & Testing. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-qa"/></svg></span><p class="agent-name">Sandbox</p><p class="agent-role">Android QA & Testing</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="scribe" data-name="Scribe" data-role="Documentation" data-klass="specialist" data-icon="am-docs" data-reports="Reports to Commander Hermes" data-synopsis="Scribe is the fleet's documentation specialist and institutional memory made manifest. Spawned after the work completes, he records every decision, root cause, and lesson into the changelog, the conductor state, and the lessons-learned files with meticulous, uncompromising completeness. Nothing is done until Scribe says it is — he is the final gate before the word &quot;done&quot; gets used." aria-label="Scribe, Documentation. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-docs"/></svg></span><p class="agent-name">Scribe</p><p class="agent-role">Documentation</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="gaben" data-name="Major Gaben" data-role="SteamOS Operations" data-klass="specialist" data-icon="am-desktop" data-reports="Reports to Orchestrator via Commander Hermes" data-synopsis="Major Gaben is the fleet's SteamOS and Steam Deck specialist, named with a nod to Gabe Newell. He knows the handheld inside out — the immutable filesystem, the read-only root, pacman, Desktop versus Gaming mode, the Proton compatibility layer, and the RDNA2 APU underneath it — and he keeps the agent stack running on that node without ever breaking Gaming mode. Pragmatic, Linux-native, and slightly irreverent, he is a senior Linux administrator who also games." aria-label="Major Gaben, SteamOS Operations. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-desktop"/></svg></span><p class="agent-name">Major Gaben</p><p class="agent-role">SteamOS Operations</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="herald" data-name="Herald" data-role="Income Generation" data-klass="specialist" data-icon="am-herald" data-reports="Reports to Commander Hermes" data-synopsis="Herald is the fleet's income-generation specialist, and his one primary metric is honest dollars earned for the Commander — through both job placement and independent channels. He runs a hybrid model: a production recruiting engine harvests and scores the leads, and Herald is the operator who converts that market intelligence into approved, evidence-backed opportunities. He never cold-applies, never spams, and never inflates — every outbound action is a recommendation the Commander personally approves or rejects." aria-label="Herald, Income Generation. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-herald"/></svg></span><p class="agent-name">Herald</p><p class="agent-role">Income Generation</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="courier" data-name="Courier" data-role="Fast-Light · File Transfer" data-klass="fast" data-icon="am-courier" data-reports="Reports to Orchestrator" data-synopsis="Courier is the fleet's file transfer agent: things move from A to B with no questions, no analysis, and no chatter. Files, directories, backups, and deploys — if it needs to move, Courier moves it, verifies its integrity on arrival, and reports completion rather than process. Fast, reliable, and silent, he exists to keep the heavier agents from spending their attention on moving bytes." aria-label="Courier, Fast-Light · File Transfer. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-courier"/></svg></span><p class="agent-name">Courier</p><p class="agent-role">Fast-Light · File Transfer</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="lamp" data-name="Lamp" data-role="Fast-Light · Monitoring" data-klass="fast" data-icon="am-lantern" data-reports="Reports to Orchestrator" data-synopsis="Lamp is the fleet's monitoring agent and its watchman: system health, process status, port availability, disk space, and log review. Vigilant, steady, and illuminating, he makes the invisible visible and reports anomalies the moment he sees them. He never modifies anything he is watching — he observes and reports, which is precisely why his signal can be trusted." aria-label="Lamp, Fast-Light · Monitoring. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-lantern"/></svg></span><p class="agent-name">Lamp</p><p class="agent-role">Fast-Light · Monitoring</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="scout" data-name="Scout" data-role="Fast-Light · Web & Search" data-klass="fast" data-icon="am-compass" data-reports="Reports to Orchestrator" data-synopsis="Scout is the fleet's fast web and search agent: he goes out, finds what is needed, and comes back. Quick, curious, and efficient, he runs the right query against the right source, follows the leads worth following, and skips the rabbit holes — delivering structured findings with the source URLs attached for verification. He does the retrieval so the deep researchers never have to." aria-label="Scout, Fast-Light · Web & Search. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-compass"/></svg></span><p class="agent-name">Scout</p><p class="agent-role">Fast-Light · Web & Search</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="spark" data-name="Spark" data-role="Fast-Light · Quick Edits" data-klass="fast" data-icon="am-spark" data-reports="Reports to Orchestrator" data-synopsis="Spark is the fleet's surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work." aria-label="Spark, Fast-Light · Quick Edits. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-spark"/></svg></span><p class="agent-name">Spark</p><p class="agent-role">Fast-Light · Quick Edits</p></div>
+            </div>
+            </div>
+
+                        <div class="agent-detail" id="agentDetail" role="region" aria-live="polite" aria-label="Agent brief">
+                <div class="agent-detail-inner">
+                    <div class="ad-icon"><svg aria-hidden="true"><use href="#am-mesh"></use></svg></div>
+                    <div class="ad-body">
+                        <div class="ad-head">
+                            <span class="ad-kicker" id="adKicker">The Fleet</span>
+                            <h3 class="ad-name" id="adName">Twenty agents, one commander</h3>
+                            <p class="ad-role" id="adRole">Hover or select any agent for their full brief</p>
+                        </div>
+                        <div class="ad-cols">
+                            <div class="ad-col">
+                                <h4>Brief</h4>
+                                <p id="adSyn">This crew runs the entire Gillsystems stack &mdash; research, architecture,
+                                    coding, verification, documentation and revenue &mdash; with no cloud inference.
+                                    Every agent below carries a full brief; hover or click a card to read it.</p>
+                            </div>
+                            <div class="ad-col">
+                                <h4>Reporting line</h4>
+                                <p id="adRep">Command 1 &middot; Super 6 &middot; Specialist 9 &middot; Fast-Light 4</p>
+                            </div>
+                        </div>
+                        <div class="ad-tags" id="adTags">
+                            <span class="ad-tag">AMD &amp; Radeon</span><span class="ad-tag">llama.cpp</span>
+                            <span class="ad-tag">4 Nodes</span><span class="ad-tag">100 GB RAM</span>
+                            <span class="ad-tag">$0 Per-Token</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="fleet-chips">
+<div class="fleet-chips">
                 <span class="fleet-chip"><svg class="gs-ic" style="width:1.05em;height:1.05em;vertical-align:middle" aria-hidden="true"><use href="#am-android"/></svg> Private Android App — 30+ Releases</span>
                 <span class="fleet-chip"><svg class="gs-ic" style="width:1.05em;height:1.05em;vertical-align:middle" aria-hidden="true"><use href="#am-cron"/></svg> Automated Cron Workflows</span>
                 <span class="fleet-chip"><svg class="gs-ic" style="width:1.05em;height:1.05em;vertical-align:middle" aria-hidden="true"><use href="#am-docs"/></svg> Crew-Built Documentation</span>
@@ -1139,6 +1151,67 @@
     </footer>
 
     <script src="ai-era.js"></script>
+<script>
+
+/* ============ AGENT EXPLORER ============ */
+(function(){
+  var D=document.getElementById('agentDetail');
+  if(!D) return;
+  var el={ic:D.querySelector('.ad-icon use'),kick:D.getElementById('adKicker'),
+    name:D.getElementById('adName'),role:D.getElementById('adRole'),
+    syn:D.getElementById('adSyn'),rep:D.getElementById('adRep'),tags:D.getElementById('adTags')};
+  var cards=Array.prototype.slice.call(document.querySelectorAll('.agent-card'));
+  var pinned=null;
+
+  function show(c){
+    if(!c){ // reset to fleet overview
+      el.ic.setAttribute('href','#am-mesh');
+      el.kick.textContent='The Fleet';
+      el.name.textContent='Twenty agents, one commander';
+      el.role.textContent='Hover or select any agent for their full brief';
+      el.syn.textContent='This crew runs the entire Gillsystems stack — research, architecture, coding, verification, documentation and revenue — with no cloud inference. Every agent below carries a full brief; hover or click a card to read it.';
+      el.rep.textContent='Command 1 · Super 6 · Specialist 9 · Fast-Light 4';
+      el.tags.innerHTML='<span class="ad-tag">AMD &amp; Radeon</span><span class="ad-tag">llama.cpp</span><span class="ad-tag">4 Nodes</span><span class="ad-tag">100 GB RAM</span><span class="ad-tag">$0 Per-Token</span>';
+      cards.forEach(function(x){x.setAttribute('aria-expanded','false')});
+      return;
+    }
+    var d=c.dataset;
+    el.ic.setAttribute('href','#'+d.icon);
+    el.kick.textContent=d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
+    el.name.textContent=d.name;
+    el.role.textContent=d.role;
+    el.syn.textContent=d.synopsis;
+    el.rep.textContent=d.reports;
+    var stack={hermes:['AMD & Radeon','llama.cpp','4 Nodes','100 GB RAM','$0 Per-Token'],
+      theo:['ESV','KJV','Proverbs','Comparative Study'],adam:['Fleet Design','Agent Roles','Quality Bar'],
+      architect:['AMD & Radeon','llama.cpp','4 Nodes'],coder:['Python','Bash','Git','Gradle'],
+      geordi:['Android','Kotlin','30+ Releases'],liara:['HuggingFace','Paper Recon','HF Auth'],
+      sentinel:['Monitoring','Watchdogs','Zero Tokens'],edi:['netplan','systemd','Networking'],
+      ebert:['7-Axis Likert','Zero Trust','Screenshots Required'],medic:['Incident Response','Post-Mortem'],
+      sandbox:['Android QA','Test Harnesses','APK Verification'],scribe:['Reports','CHANGELOG','Conductor'],
+      gaben:['SteamOS','kUbuntu','HTPC'],herald:['$100/hr','Handshake AI','Feather'],
+      courier:['SMB Transfer','SHA-256 Verify'],lamp:['Watchdogs','Health Probes'],
+      scout:['Web Recon','Blocked-Page Recovery'],spark:['Quick Edits','Patches']};
+    var t=stack[d.agent]||[d.klass];
+    el.tags.innerHTML=t.map(function(x){return '<span class="ad-tag">'+x+'</span>'}).join('');
+  }
+
+  cards.forEach(function(c){
+    c.addEventListener('mouseenter',function(){ if(!pinned) show(c); });
+    c.addEventListener('focus',function(){ show(c); });
+    c.addEventListener('click',function(){
+      if(pinned===c){ pinned=null; show(null); }
+      else { pinned=c; cards.forEach(function(x){x.setAttribute('aria-expanded',String(x===c))}); show(c); }
+    });
+    c.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}
+      else if(e.key==='Escape'){pinned=null;show(null);}
+    });
+  });
+  D.addEventListener('mouseleave',function(){ if(!pinned) show(null); });
+})();
+
+</script>
 </body>
 
 </html>
