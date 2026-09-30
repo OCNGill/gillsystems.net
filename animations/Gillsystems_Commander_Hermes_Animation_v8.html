@@ -592,7 +592,9 @@ for(const d of dust){const y=((d.y+time*d.v)%52)-14;const p=P(d.x+Math.sin(time*
 g.globalCompositeOperation='source-over';
 const fy=-10;g.lineWidth=1;for(let i=-6;i<=6;i++){const w=i*8,ar=.16*(1-Math.abs(i)/8);g.strokeStyle=`rgba(58,226,224,${ar})`;let a=P(w,fy,-48),b=P(w,fy,48);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();a=P(-48,fy,w);b=P(48,fy,w);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
 for(let k=0;k<3;k++){const r=((time*7+k*14)%42);g.beginPath();for(let i=0;i<=44;i++){const t=i/44*6.283,p=P(Math.cos(t)*r,fy,Math.sin(t)*r);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=`rgba(58,226,224,${.13*(1-r/42)})`;g.lineWidth=1;g.stroke()}cyber();tess(0)}
-function frame(ms){setDense();if(document.hidden){requestAnimationFrame(frame);return}
+var inView=true;var rafId=0;
+function frame(ms){setDense();if(document.hidden||!inView){rafId=0;return}
+try{stepFrame(ms);rafId=requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}rafId=requestAnimationFrame(frame)}
 try{stepFrame(ms);requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}requestAnimationFrame(frame)}
 function stepFrame(ms){const dt=(st.pause?0:Math.min(.05,(ms-(frame.l||ms))/1000))*(st.speed||1);frame.l=ms;time+=dt;off+=((W>760?(st.sel?55:-70):0)-off)*.08;cam.yaw=yb+(st.rot?Math.sin(time*.11)*.32:0);
 for(const k of['dist','tx','ty','tz'])cam[k]+=(tg[k]-cam[k])*.07;
@@ -1318,5 +1320,32 @@ requestAnimationFrame(frame);
 </symbol>
 
 </defs></svg>
+
+/* ---- host-page visibility protocol (Commander 2026-09-30) ----
+   The mesh rendered at full rate even when scrolled out of view, starving
+   the YouTube player above it. The PARENT page owns scroll position, so the
+   parent observes the iframe and posts visibility; we stop the rAF loop when
+   not visible and resume on return. Manual pause button is unaffected. */
+window.addEventListener('message',function(e){
+  var d=e.data;
+  if(!d||typeof d!=='object')return;
+  if(d.type==='mesh-visibility'){
+    var v=!!d.visible;
+    if(v===inView)return;
+    inView=v;
+    if(v){ if(!rafId&&!frame.warned){ frame.l=0; rafId=requestAnimationFrame(frame);} }
+    else { if(rafId){cancelAnimationFrame(rafId);rafId=0;} }
+  }
+});
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden&&inView&&!rafId&&!st.pause){frame.l=0;rafId=requestAnimationFrame(frame)}
+});
+try{
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){
+    window.parent.postMessage({type:'mesh-visibility',visible:en.isIntersecting},'*');});},
+    {threshold:0.01});
+  io.observe(document.body);
+}catch(_){}
+
 </body>
 </html>

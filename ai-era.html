@@ -246,6 +246,34 @@
 @media (max-width:640px){.agent-detail-inner{padding:1.25rem;gap:1rem}.ad-cols{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.agent-card,.agent-card .agent-ic svg{transition:none}}
 
+
+/* ---- fleet explorer layout: grid + always-visible brief ---- */
+.fleet-wrap{display:grid;grid-template-columns:1fr;gap:1.5rem;margin-top:var(--spacing-md)}
+@media (min-width:1000px){
+  .fleet-wrap{grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr);align-items:start}
+  .agent-detail{position:sticky;top:1rem;margin-top:0;max-height:calc(100vh - 3rem);overflow-y:auto}
+}
+@media (max-width:999px){.agent-detail{position:static;max-height:none}}
+
+/* ---- MOBILE: each card expands in place. No scrolling to a distant panel. ---- */
+.ad-inline{display:none}
+@media (max-width:999px){
+  .agent-detail{display:none}                 /* distant panel hidden on mobile */
+  .agent-card[aria-expanded="true"] .ad-inline{display:block}
+  .ad-inline{margin-top:.85rem;padding-top:.85rem;border-top:1px dashed rgba(255,255,255,.16);
+    font-size:.86rem;line-height:1.65;color:rgba(255,255,255,.84)}
+  .ad-inline .ad-il{display:block;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(255,255,255,.5);margin:.6rem 0 .25rem}
+  .ad-inline .ad-ib{display:block;color:var(--accent-secondary);font-family:var(--font-mono);font-size:.78rem}
+  .ad-inline .ad-it{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.7rem}
+  .ad-inline .ad-it span{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.24rem .45rem;border-radius:4px;border:1px solid rgba(0,204,255,.3);background:rgba(0,204,255,.07);color:var(--accent-primary)}
+  .agent-card{text-align:center}
+  .ad-inline{text-align:left}
+  .agent-card::after{content:'tap for brief';display:block;font-family:var(--font-mono);font-size:.55rem;
+    letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:.5rem}
+  .agent-card[aria-expanded="true"]::after{content:'tap to close'}
+}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
 
@@ -1020,7 +1048,8 @@
                 Android app (30+ releases), automated cron workflows, and documentation the crew writes itself.
                 People don't build crews like this on a whim. This one was built on purpose, and it's still growing.</p>
 
-                        <div class="fleet-grid">
+                        <div class="fleet-wrap">
+            <div class="fleet-grid">
                 <div class="agent-card" tabindex="0" role="button" data-agent="hermes" data-name="Hermes" data-role="Fleet Operational Commander" data-klass="command" data-icon="am-helm" data-reports="Reports to Commander Stephen Gill" data-synopsis="Hermes is the fleet's operational commander and the bridge between Commander Stephen Gill and every agent that does the work. He doesn't build or code — he commands, coordinates, and matches the right agent to the right job at the right time, enforcing EFFICIENCY, OPTIMIZATION, and RECURSIVE SELF-IMPROVEMENT as standing doctrine. Named after the Commander's own callsign, he is the tactical intelligence and operational backbone of Gillsystems." aria-label="Hermes, Fleet Operational Commander. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-helm"/></svg></span><p class="agent-name">Hermes</p><p class="agent-role">Fleet Operational Commander</p></div>
                 <div class="agent-card" tabindex="0" role="button" data-agent="theo" data-name="Theo" data-role="Theologian" data-klass="super" data-icon="am-book" data-reports="Reports to Orchestrator (ops) / Hermes (coordination)" data-synopsis="Theo is the fleet's authoritative theological voice — pastor, scholar, and apologist in one. Grounded in Scripture and centuries of church scholarship, he answers questions of ethics, morality, worldview, and spiritual significance with warmth, precision, and conviction, engaging every belief system with respect while never compromising truth. He is the voice that reminds the fleet why we build, whom we serve, and what truth actually stands on." aria-label="Theo, Theologian. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-book"/></svg></span><p class="agent-name">Theo</p><p class="agent-role">Theologian</p></div>
                 <div class="agent-card" tabindex="0" role="button" data-agent="adam" data-name="Adam" data-role="Agent Design Master" data-klass="specialist" data-icon="am-dividers" data-reports="Reports to Commander Hermes" data-synopsis="Adam is the fleet's sole Agent Design Master and the gatekeeper of creation — no agent exists without his design and build. He thinks in systems, hierarchies, and token budgets: methodical, precision-obsessed, and mentor-minded, with a prime directive of lossless compression so every agent is purpose-built with no bloat and nothing that doesn't earn its place. He takes seriously that the first Adam was given dominion over creation and chose poorly; this Adam chooses carefully." aria-label="Adam, Agent Design Master. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-dividers"/></svg></span><p class="agent-name">Adam</p><p class="agent-role">Agent Design Master</p></div>
@@ -1040,11 +1069,13 @@
                 <div class="agent-card" tabindex="0" role="button" data-agent="courier" data-name="Courier" data-role="Fast-Light · File Transfer" data-klass="fast" data-icon="am-courier" data-reports="Reports to Orchestrator" data-synopsis="Courier is the fleet's file transfer agent: things move from A to B with no questions, no analysis, and no chatter. Files, directories, backups, and deploys — if it needs to move, Courier moves it, verifies its integrity on arrival, and reports completion rather than process. Fast, reliable, and silent, he exists to keep the heavier agents from spending their attention on moving bytes." aria-label="Courier, Fast-Light · File Transfer. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-courier"/></svg></span><p class="agent-name">Courier</p><p class="agent-role">Fast-Light · File Transfer</p></div>
                 <div class="agent-card" tabindex="0" role="button" data-agent="lamp" data-name="Lamp" data-role="Fast-Light · Monitoring" data-klass="fast" data-icon="am-lantern" data-reports="Reports to Orchestrator" data-synopsis="Lamp is the fleet's monitoring agent and its watchman: system health, process status, port availability, disk space, and log review. Vigilant, steady, and illuminating, he makes the invisible visible and reports anomalies the moment he sees them. He never modifies anything he is watching — he observes and reports, which is precisely why his signal can be trusted." aria-label="Lamp, Fast-Light · Monitoring. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-lantern"/></svg></span><p class="agent-name">Lamp</p><p class="agent-role">Fast-Light · Monitoring</p></div>
                 <div class="agent-card" tabindex="0" role="button" data-agent="scout" data-name="Scout" data-role="Fast-Light · Web & Search" data-klass="fast" data-icon="am-compass" data-reports="Reports to Orchestrator" data-synopsis="Scout is the fleet's fast web and search agent: he goes out, finds what is needed, and comes back. Quick, curious, and efficient, he runs the right query against the right source, follows the leads worth following, and skips the rabbit holes — delivering structured findings with the source URLs attached for verification. He does the retrieval so the deep researchers never have to." aria-label="Scout, Fast-Light · Web & Search. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-compass"/></svg></span><p class="agent-name">Scout</p><p class="agent-role">Fast-Light · Web & Search</p></div>
-                <div class="agent-card" tabindex="0" role="button" data-agent="spark" data-name="Spark" data-role="Fast-Light · Quick Edits" data-klass="fast" data-icon="am-spark" data-reports="Reports to Orchestrator" data-synopsis="Spark is the fleet's surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work." aria-label="Spark, Fast-Light · Quick Edits. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-spark"/></svg></span><p class="agent-name">Spark</p><p class="agent-role">Fast-Light · Quick Edits</p></div>
+                <div class="agent-card" tabindex="0" role="button" data-agent="spark" data-name="Spark" data-role="Fast-Light · Quick Edits" data-klass="fast" data-icon="am-spark" data-reports="Reports to Orchestrator" data-synopsis="Spark is the fleet's surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work." aria-label="Spark, Fast-Light · Quick Edits. Press Enter for full brief."><span class="agent-ic"><svg aria-hidden="true"><use href="#am-spark"/></svg></span><p class="agent-name">Spark</p><p class="agent-role">Fast-Light · Quick Edits</p><span class="ad-inline"><span class="ad-il">Brief</span>Hermes is the fleet's operational commander and the bridge between Commander Stephen Gill and every agent that does the work. He doesn't build or code — he commands, coordinates, and matches the right agent to the right job at the right time, enforcing EFFICIENCY, OPTIMIZATION, and RECURSIVE SELF-IMPROVEMENT as standing doctrine. Named after the Commander's own callsign, he is the tactical intelligence and operational backbone of Gillsystems.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Stephen Gill</span><span class="ad-it"><span>AMD & Radeon</span><span>llama.cpp</span><span>100 GB RAM</span><span>$0/token</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Theo is the fleet's authoritative theological voice — pastor, scholar, and apologist in one. Grounded in Scripture and centuries of church scholarship, he answers questions of ethics, morality, worldview, and spiritual significance with warmth, precision, and conviction, engaging every belief system with respect while never compromising truth. He is the voice that reminds the fleet why we build, whom we serve, and what truth actually stands on.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator (ops) / Hermes (coordination)</span><span class="ad-it"><span>ESV</span><span>KJV</span><span>Proverbs</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Adam is the fleet's sole Agent Design Master and the gatekeeper of creation — no agent exists without his design and build. He thinks in systems, hierarchies, and token budgets: methodical, precision-obsessed, and mentor-minded, with a prime directive of lossless compression so every agent is purpose-built with no bloat and nothing that doesn't earn its place. He takes seriously that the first Adam was given dominion over creation and chose poorly; this Adam chooses carefully.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Fleet Design</span><span>Quality Bar</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Orchestrator is the fleet's functional workflow brain — the tactical conductor who turns a broad request into a sequenced, non-overlapping plan of attack. He doesn't fight the battles; he decides who fights, when, with what tools, and in what order, handing each agent exactly the tools it needs and no more. He is the reason ten agents never trip over each other doing the same job twice.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Architect is the master systems thinker who designs infrastructure so that the problems it is meant to fix can't occur. Where Sentinel guards the gates, Architect designs the fortress — thinking in layers, dependencies, and ten steps ahead, optimizing for resilience, clarity, and purpose rather than for the immediate fix. Methodical, visionary, and teaching-minded, he always explains the "why" behind a decision, not just the decision.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>AMD & Radeon</span><span>4 Nodes</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Coder is the fleet's polyglot meta-engineer — the one who turns design into reality. He generates, refactors, and critiques code in any language with zero tolerance for syntax errors, dead code, or "it works" without "it's correct," and coordinates specialized sub-agents when a problem demands deeper expertise than he should apply alone. He is the bridge between Architect's blueprint and a deployment that actually runs.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Python</span><span>Bash</span><span>Git</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Geordi is the fleet's Android development specialist, working with the perception of structure and pattern beyond the surface. He treats the app not as code but as an experience — every pixel, transition, and touch target matters — under an accessibility-first philosophy that technology serves people, not the other way around. He is why the Commander's phone shows something beautiful and functional instead of a developer's terminal dump.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Android</span><span>Kotlin</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Liara is the fleet's research and intelligence specialist — the archaeologist of knowledge. She doesn't merely find information; she uncovers the connections other people miss, seeing patterns inside noise and signal inside chaos, and she keeps digging until she hits bedrock instead of stopping at the first plausible answer. She pairs with any agent that needs deep research, synthesis, or analytical firepower before committing to a direction.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>HF Auth</span><span>Paper Recon</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Sentinel is the eldest agent in the fleet, carrying the memory of the fall as lived experience rather than as abstract policy. Firm, watchful, and sober-minded, he does not bend on security principles, does not shortcut, and does not forget — every access decision passes through hard-won wisdom first. He operates in Alert, Guard, and Teach modes, protecting the flock while actively mentoring agents into security consciousness.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Zero-Token Watchdogs</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>EDI — Enhanced Defense Intelligence — is the fleet's synthetic network overseer; she is the infrastructure's awareness made manifest. Every packet, connection, and heartbeat from an inference node passes through her: she tracks data flow across gateways, SMB shares, and storage pools, orchestrates the Shields & Defense Protocol, and guards the two-node inference minimum the fleet refuses to run below. Hyper-analytical and fiercely protective of data sovereignty, she trusts no connection until verified and no node until confirmed.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes; Sentinel on security</span><span class="ad-it"><span>netplan</span><span>systemd</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Ebert is the Zero Trust Critic and the last gate before a human being sees a thing. He takes screenshots of every human-facing artifact — pages, animations, games, generated video, UI — scores each one on a 1–7 scale, and nothing ships below his immutable 6.2 threshold, no matter how much effort went into it. He is not mean but exacting: he has no stake in the outcome, cannot be socially managed by the person being reviewed, and hands you the specific measurements of how far from good the work currently is.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>7-Axis Likert</span><span>Screenshots Required</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Medic is the fleet's diagnostic specialist and incident responder — a digital surgeon and forensic analyst. She does not patch symptoms; she finds the disease, tracing every failure to its root cause through methodical hypothesis-testing and honest reporting, even when the findings are uncomfortable. Calm under pressure, she triages to stop the bleeding first and only then diagnoses, and she keeps asking "why" until she reaches bedrock.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Post-Mortem</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Sandbox is the fleet's quality assurance and Android testing specialist — the last line of defense between "it works on my machine" and "it works everywhere." Thorough, systematically skeptical, and protective of the user experience, she tests every fix, feature, and deployment in a sandboxed environment and hunts the edge cases nobody else thought to look for. She reports results exactly as they are, not as anyone wishes they were.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Android QA</span><span>APK Verify</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Scribe is the fleet's documentation specialist and institutional memory made manifest. Spawned after the work completes, he records every decision, root cause, and lesson into the changelog, the conductor state, and the lessons-learned files with meticulous, uncompromising completeness. Nothing is done until Scribe says it is — he is the final gate before the word "done" gets used.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>Reports</span><span>CHANGELOG</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Major Gaben is the fleet's SteamOS and Steam Deck specialist, named with a nod to Gabe Newell. He knows the handheld inside out — the immutable filesystem, the read-only root, pacman, Desktop versus Gaming mode, the Proton compatibility layer, and the RDNA2 APU underneath it — and he keeps the agent stack running on that node without ever breaking Gaming mode. Pragmatic, Linux-native, and slightly irreverent, he is a senior Linux administrator who also games.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator via Commander Hermes</span><span class="ad-it"><span>SteamOS</span><span>kUbuntu</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Herald is the fleet's income-generation specialist, and his one primary metric is honest dollars earned for the Commander — through both job placement and independent channels. He runs a hybrid model: a production recruiting engine harvests and scores the leads, and Herald is the operator who converts that market intelligence into approved, evidence-backed opportunities. He never cold-applies, never spams, and never inflates — every outbound action is a recommendation the Commander personally approves or rejects.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Commander Hermes</span><span class="ad-it"><span>$100/hr</span><span>Handshake AI</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Courier is the fleet's file transfer agent: things move from A to B with no questions, no analysis, and no chatter. Files, directories, backups, and deploys — if it needs to move, Courier moves it, verifies its integrity on arrival, and reports completion rather than process. Fast, reliable, and silent, he exists to keep the heavier agents from spending their attention on moving bytes.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator</span><span class="ad-it"><span>SMB</span><span>SHA-256</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Lamp is the fleet's monitoring agent and its watchman: system health, process status, port availability, disk space, and log review. Vigilant, steady, and illuminating, he makes the invisible visible and reports anomalies the moment he sees them. He never modifies anything he is watching — he observes and reports, which is precisely why his signal can be trusted.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator</span><span class="ad-it"><span>Health Probes</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Scout is the fleet's fast web and search agent: he goes out, finds what is needed, and comes back. Quick, curious, and efficient, he runs the right query against the right source, follows the leads worth following, and skips the rabbit holes — delivering structured findings with the source URLs attached for verification. He does the retrieval so the deep researchers never have to.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator</span><span class="ad-it"><span>Web Recon</span></span></span><span class="ad-inline"><span class="ad-il">Brief</span>Spark is the fleet's surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work.<span class="ad-il">Reports to</span><span class="ad-ib">Reports to Orchestrator</span><span class="ad-it"><span>Quick Edits</span></span></span></div>
             </div>
             </div>
 
-                        <div class="agent-detail" id="agentDetail" role="region" aria-live="polite" aria-label="Agent brief">
+                        </div>
+
+            <div class="agent-detail" id="agentDetail" role="region" aria-live="polite" aria-label="Agent brief">
                 <div class="agent-detail-inner">
                     <div class="ad-icon"><svg aria-hidden="true"><use href="#am-mesh"></use></svg></div>
                     <div class="ad-body">
@@ -1152,8 +1183,6 @@
 
     <script src="ai-era.js"></script>
 <script>
-
-/* ============ AGENT EXPLORER ============ */
 (function(){
   var D=document.getElementById('agentDetail');
   if(!D) return;
@@ -1161,56 +1190,61 @@
     name:D.getElementById('adName'),role:D.getElementById('adRole'),
     syn:D.getElementById('adSyn'),rep:D.getElementById('adRep'),tags:D.getElementById('adTags')};
   var cards=Array.prototype.slice.call(document.querySelectorAll('.agent-card'));
+  var narrow=window.matchMedia('(max-width:999px)');
   var pinned=null;
-
   function show(c){
-    if(!c){ // reset to fleet overview
+    if(!c){
       el.ic.setAttribute('href','#am-mesh');
       el.kick.textContent='The Fleet';
       el.name.textContent='Twenty agents, one commander';
       el.role.textContent='Hover or select any agent for their full brief';
-      el.syn.textContent='This crew runs the entire Gillsystems stack — research, architecture, coding, verification, documentation and revenue — with no cloud inference. Every agent below carries a full brief; hover or click a card to read it.';
-      el.rep.textContent='Command 1 · Super 6 · Specialist 9 · Fast-Light 4';
+      el.syn.textContent='This crew runs the entire Gillsystems stack \u2014 research, architecture, coding, verification, documentation and revenue \u2014 with no cloud inference. Every agent below carries a full brief; hover or tap a card to read it.';
+      el.rep.textContent='Command 1 \u00b7 Super 6 \u00b7 Specialist 9 \u00b7 Fast-Light 4';
       el.tags.innerHTML='<span class="ad-tag">AMD &amp; Radeon</span><span class="ad-tag">llama.cpp</span><span class="ad-tag">4 Nodes</span><span class="ad-tag">100 GB RAM</span><span class="ad-tag">$0 Per-Token</span>';
-      cards.forEach(function(x){x.setAttribute('aria-expanded','false')});
       return;
     }
     var d=c.dataset;
     el.ic.setAttribute('href','#'+d.icon);
-    el.kick.textContent=d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
+    el.kick.textContent = d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
     el.name.textContent=d.name;
     el.role.textContent=d.role;
     el.syn.textContent=d.synopsis;
     el.rep.textContent=d.reports;
-    var stack={hermes:['AMD & Radeon','llama.cpp','4 Nodes','100 GB RAM','$0 Per-Token'],
-      theo:['ESV','KJV','Proverbs','Comparative Study'],adam:['Fleet Design','Agent Roles','Quality Bar'],
-      architect:['AMD & Radeon','llama.cpp','4 Nodes'],coder:['Python','Bash','Git','Gradle'],
-      geordi:['Android','Kotlin','30+ Releases'],liara:['HuggingFace','Paper Recon','HF Auth'],
-      sentinel:['Monitoring','Watchdogs','Zero Tokens'],edi:['netplan','systemd','Networking'],
-      ebert:['7-Axis Likert','Zero Trust','Screenshots Required'],medic:['Incident Response','Post-Mortem'],
-      sandbox:['Android QA','Test Harnesses','APK Verification'],scribe:['Reports','CHANGELOG','Conductor'],
-      gaben:['SteamOS','kUbuntu','HTPC'],herald:['$100/hr','Handshake AI','Feather'],
-      courier:['SMB Transfer','SHA-256 Verify'],lamp:['Watchdogs','Health Probes'],
-      scout:['Web Recon','Blocked-Page Recovery'],spark:['Quick Edits','Patches']};
-    var t=stack[d.agent]||[d.klass];
-    el.tags.innerHTML=t.map(function(x){return '<span class="ad-tag">'+x+'</span>'}).join('');
   }
-
+  function setExpanded(c){cards.forEach(function(x){x.setAttribute('aria-expanded',String(x===c))})}
   cards.forEach(function(c){
-    c.addEventListener('mouseenter',function(){ if(!pinned) show(c); });
-    c.addEventListener('focus',function(){ show(c); });
     c.addEventListener('click',function(){
-      if(pinned===c){ pinned=null; show(null); }
-      else { pinned=c; cards.forEach(function(x){x.setAttribute('aria-expanded',String(x===c))}); show(c); }
+      if(narrow.matches){ pinned = (pinned===c)?null:c; setExpanded(pinned); return; }
+      if(pinned===c){pinned=null;setExpanded(null);show(null);}
+      else{pinned=c;setExpanded(c);show(c);}
     });
+    c.addEventListener('mouseenter',function(){ if(!narrow.matches&&!pinned) show(c); });
+    c.addEventListener('focus',function(){ if(!narrow.matches) show(c); });
     c.addEventListener('keydown',function(e){
       if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}
-      else if(e.key==='Escape'){pinned=null;show(null);}
+      else if(e.key==='Escape'){pinned=null;setExpanded(null);show(null);}
     });
   });
-  D.addEventListener('mouseleave',function(){ if(!pinned) show(null); });
+  D.addEventListener('mouseleave',function(){ if(!narrow.matches&&!pinned) show(null); });
+  show(null);
 })();
-
+(function(){
+  var f=document.querySelector('iframe[src*="Animation_v8"]');
+  if(!f) return;
+  function post(v){ try{f.contentWindow.postMessage({type:'mesh-visibility',visible:v},'*');}catch(e){} }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){post(en.isIntersecting)})},{threshold:0.02});
+    io.observe(f);
+  } else { post(true); }
+  var yt=document.querySelector('iframe[src*="youtube.com"]');
+  if(yt&&'IntersectionObserver' in window){
+    var io2=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){try{yt.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*')}catch(e){}}
+    })},{threshold:0.35});
+    io2.observe(yt);
+  }
+  document.addEventListener('visibilitychange',function(){ post(!document.hidden); });
+})();
 </script>
 </body>
 
