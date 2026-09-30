@@ -300,19 +300,63 @@ function model3d(cen,M,rot,alpha,hot){
     B(0,5.6,-10.6,35,18.6,.2,'#7ff0ff',{ghost:true,lw:.85}); LS([-17.5,-3.7,-10.5,17.5,-3.7,-10.5],'#4a545c',.5,2.4); // display, thick bezel + chin
     DT(0,15.3,-10.5,.4,'#1a2026',.9); LS([-1.4,-6.2,-10.5,1.4,-6.2,-10.5],'#cfd8e0',.5,1.4); // webcam, Acer mark on chin
     B(-11.5,-7.6,-12.6,7,2.2,2.6,'#b9c2cb'); B(11.5,-7.6,-12.6,7,2.2,2.6,'#b9c2cb'); // two broad silver hinges
-    const tp=O(-15.6,-9.7,13.6),tq=O(10.1,-9.7,13.6),tA=P(tp[0],tp[1],tp[2]),tB=P(tq[0],tq[1],tq[2]);
-    const tw=Math.max(2.0,3.0*tA.k), ang=Math.atan2(tB.y-tA.y,tB.x-tA.x);
-    g.save();g.translate(tA.x,tA.y);g.rotate(ang);
-    const tl=tB.x-tA.x, gd=g.createLinearGradient(0,-tw/2,0,tw/2);
-    gd.addColorStop(0,rg('#c8ccd0',.92*alpha));gd.addColorStop(.45,rg('#a7adb2',.95*alpha));gd.addColorStop(1,rg('#8e9499',.9*alpha));
-    g.fillStyle=gd;g.beginPath();g.moveTo(0,-tw/2);g.lineTo(tl,-tw/2);g.lineTo(tl,tw/2);g.lineTo(0,tw/2);g.closePath();g.fill();
-    g.strokeStyle=rg('#6f757a',.34*alpha);g.lineWidth=.6;
-    for(let i=0;i<tl;i+=Math.max(2,2.4*tA.k)){g.beginPath();g.moveTo(i,-tw/2);g.lineTo(i,tw/2);g.stroke();}
-    g.fillStyle=rg('#b6bbc0',.95*alpha);
-    g.beginPath();g.moveTo(tl,-tw/2);g.lineTo(tl+tw*.34,-tw*.22);g.lineTo(tl+tw*.12,tw*.06);
-    g.lineTo(tl+tw*.40,tw*.30);g.lineTo(tl,tw/2);g.closePath();g.fill();
-    g.strokeStyle=rg('#5f666b',.5*alpha);g.lineWidth=.7;g.stroke();
-    g.restore();
+    // clickpad: a proper INSET pad on the deck, left of centre (not a floating sheet)
+    B(-6.5,-8.35,7.4,11.5,0.5,7.2,'#2a3036',{ghost:true,lw:.7});
+    LS([-12.25,-8.1,3.8,-0.75,-8.1,3.8],'#6d757c',.42,.8);
+    // ---- DUCT TAPE REPAIR (real machine: lower bezel + sides, wrinkled, bezel lifting) ----
+    // Reference photo: silver/grey tape, U-shaped run, right side reaches ~mid-height.
+    const TAP=(pts,wid,al,wr)=>{ // pts = polyline in 3D model space
+      for(let i=0;i+5<pts.length;i+=6){
+        const p=O(pts[i],pts[i+1],pts[i+2]), q=O(pts[i+3],pts[i+4],pts[i+5]);
+        const a=P(p[0],p[1],p[2]), b=P(q[0],q[1],q[2]);
+        const dx=b.x-a.x, dy=b.y-a.y, L=Math.max(1,Math.hypot(dx,dy));
+        if(L<.6) continue;
+        const nx=-dy/L, ny=dx/L, W=wid*S*a.k;
+        if(!(W>0)) continue;
+        // wrinkly edge: deterministic per-vertex jitter so it never looks like clean vector art
+        const j1=((i*37)%11)/11-.5, j2=((i*53+7)%13)/13-.5;
+        g.beginPath();
+        g.moveTo(a.x+nx*W*(.8+j1*.5), a.y+ny*W*(.8+j1*.5));
+        g.lineTo(b.x+nx*W*(.8+j2*.5), b.y+ny*W*(.8+j2*.5));
+        g.lineTo(b.x-nx*W*(.9-j2*.4), b.y-ny*W*(.9-j2*.4));
+        g.lineTo(a.x-nx*W*(.9-j1*.4), a.y-ny*W*(.9-j1*.4));
+        g.closePath();
+        const gd=g.createLinearGradient(a.x+nx*W,a.y+ny*W,a.x-nx*W,a.y-ny*W);
+        gd.addColorStop(0,rg('#f2f4f6',(al||.9)*alpha));
+        gd.addColorStop(.34,rg('#c3c8cd',(al||.9)*alpha));
+        gd.addColorStop(.55,rg('#8f979e',(al||.9)*alpha));  // crease shadow
+        gd.addColorStop(.78,rg('#d5dade',(al||.9)*alpha));
+        gd.addColorStop(1,rg('#7d858c',(al||.9)*alpha));
+        g.fillStyle=gd; g.fill();
+        // wrinkle striations across the strip
+        g.save(); g.clip();
+        g.strokeStyle=rg('#6d757c',.30*alpha); g.lineWidth=.5;
+        for(let s2=0;s2<5;s2++){
+          const f=(s2+.6)/5.6;
+          g.beginPath();
+          g.moveTo(a.x+(b.x-a.x)*f+nx*W*.9, a.y+(b.y-a.y)*f+ny*W*.9);
+          g.lineTo(a.x+(b.x-a.x)*(f+.07)+nx*W*(-.1), a.y+(b.y-a.y)*(f+.07)+ny*W*(-.1));
+          g.stroke();
+        }
+        g.restore();
+        g.strokeStyle=rg('#5d666d',.34*alpha); g.lineWidth=.45; g.stroke();
+      }
+    };
+    // bottom band across the chin (3 overlapping runs, torn ends)
+    TAP([-20.2,-4.1,-10.35, 20.2,-4.1,-10.35], 1.55, .95);
+    TAP([-19.4,-2.5,-10.30, 19.8,-2.5,-10.30], 1.25, .82);
+    TAP([-18.1,-1.0,-10.28, 17.6,-1.0,-10.28], .95, .68);
+    // left return: short, lower quarter
+    TAP([-19.9,-3.6,-10.34, -19.9, 3.2,-10.34], 1.35, .9);
+    TAP([-19.1,-3.4,-10.30, -19.1, 1.4,-10.30], 1.05, .72);
+    // right return: long, up to ~mid height (per photo)
+    TAP([20.0,-3.7,-10.34, 20.0, 8.4,-10.34], 1.45, .92);
+    TAP([19.2,-3.5,-10.30, 19.2, 6.2,-10.30], 1.1, .74);
+    // bezel separation: dark slit at the lifted lower-right + lower-left corners
+    LS([20.6,-4.6,-10.15, 20.6,8.0,-10.15],'#05070a',.85,2.2);
+    LS([-20.4,-5.0,-10.15, -20.4,2.6,-10.15],'#05070a',.6,1.6);
+    // bowed lower bezel
+    LS([-20.2,-4.6,-10.15, 0,-4.2,-10.15, 20.6,-4.7,-10.15],'#0b0e12',.7,1.3);
   }
 }
 // flat fan disc used by tower / sff
