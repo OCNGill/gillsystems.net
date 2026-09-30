@@ -1,0 +1,79 @@
+[
+ {
+  "k": "main",
+  "name": "Main",
+  "host": "10.0.0.164",
+  "cpu": "Ryzen 9 / 7900 XTX 24GB",
+  "os": "Windows",
+  "icons": [
+   "am-windows",
+   "am-amd",
+   "am-radeon",
+   "am-rocm",
+   "am-llama",
+   "am-vulkan",
+   "am-zfs",
+   "am-nvme",
+   "am-caddy",
+   "am-oci",
+   "am-frp",
+   "am-mesh"
+  ]
+ },
+ {
+  "k": "htpc",
+  "name": "HTPC",
+  "host": "10.0.0.42",
+  "cpu": "Ryzen / Radeon 7600",
+  "os": "kUbuntu",
+  "icons": [
+   "am-ubuntu",
+   "am-linux",
+   "am-amd",
+   "am-radeon",
+   "am-rocm",
+   "am-llama",
+   "am-vulkan",
+   "am-zfs",
+   "am-nvme",
+   "am-caddy",
+   "am-mesh"
+  ]
+ },
+ {
+  "k": "laptop",
+  "name": "Laptop",
+  "host": "10.0.0.93",
+  "cpu": "Ryzen AI / iGPU",
+  "os": "Windows",
+  "icons": [
+   "am-windows",
+   "am-amd",
+   "am-radeon",
+   "am-llama",
+   "am-nvme",
+   "am-caddy",
+   "am-frp",
+   "am-gchat",
+   "am-android",
+   "am-mesh"
+  ]
+ },
+ {
+  "k": "deck",
+  "name": "Steam Deck",
+  "host": "10.0.0.139",
+  "cpu": "AMD APU / 16GB unified",
+  "os": "SteamOS",
+  "icons": [
+   "am-steamos",
+   "am-deck",
+   "am-amd",
+   "am-radeon",
+   "am-vulkan",
+   "am-llama",
+   "am-nvme",
+   "am-mesh"
+  ]
+ }
+]

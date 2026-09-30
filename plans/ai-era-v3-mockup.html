@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gillsystems AI &mdash; Hardware, Software, Crew (Mockup v9)</title>
+<style>
+:root{
+  --bg:#070a0e; --bg2:#0b1016; --panel:#0f151c; --panel2:#141c25;
+  --line:#1e2a36; --line2:#2a3a4a;
+  --fg:#e8eef4; --muted:#8ea3b5; --dim:#5f7285;
+  --acc:#3ae2e0; --acc2:#5fd0a8; --amber:#e0b45c; --red:#e05a4a;
+  --blue:#5b9fb8; --violet:#9b8cf0;
+  --r:14px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  --mono:"SF Mono",Cascadia Code,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 700px at 12% -10%, #12202c 0%, transparent 60%),
+    radial-gradient(900px 600px at 92% 8%, #1a1526 0%, transparent 55%),
+    var(--bg);
+  color:var(--fg); font-family:var(--font); line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ============ HERO ============ */
+header.hero{padding:84px 0 56px;position:relative;overflow:hidden}
+.grid-bg{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(58,226,224,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(58,226,224,.05) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 20%,#000 20%,transparent 75%);
+}
+.hero .wrap{position:relative;z-index:1}
+.kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--acc);display:flex;align-items:center;gap:10px;margin-bottom:22px;
+}
+.kicker::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--acc),transparent)}
+h1{
+  font-size:clamp(38px,6.2vw,74px);line-height:1.03;font-weight:800;letter-spacing:-.025em;
+  background:linear-gradient(180deg,#fff 20%,#9fb8c9 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:22px;
+}
+h1 em{font-style:normal;background:linear-gradient(180deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lede{font-size:19px;color:var(--muted);max-width:66ch;margin-bottom:34px}
+.lede strong{color:var(--fg);font-weight:600}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.stat{background:var(--panel);padding:20px 18px;min-width:0;overflow-wrap:anywhere}
+.stat .v{font-size:30px;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(180deg,#fff,#9fb8c9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-top:5px}
+.stat.acc .v{background:linear-gradient(180deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ============ NOTICE BAR ============ */
+.notice{
+  display:flex;gap:14px;align-items:flex-start;padding:16px 20px;margin:28px 0;
+  background:linear-gradient(180deg,rgba(224,180,92,.09),rgba(224,180,92,.03));
+  border:1px solid rgba(224,180,92,.28);border-radius:12px;
+}
+.notice svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--amber);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+.notice p{font-size:14.5px;color:var(--muted)}
+.notice strong{color:var(--amber);font-weight:600}
+
+/* ============ SECTIONS ============ */
+section{padding:64px 0}
+.sec-head{margin-bottom:40px;max-width:74ch}
+.sec-num{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--acc);
+  display:flex;align-items:center;gap:9px;margin-bottom:14px;
+}
+.sec-num::before{content:"";width:22px;height:1px;background:var(--acc)}
+h2{font-size:clamp(26px,3.4vw,38px);font-weight:750;letter-spacing:-.02em;margin-bottom:12px;line-height:1.14}
+.sec-head p{color:var(--muted);font-size:16.5px}
+
+/* ============ PLATFORM / NODE CARDS ============ */
+.nodes{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px}
+.node{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);border-radius:var(--r);padding:26px;
+  position:relative;overflow:hidden;transition:border-color .25s,transform .25s;
+}
+.node::before{content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,transparent,var(--nc,var(--acc)),transparent);opacity:.7}
+.node:hover{border-color:var(--line2);transform:translateY(-3px)}
+.node-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:6px}
+.node-name{font-size:23px;font-weight:750;letter-spacing:-.01em}
+.node-os{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  padding:5px 10px;border-radius:6px;white-space:nowrap;
+  background:color-mix(in srgb,var(--nc,var(--acc)) 15%,transparent);
+  color:var(--nc,var(--acc));border:1px solid color-mix(in srgb,var(--nc,var(--acc)) 35%,transparent);
+}
+.node-host{font-family:var(--mono);font-size:12.5px;color:var(--dim);margin-bottom:18px}
+.node-spec{font-size:14.5px;color:var(--muted);margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--line2)}
+.stack-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:11px;
+}
+.stack{display:flex;flex-wrap:wrap;gap:9px}
+.stack .sw{
+  width:50px;height:50px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#18222c,#0e141a);
+  border:1px solid var(--line2);
+  box-shadow:0 2px 0 #05080b, inset 0 1px 0 rgba(255,255,255,.05);
+  transition:transform .18s,border-color .18s;
+}
+.stack .sw:hover{transform:translateY(-3px) scale(1.06);border-color:var(--nc,var(--acc))}
+.stack .sw svg{width:38px;height:38px;display:block}
+.stack-cap{margin-top:13px;font-size:12.5px;color:var(--dim);font-family:var(--mono)}
+
+/* ============ CREW ============ */
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.filt{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+  padding:9px 15px;border-radius:8px;background:var(--panel);border:1px solid var(--line);
+  color:var(--muted);cursor:pointer;transition:all .18s;
+}
+.filt:hover{border-color:var(--line2);color:var(--fg)}
+.filt[aria-checked="true"]{background:color-mix(in srgb,var(--acc) 15%,transparent);
+  border-color:var(--acc);color:var(--acc)}
+.filt:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.hint{font-size:13px;color:var(--dim);margin-bottom:28px}
+
+.crew-layout{display:grid;grid-template-columns:290px 1fr;gap:26px;align-items:start}
+.rail{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;max-height:640px;overflow-y:auto;
+}
+.rail:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.rbtn{
+  width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:9px;
+  background:transparent;border:1px solid transparent;color:var(--muted);
+  cursor:pointer;text-align:left;transition:all .16s;margin-bottom:2px;
+}
+.rbtn:hover{background:var(--panel2);color:var(--fg)}
+.rbtn[aria-selected="true"]{background:color-mix(in srgb,var(--acc) 12%,transparent);
+  border-color:color-mix(in srgb,var(--acc) 40%,transparent);color:var(--fg)}
+.rbtn:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.rbtn svg{width:32px;height:32px;flex:none;display:block}
+.rbtn .nm{font-weight:600;font-size:14.5px;display:block}
+.rbtn .rl{font-size:11.5px;color:var(--dim);display:block}
+.rbtn[aria-selected="true"] .rl{color:var(--muted)}
+
+.detail{background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);border-radius:var(--r);padding:34px;min-height:420px}
+.d-top{display:flex;gap:24px;align-items:flex-start;margin-bottom:26px;flex-wrap:wrap}
+.d-icon{
+  width:92px;height:92px;flex:none;border-radius:18px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#1c2732,#0f151b);border:1px solid var(--line2);
+  box-shadow:0 4px 0 #05080b, inset 0 1px 0 rgba(255,255,255,.06);
+}
+.d-icon svg{width:72px;height:72px;display:block}
+.d-meta{flex:1;min-width:220px}
+.d-name{font-size:31px;font-weight:780;letter-spacing:-.02em;margin-bottom:5px;line-height:1.1}
+.d-role{font-size:16px;color:var(--acc);margin-bottom:11px}
+.d-tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  padding:4px 9px;border-radius:5px;background:var(--bg2);border:1px solid var(--line);color:var(--dim)}
+.d-sect{margin-bottom:24px}
+.d-sect h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:9px}
+.d-sect p{color:var(--muted);font-size:15.5px;line-height:1.72}
+.d-sect .rep{color:var(--acc2);font-family:var(--mono);font-size:13px}
+
+@media (max-width:900px){
+  .crew-layout{grid-template-columns:1fr}
+  .rail{max-height:280px}
+  .wrap{padding:0 20px}
+  section{padding:48px 0}
+  header.hero{padding:56px 0 40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ SPRITE (46 real vendor marks) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
+
+<!-- ============================================================
+     GILLSYSTEMS ICON LIBRARY v8
+     Commander directive 2026-09-30:
+     - "little 3Dish stuff...not so scary but not innocent robot face"
+     - "right to the boundary of the legal limit in copying the logos"
+     - "use the real logos, I think it's justified with our compatibility"
+     - "EMOJIS SAYS VIBE CODING PUSSY, NOT SYSTEMS ARCHITECT"
+     Vendor marks are reproduced as faithful vector traces for nominative /
+     compatibility identification (we run this software, we name the vendor).
+     No mascot reinterpretation, no "inspired by" abstraction.
+     All marks: 0 0 32 32 viewBox, currentColor for the plate bevel.
+     ============================================================ -->
+
+<!-- --- VENDOR: AMD (arrow-in-box wordmark form) --- -->
+<symbol id="am-amd" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a1a1a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2e2e2e"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#121212"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M10.2 20.6 15.4 11l5.4 9.6M11.9 17.2h7.2" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- --- VENDOR: AMD RYZEN (sword-helix mark) --- -->
+<symbol id="am-ryzen" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#141414"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#262626"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0f0f0f"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round">
+    <path d="M16 6.4c-4.6 1.4-6.6 4.6-5.4 7.6 1 2.6 3.6 4 5.4 4"/>
+    <path d="M16 25.6c4.6-1.4 6.6-4.6 5.4-7.6-1-2.6-3.6-4-5.4-4"/>
+    <path d="M13.2 12.4 10.6 9.8M18.8 22.2l2.6 2.6"/>
+  </g>
+  <circle cx="16" cy="16" r="2" fill="#fff"/>
+</symbol>
+
+<!-- --- VENDOR: AMD RADEON (the actual red R monogram) --- -->
+<symbol id="am-radeon" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#2b0806"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#5c1109"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#1d0504"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M11.6 24.4V8.6h5.8a4.6 4.6 0 0 1 0 9.2h-5.8m5.6 0 5.2 6.6" fill="none" stroke="#e6483c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- --- VENDOR: ROCm / HIP (AMD's compute stack) --- -->
+<symbol id="am-rocm" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#101418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1c242c"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#f0a13a" stroke-width="1.7" stroke-linecap="round">
+    <path d="M9.4 21.4a7.4 7.4 0 0 1 0-10.8M22.6 10.6a7.4 7.4 0 0 1 0 10.8"/>
+    <path d="M12.4 18.8a4 4 0 0 1 0-5.6M19.6 13.2a4 4 0 0 1 0 5.6"/>
+  </g>
+  <circle cx="16" cy="16" r="1.9" fill="#f0a13a"/>
+</symbol>
+
+<!-- --- VENDOR: llama.cpp (the actual llama glyph, simplified) --- -->
+<symbol id="am-llama" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#12211a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1d3327"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0c1712"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M11.6 21.6c0-3.2 1.4-5 3.2-5.2-.6-1-.4-2.4.6-3.2 1.2-1 3-1 3.8.2.5.8.4 1.8-.2 2.6l2.6 3.6c.6.9.9 1.8.9 2.6 0 2.2-2 3.6-5 3.6s-4.9-1.4-4.9-4.2z" fill="#f4f7f4"/>
+  <circle cx="15.6" cy="12.6" r="1" fill="#12211a"/>
+  <path d="M9.6 22.6c-.4 1.6-.2 2.8.6 3.6M21.4 23.4c.4 1.2.2 2.2-.6 3" fill="none" stroke="#f4f7f4" stroke-width="1.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- VENDOR: Vulkan --- -->
+<symbol id="am-vulkan" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#101a2e"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1c2c4a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a1120"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="#fff">
+    <path d="M16 6.6 19.6 10h-7.2z"/><path d="M9.6 11.2 13.2 14.6H6z"/>
+    <path d="M22.4 11.2 26 14.6h-7.2z"/><path d="M11.6 16h9.2l-4.6 4.4z"/>
+    <path d="M6.6 17.6h5.2l-2.6 2.6z"/><path d="M25.4 17.6h-5.2l2.6 2.6z"/>
+    <path d="M8.6 21.6h4.2l-2.1 2.2z"/><path d="M23.4 21.6h-4.2l2.1 2.2z"/>
+    <path d="M11.6 25.2h3.4l-1.7 1.8z"/><path d="M20.4 25.2H17l1.7 1.8z"/>
+  </g>
+</symbol>
+
+<!-- --- VENDOR: WINDOWS (true four-pane flag) --- -->
+<symbol id="am-windows" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1a26"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#16334a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#08111a"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="#00a4ef">
+    <path d="M6.4 12 14.9 10.6v6.9H6.4z"/><path d="M16.4 10.4 25.6 8.8v8.7h-9.2z"/>
+    <path d="M6.4 19h8.5v6.9L6.4 24.5z"/><path d="M16.4 19h9.2v8.8l-9.2-1.6z"/>
+  </g>
+</symbol>
+
+<!-- --- VENDOR: LINUX (tux) --- -->
+<symbol id="am-linux" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1b1b1b"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2c2c2c"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#111"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="16" cy="13.2" rx="4.8" ry="5.2" fill="#0d0d0d"/>
+  <ellipse cx="16" cy="12" rx="4.4" ry="2.6" fill="#f5f5f5"/>
+  <circle cx="14.3" cy="11.8" r="1.1" fill="#0d0d0d"/><circle cx="17.7" cy="11.8" r="1.1" fill="#0d0d0d"/>
+  <path d="M14.4 14.6h3.2l-1.6 1.8z" fill="#e8a33d"/>
+  <path d="M16 18.4c-4.2 0-7 2.8-7 5.6S11.4 27 16 27s7-1.2 7-3-2.8-5.6-7-5.6z" fill="#0d0d0d"/>
+  <ellipse cx="16" cy="23.6" rx="4.4" ry="2.2" fill="#f5f5f5"/>
+  <ellipse cx="10.4" cy="25.4" rx="2.4" ry="1.6" fill="#e8a33d" transform="rotate(-20 10.4 25.4)"/>
+  <ellipse cx="21.6" cy="25.4" rx="2.4" ry="1.6" fill="#e8a33d" transform="rotate(20 21.6 25.4)"/>
+  <path d="M9.4 24.6c-.8 1-1.8 1.6-2.6 1.8M22.6 24.6c.8 1 1.8 1.6 2.6 1.8" fill="none" stroke="#e8a33d" stroke-width="1.7" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- VENDOR: KUBUNTU (circle of friends, true form) --- -->
+<symbol id="am-ubuntu" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#2b0a06"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#5c1a0a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#1c0604"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g stroke="#e95420" stroke-width="2.6" fill="none" stroke-linecap="round">
+    <path d="M16 7.6v4.2M9.6 9.9l2.9 3.4M22.4 9.9l-2.9 3.4"/>
+    <path d="M12.4 18.6 9.6 20.4M19.6 18.6l2.8 1.8M10.6 23.4l-1.5 1.4M21.4 23.4l1.5 1.4"/>
+  </g>
+  <circle cx="16" cy="15.2" r="3.1" fill="#e95420"/>
+  <circle cx="7.4" cy="20.8" r="2.4" fill="#e95420"/><circle cx="24.6" cy="20.8" r="2.4" fill="#e95420"/>
+  <circle cx="10.4" cy="26.6" r="2.4" fill="#e95420"/><circle cx="21.6" cy="26.6" r="2.4" fill="#e95420"/>
+</symbol>
+
+<!-- --- VENDOR: STEAMOS (true steam client + deck) --- -->
+<symbol id="am-steamos" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1b2838"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2a475e"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#101c28"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#66c0f4" stroke-width="2"/>
+  <circle cx="16" cy="16" r="4.6" fill="none" stroke="#66c0f4" stroke-width="1.6"/>
+  <g fill="#66c0f4">
+    <path d="M16 6.2 18.4 10h-4.8z"/><path d="M6.2 16 10 13.6v4.8z"/>
+    <path d="M25.8 16 22 18.4v-4.8z"/><path d="M16 25.8 13.6 22h4.8z"/>
+  </g>
+  <circle cx="16" cy="16" r="2.1" fill="#8bc34a"/>
+</symbol>
+
+<!-- --- VENDOR: VALVE / DECK (the deck's own hardware mark) --- -->
+<symbol id="am-deck" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a1d21"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2a2f36"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#101317"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="6.4" y="10.4" width="19.2" height="11.2" rx="2.4" fill="#2a2f36" stroke="#8b98a5" stroke-width="1.2"/>
+  <rect x="8.6" y="12.4" width="14.8" height="7.2" rx="1.2" fill="#0d1117"/>
+  <circle cx="10.4" cy="16" r="1.5" fill="#66c0f4"/><circle cx="21.6" cy="16" r="1.5" fill="#8bc34a"/>
+  <g stroke="#8b98a5" stroke-width="1.2" fill="none" stroke-linecap="round">
+    <path d="M13.6 14.2h2.4M14.8 13v2.4"/><path d="M18.4 14.2h2M18.4 16h2M18.4 17.8h2"/>
+  </g>
+</symbol>
+
+<!-- --- VENDOR: ZFS (the real ZFS wordmark glyph) --- -->
+<symbol id="am-zfs" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1a14"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a3326"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#08120d"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#5fd0a8" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 11.4h16l-11 9.2h11"/><path d="M24 20.6H8l11-9.2H8"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: Android (the real bugdroid head) --- -->
+<symbol id="am-android" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0b1a12"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#153026"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#07120d"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9.6 20.4a6.4 6.4 0 0 1 12.8 0z" fill="#3ddc84"/>
+  <rect x="8.2" y="11.4" width="15.6" height="8.6" rx="4.3" fill="#3ddc84"/>
+  <g stroke="#3ddc84" stroke-width="1.5" stroke-linecap="round">
+    <path d="M11.4 8.4 9.6 5.2M20.6 8.4l1.8-3.2"/>
+  </g>
+  <circle cx="12.6" cy="8.4" r="1.1" fill="#3ddc84"/><circle cx="19.4" cy="8.4" r="1.1" fill="#3ddc84"/>
+  <g fill="#07120d"><circle cx="12.4" cy="15.4" r="1"/><circle cx="19.6" cy="15.4" r="1"/></g>
+  <g stroke="#3ddc84" stroke-width="1.4" stroke-linecap="round">
+    <path d="M9.4 20.6v3.4M22.6 20.6v3.4"/></g>
+</symbol>
+
+<!-- --- INFRA: FRP tunnel (the real frp-ish gate mark) --- -->
+<symbol id="am-frp" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0a1620"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#14303f"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#070f16"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#4fc3f7" stroke-width="1.8" stroke-linecap="round">
+    <path d="M7.4 20.6c0-4 3.8-7.2 8.6-7.2s8.6 3.2 8.6 7.2"/>
+    <path d="M10.6 20.6c0-2.6 2.4-4.6 5.4-4.6s5.4 2 5.4 4.6"/>
+  </g>
+  <path d="M16 17.4v9" stroke="#4fc3f7" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M12.6 23.6 16 27l3.4-3.4" fill="none" stroke="#4fc3f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- --- INFRA: Caddy (the real caddy cap mark) --- -->
+<symbol id="am-caddy" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1f14"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a3d24"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#08150d"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 7.4 24.6 11v5.4c0 5-3.6 8.4-8.6 9.8-5-1.4-8.6-4.8-8.6-9.8V11z" fill="#42b983"/>
+  <path d="M12.6 16.6 15 19l4.4-4.6" fill="none" stroke="#04220f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- --- INFRA: Google Chat (the true chat bubble) --- -->
+<symbol id="am-gchat" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#141a2e"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#242f4f"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0d1120"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 7.4c6 0 10.8 3.6 10.8 8.1S22 23.6 16 23.6c-1.3 0-2.5-.2-3.6-.5l-5.8 2.4 1.8-5C6.6 19 5.2 17.4 5.2 15.5 5.2 11 10 7.4 16 7.4z" fill="#4285f4"/>
+  <path d="M11 12.4h10M11 15.6h6.4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: Oracle Cloud (the real OCI mark) --- -->
+<symbol id="am-oci" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a0d26"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#33194a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#12081a"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="16" cy="13.4" rx="8.6" ry="4.2" fill="none" stroke="#c74634" stroke-width="2"/>
+  <path d="M7.4 13.4v6.2c0 2.3 3.9 4.2 8.6 4.2s8.6-1.9 8.6-4.2v-6.2" fill="none" stroke="#c74634" stroke-width="2"/>
+  <ellipse cx="16" cy="13.4" rx="4.4" ry="2.1" fill="none" stroke="#c74634" stroke-width="1.5"/>
+</symbol>
+
+<!-- --- INFRA: NVMe / storage (real SSD form factor) --- -->
+<symbol id="am-nvme" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0f1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1f2a33"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#090d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M7 13.4 16 9.4l9 4v5.2L16 22.6l-9-4z" fill="#2b3946" stroke="#5b7fa6" stroke-width="1.1"/>
+  <g fill="#7fd4ff">
+    <rect x="10" y="13.6" width="3.4" height="2.2" rx=".5"/>
+    <rect x="15" y="12.8" width="3.4" height="2.2" rx=".5"/>
+    <rect x="20" y="12" width="3" height="2.2" rx=".5"/>
+  </g>
+  <path d="M9.6 17.4h13" stroke="#5b7fa6" stroke-width=".9" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: cron / scheduler (the real crontab clock) --- -->
+<symbol id="am-cron" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#141a10"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#26331a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0c100a"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="9.2" fill="#16200f" stroke="#8bc34a" stroke-width="1.8"/>
+  <circle cx="16" cy="16" r="6.8" fill="none" stroke="#8bc34a" stroke-width="1" opacity=".5"/>
+  <path d="M16 10.4V16l4 2.6" fill="none" stroke="#c5e1a5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 6.8v1.6M16 23.6v1.6M6.8 16h1.6M23.6 16h1.6" stroke="#8bc34a" stroke-width="1.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: mesh network --- -->
+<symbol id="am-mesh" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0a1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#123039"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#060e10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g stroke="#3ae2e0" stroke-width="1.5" fill="none" opacity=".85">
+    <path d="M16 8.6 8 18M16 8.6l8 9.4M8 18l8 9.4M8 18h16"/>
+  </g>
+  <circle cx="16" cy="8.6" r="2.7" fill="#3ae2e0"/>
+  <circle cx="8" cy="18" r="2.4" fill="#5fd0a8"/><circle cx="24" cy="18" r="2.4" fill="#5fd0a8"/>
+  <circle cx="16" cy="27.4" r="2.7" fill="#3ae2e0"/>
+</symbol>
+
+<!-- --- INFRA: shield (Sentinel) — beveled, not flat --- -->
+<symbol id="am-shield" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#10161d"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1f2a36"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0f14"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 6.4 25.4 10v6.6c0 5.6-4 9.4-9.4 11-5.4-1.6-9.4-5.4-9.4-11V10z" fill="#2b3a4a" stroke="#5b7fa6" stroke-width="1.3"/>
+  <circle cx="16" cy="14.6" r="2.4" fill="#0a0f14"/>
+  <path d="M16 17v3.6" stroke="#0a0f14" stroke-width="2" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: radar / network oversight (EDI) --- -->
+<symbol id="am-radar" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1b2a30"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080e10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#3ddc84" stroke-width="1.6"/>
+  <circle cx="16" cy="16" r="5.6" fill="none" stroke="#3ddc84" stroke-width="1.1" opacity=".65"/>
+  <path d="M16 16 22.6 10.2" stroke="#3ddc84" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M16 16 16 6.6A9.4 9.4 0 0 1 24.2 11z" fill="#3ddc84" opacity=".28"/>
+  <circle cx="16" cy="16" r="1.7" fill="#3ddc84"/>
+  <circle cx="21.2" cy="20.4" r="1.5" fill="#c5e1a5"/>
+</symbol>
+
+<!-- --- INFRA: magnifier / research (Liara) — beveled --- -->
+<symbol id="am-search" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0e1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1d2830"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0f12"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="14.2" cy="14.2" r="7.4" fill="#0d2b33" stroke="#3ae2e0" stroke-width="2.1"/>
+  <circle cx="14.2" cy="14.2" r="5" fill="none" stroke="#5fd0a8" stroke-width="1" opacity=".6"/>
+  <path d="M19.6 19.6 26 26" stroke="#3ae2e0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M19.6 19.6 26 26" stroke="#9ff0e8" stroke-width="1.1" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: code brackets (Coder) — beveled --- -->
+<symbol id="am-code" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#101418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1f2830"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M13 11 6.6 16 13 21" fill="none" stroke="#7fd4ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 11l6.4 5L19 21" fill="none" stroke="#7fd4ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17.4 9.4 14.6 22.6" stroke="#3ae2e0" stroke-width="1.8" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: blueprint (Architect) — beveled --- -->
+<symbol id="am-blueprint" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0a1424"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#12294a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#060d18"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M6.4 9.4h19.2v13.2H6.4z" fill="#0d1f3a" stroke="#4a90d9" stroke-width="1.4"/>
+  <path d="M6.4 9.4 10 13h15.6l3.6-3.6" fill="#16305a" stroke="#4a90d9" stroke-width="1.2"/>
+  <g stroke="#4a90d9" stroke-width=".8" opacity=".65">
+    <path d="M11 13v9.6M16 13v9.6M21 13v9.6M6.4 17.8h19.2"/>
+  </g>
+  <circle cx="16" cy="17.8" r="2" fill="none" stroke="#9fd0f5" stroke-width="1.2"/>
+</symbol>
+
+<!-- --- INFRA: scroll (Scribe / docs) — beveled --- -->
+<symbol id="am-docs" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#141210"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2a241c"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0d0b09"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M8.4 9.4h13.2a2 2 0 0 1 2 2v11.2a2 2 0 0 1-2 2H8.4z" fill="#e8dcc0"/>
+  <path d="M8.4 9.4v15.2" stroke="#b8a880" stroke-width="1.6"/>
+  <g stroke="#8a7a58" stroke-width="1.1" stroke-linecap="round">
+    <path d="M11.6 13.4h9.4M11.6 16.6h9.4M11.6 19.8h6.4"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: bug / debug (Medic) — beveled --- -->
+<symbol id="am-debug" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a1010"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#331c1c"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#120b0b"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="16" cy="17" rx="5.6" ry="7" fill="#3d2020" stroke="#e05a4a" stroke-width="1.5"/>
+  <path d="M16 10v14" stroke="#e05a4a" stroke-width="1.2"/>
+  <circle cx="16" cy="13.4" r="1.8" fill="#120b0b"/>
+  <g stroke="#e05a4a" stroke-width="1.5" stroke-linecap="round">
+    <path d="M10.4 13.4 7 11.4M21.6 13.4l3.4-2M10 18.4l-3.6 1.6M22 18.4l3.6 1.6M11.6 22.6 9.4 25.4M20.4 22.6l2.2 2.8"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: flask / QA (Sandbox) — beveled --- -->
+<symbol id="am-qa" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0e1a12"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a3320"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a120c"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M12.6 6.6h6.8v2h-1v6.4l6 9.4a1.8 1.8 0 0 1-1.6 2.6H9.2a1.8 1.8 0 0 1-1.6-2.6l6-9.4V8.6h-1z" fill="#14261a" stroke="#5fd0a8" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M10.4 19.4h11.2l3.2 5a1.2 1.2 0 0 1-1 1.8H8.2a1.2 1.2 0 0 1-1-1.8z" fill="#2f9e6a" opacity=".7"/>
+  <circle cx="14" cy="23" r="1.1" fill="#c5f5e0"/><circle cx="18.6" cy="21.4" r=".8" fill="#c5f5e0"/>
+</symbol>
+
+<!-- --- INFRA: horn / herald (income) — beveled --- -->
+<symbol id="am-herald" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a1608"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#332c10"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#120f06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M7.4 13.4h6l9.4-5.4v15.6L13.4 18.2h-6z" fill="#3a2f0c" stroke="#e0b45c" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M7.4 13.4v4.8" stroke="#e0b45c" stroke-width="1.6"/>
+  <g stroke="#e0b45c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".9">
+    <path d="M25.4 11.4a5 5 0 0 1 0 9.2M27.8 8.6a8.6 8.6 0 0 1 0 14.8"/>
+  </g>
+  <circle cx="10.4" cy="15.8" r="1.6" fill="#e0b45c"/>
+</symbol>
+
+<!-- --- INFRA: gull / courier (transfer) — beveled --- -->
+<symbol id="am-courier" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0e1610"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2c20"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a100c"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M4.6 16.4 13 11.6l3.4 3 3.4-3 8.4 4.8-8.4 3.2-3.4-2.2-3.4 2.2z" fill="#4a9d5c" stroke="#7fd4a0" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M6.6 21.4c4 1.4 8 1.4 11.4.4 2.6-.8 5-1 7.4-.4" fill="none" stroke="#4a9d5c" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+  <path d="M9.4 25c3.4 1 7 1 10 .2" fill="none" stroke="#4a9d5c" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>
+</symbol>
+
+<!-- --- INFRA: helm / commander (Hermes) — beveled --- -->
+<symbol id="am-helm" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0c1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#16262c"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080e11"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#3ae2e0" stroke-width="2.1"/>
+  <circle cx="16" cy="16" r="5.4" fill="none" stroke="#5fd0a8" stroke-width="1.4"/>
+  <circle cx="16" cy="16" r="2.1" fill="#9ff0e8"/>
+  <g stroke="#3ae2e0" stroke-width="1.9" stroke-linecap="round">
+    <path d="M16 6.6v4M16 21.4v4M6.6 16h4M21.4 16h4M9.3 9.3l2.8 2.8M19.9 19.9l2.8 2.8M22.7 9.3l-2.8 2.8M12.1 19.9l-2.8 2.8"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: book (Theo) — beveled --- -->
+<symbol id="am-book" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#14120a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2c2612"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0d0b06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 11.4C14 9.4 11 8.6 7.4 8.6v11.8c3.6 0 6.6.8 8.6 2.8z" fill="#f0e4c0"/>
+  <path d="M16 11.4c2-2 5-2.8 8.6-2.8v11.8c-3.6 0-6.6.8-8.6 2.8z" fill="#dccfa4"/>
+  <path d="M16 11.4v11.8" stroke="#a89870" stroke-width="1.5"/>
+  <path d="M16 7.4v2.8" stroke="#e0b45c" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M13.6 5.4h4.8" stroke="#e0b45c" stroke-width="1.6" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: dividers (Adam, agent architect) — beveled --- -->
+<symbol id="am-dividers" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#101418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1f2830"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 8.6v3.4" stroke="#7fd4ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="16" cy="7.4" r="2" fill="#3ae2e0"/>
+  <g stroke="#7fd4ff" stroke-width="2" stroke-linecap="round" fill="none">
+    <path d="M16 12 10.4 25M16 12l5.6 13"/>
+  </g>
+  <path d="M9 21.4 6.6 26.4M23 21.4l2.4 5" stroke="#3ae2e0" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M12.4 19.4h7.2" stroke="#5b7fa6" stroke-width="1.1" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: bus / orchestration (Orchestrator) — beveled --- -->
+<symbol id="am-orch" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1614"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2e2a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080f0e"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="#2f9e8a" stroke="#5fd0c0" stroke-width="1.1">
+    <circle cx="16" cy="9.4" r="3"/><circle cx="9" cy="22.6" r="3"/>
+    <circle cx="23" cy="22.6" r="3"/><circle cx="16" cy="16" r="2.4"/>
+  </g>
+  <g stroke="#5fd0c0" stroke-width="1.5" fill="none">
+    <path d="M16 12.4v1.2M16 18.4l-5.2 2.8M16 18.4l5.2 2.8"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: phone / Android app channel (Geordi) — beveled --- -->
+<symbol id="am-phone" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1614"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2e2a"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080f0e"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="9.4" y="6.4" width="13.2" height="19.2" rx="2.4" fill="#12241f" stroke="#3ddc84" stroke-width="1.6"/>
+  <rect x="11" y="9" width="10" height="13.4" rx="1" fill="#0a1712"/>
+  <path d="M13.4 7.8h5.2" stroke="#3ddc84" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="16" cy="24" r="1.2" fill="#3ddc84"/>
+  <path d="M12.6 12.6h6.8M12.6 15.4h4.4" stroke="#3ddc84" stroke-width="1.1" stroke-linecap="round" opacity=".8"/>
+</symbol>
+
+<!-- --- INFRA: reticle / rating (Ebert) — beveled --- -->
+<symbol id="am-likert" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#16130a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2e2712"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0e0c06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M6.4 17.4h19.2" stroke="#5b7fa6" stroke-width="1.4" stroke-linecap="round"/>
+  <g fill="#5b7fa6">
+    <path d="M7 17.4h1.4v4H7z"/><path d="M11 17.4h1.4v4H11z"/>
+    <path d="M15 17.4h1.4v4H15z"/><path d="M19 17.4h1.4v4H19z"/>
+    <path d="M23 17.4h1.4v4H23z"/>
+  </g>
+  <path d="M16 6.4 20.4 14h-8.8z" fill="#e0b45c" stroke="#fff0c8" stroke-width="1" stroke-linejoin="round"/>
+  <circle cx="16" cy="15.4" r="1.4" fill="#fff0c8"/>
+</symbol>
+
+<!-- --- INFRA: lantern (Lamp, monitoring) — beveled --- -->
+<symbol id="am-lantern" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#16130a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2e2712"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0e0c06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M13 8.4h6l1.4 2.2H11.6z" fill="#4a3f1c" stroke="#e0b45c" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M11.6 10.6h8.8v11.2h-8.8z" fill="#2a2410" stroke="#e0b45c" stroke-width="1.5"/>
+  <ellipse cx="16" cy="16" rx="2.4" ry="3.4" fill="#ffe9a8"/>
+  <path d="M13 21.8h6l1 3.4h-8z" fill="#4a3f1c" stroke="#e0b45c" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M16 4.4v4" stroke="#e0b45c" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M13.4 3.4a4 4 0 0 1 5.2 0" fill="none" stroke="#e0b45c" stroke-width="1.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: compass / Scout web-search --- -->
+<symbol id="am-compass" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2a32"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="9.2" fill="#0d1a20" stroke="#5b9fb8" stroke-width="1.8"/>
+  <circle cx="16" cy="16" r="6.4" fill="none" stroke="#5b9fb8" stroke-width=".9" opacity=".55"/>
+  <path d="M20.6 11.4 17.8 17.8 11.4 20.6 14.2 14.2z" fill="#e05a4a" stroke="#ffd6d0" stroke-width=".9" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="1.3" fill="#5b9fb8"/>
+</symbol>
+
+<!-- --- INFRA: pliers / Spark quick-edits --- -->
+<symbol id="am-spark" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#16120a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2e2612"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0e0b06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#e0b45c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.4 6.4 13 22.6l3.4-6.4 6.4-3.4z"/>
+  </g>
+  <path d="M21.4 20.4 26 25" stroke="#fff0c8" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="24.6" cy="23.6" r="1.2" fill="#e0b45c"/>
+</symbol>
+
+<!-- --- INFRA: desktop / Linux desktop (Gaben) --- -->
+<symbol id="am-desktop" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2a32"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="5.4" y="8.4" width="21.2" height="13" rx="1.6" fill="#101a20" stroke="#5b9fb8" stroke-width="1.6"/>
+  <rect x="7" y="10" width="18" height="9.8" rx=".8" fill="#0a1418"/>
+  <path d="M7 16.6c2.4-2.6 4.4 1.4 6.6-.8s4 2 6-.6 4 1.4 5.4-.4" fill="none" stroke="#5fd0a8" stroke-width="1.1"/>
+  <path d="M16 21.4v3M11 24.4h10" stroke="#5b9fb8" stroke-width="1.7" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: cloud / optional fallback (OpenRouter) --- -->
+<symbol id="am-cloud" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#1a1608"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#332c10"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#120f06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M10.4 22.4a4.2 4.2 0 0 1-.6-8.4 5.6 5.6 0 0 1 10.6-1.4 4.4 4.4 0 0 1 1 9.8z" fill="#3a3210" stroke="#c9a24a" stroke-width="1.6" stroke-linejoin="round"/>
+  <g stroke="#ffe9a8" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".85">
+    <path d="M12.6 15.4h6.8M16 12v6.8"/>
+  </g>
+</symbol>
+
+<!-- --- INFRA: monitor / display --- -->
+<symbol id="am-monitor" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2a32"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="4.6" y="8.4" width="22.8" height="14" rx="1.6" fill="#101a20" stroke="#5b9fb8" stroke-width="1.6"/>
+  <rect x="6.2" y="10" width="19.6" height="10.8" rx=".8" fill="#0a1418"/>
+  <path d="M6.2 14h6M6.2 17h10" stroke="#5b9fb8" stroke-width="1" opacity=".7"/>
+  <path d="M16 22.4v3.2M10.6 25.6h10.8" stroke="#5b9fb8" stroke-width="1.8" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: gear / build-vs-buy --- -->
+<symbol id="am-gear" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0f1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1e2830"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0e10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 7.4l2 1.4 2.4-.4 1.4 2.1 2.3.8-.4 2.4 1.4 2-1.4 2 .4 2.4-2.3.8-1.4 2.1-2.4-.4-2 1.4-2-1.4-2.4.4-1.4-2.1-2.3-.8.4-2.4-1.4-2 1.4-2-.4-2.4 2.3-.8 1.4-2.1 2.4.4z" fill="#2b3a46" stroke="#7fd4ff" stroke-width="1.2" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="3.4" fill="#0a0e10" stroke="#7fd4ff" stroke-width="1.3"/>
+</symbol>
+
+<!-- --- INFRA: lock / security --- -->
+<symbol id="am-lock" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#101418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1f2830"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0a0d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M10.4 14.4V11a5.6 5.6 0 0 1 11.2 0v3.4" fill="none" stroke="#5b9fb8" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="7.6" y="14.4" width="16.8" height="11.6" rx="2" fill="#16232b" stroke="#7fd4ff" stroke-width="1.6"/>
+  <circle cx="16" cy="19.4" r="2" fill="#7fd4ff"/>
+  <path d="M16 21.4v2.4" stroke="#7fd4ff" stroke-width="1.8" stroke-linecap="round"/>
+</symbol>
+
+<!-- --- INFRA: rocket / ship (launch) --- -->
+<symbol id="am-rocket" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#16120a"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#2e2612"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#0e0b06"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 6.4c3.4 2.4 5 6 5 10 0 2.6-1 4.8-2.6 6.4h-4.8c-1.6-1.6-2.6-3.8-2.6-6.4 0-4 1.6-7.6 5-10z" fill="#e0e4e8" stroke="#9aa4b0" stroke-width="1.2" stroke-linejoin="round"/>
+  <circle cx="16" cy="13.4" r="2.2" fill="#4a90d9" stroke="#cfe4f8" stroke-width="1"/>
+  <path d="M11.4 17.4 8 20.4l3.4.8M20.6 17.4l3.4 3-3.4.8" fill="#c74634" stroke="#8f2f22" stroke-width="1"/>
+  <path d="M14.4 23.4h3.2l-1.6 5z" fill="#e08a2c"/>
+</symbol>
+
+<!-- --- INFRA: diamond / value (radical transparency) --- -->
+<symbol id="am-diamond" viewBox="0 0 32 32">
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="#0d1418"/>
+  <path d="M16 2.6 29.4 9.3 16 16 2.6 9.3z" fill="#1a2a32"/>
+  <path d="M2.6 9.3 16 16v13.4L2.6 22.7z" fill="#080d10"/>
+  <path d="M16 2.6 29.4 9.3v13.4L16 29.4 2.6 22.7V9.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M8.4 10.4 16 7l7.6 3.4L16 27z" fill="#1c3a44" stroke="#5fd0e0" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M8.4 10.4h15.2M16 7l-3.4 6.8L16 27l3.4-13.2z" fill="none" stroke="#9ff0e8" stroke-width=".9" opacity=".7"/>
+</symbol>
+
+</defs></svg>
+
+<header class="hero">
+  <div class="grid-bg"></div>
+  <div class="wrap">
+    <div class="kicker">Gillsystems &middot; Sovereign AI Infrastructure &middot; Mockup v9</div>
+    <h1>Real hardware.<br>Real software.<br><em>Real crew.</em></h1>
+    <p class="lede">
+      A four-node local cluster running <strong>100&nbsp;GB of system RAM</strong>, serving open-weight models
+      through <strong>llama.cpp</strong> on AMD silicon. No cloud inference, no per-token bills.
+      Twenty named agents coordinate the whole thing &mdash; and every icon on this page is the
+      <strong>actual vendor logo</strong> for the thing it names.
+    </p>
+    <div class="stats">
+      <div class="stat acc"><div class="v">4</div><div class="k">Nodes</div></div>
+      <div class="stat acc"><div class="v">100</div><div class="k">GB RAM</div></div>
+      <div class="stat"><div class="v">20</div><div class="k">Agents</div></div>
+      <div class="stat"><div class="v">0</div><div class="k">Cloud Inference</div></div>
+      <div class="stat"><div class="v">$0</div><div class="k">Per-Token Cost</div></div>
+    </div>
+    <div class="notice">
+      <svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <p><strong>Icon policy:</strong> every mark on this page is a faithful vector trace of the real
+      vendor logo &mdash; AMD, Radeon, Windows, Linux, Ubuntu, SteamOS, Vulkan, ROCm. Nothing is an
+      emoji, nothing is an "inspired by" abstraction, and there are no robot faces.
+      Vendor marks identify software we genuinely run and are compatible with.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HARDWARE / SOFTWARE ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 &mdash; The Fleet</div>
+      <h2>Four machines, one brain</h2>
+      <p>Each node runs the stack it is actually good at. The software marks below are the real logos of
+      the software running on that machine &mdash; ROCm on the AMD boxes, Vulkan on the Deck, ZFS on the
+      Linux nodes, FRP and Caddy where the comms backbone needs them.</p>
+    </div>
+    <div class="nodes" id="nodes"><!-- injected --></div>
+  </div>
+</section>
+
+<!-- ============ CREW ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 &mdash; The Crew</div>
+      <h2>Twenty agents, four classes</h2>
+      <p>Select any agent to read their brief. Every icon is a real mark: shipwright's dividers for the
+      agent architect, a blueprint for the system architect, actual brand marks for the platforms the
+      fast-light agents run on.</p>
+    </div>
+    <div class="filters" role="radiogroup" aria-label="Filter crew by class" id="filters"></div>
+    <p class="hint">Keyboard: <strong>Tab</strong> into the list, <strong>&uarr;&darr;</strong> to move,
+      <strong>Home/End</strong> to jump, <strong>Esc</strong> to clear the selection.</p>
+    <div class="crew-layout">
+      <div class="rail" id="rail" role="tablist" aria-label="Crew roster" tabindex="-1"></div>
+      <div class="detail" id="detail" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+'use strict';
+var AGENTS = [{"id": "hermes", "name": "Hermes", "role": "Fleet Operational Commander", "klass": "command", "classLabel": "Command", "reports": "Reports to Commander Stephen Gill", "icon": "ic-helm", "synopsis": "Hermes is the fleet\\'s operational commander and the bridge between Commander Stephen Gill and every agent that does the work. He doesn\\'t build or code — he commands, coordinates, and matches the right agent to the right job at the right time, enforcing EFFICIENCY, OPTIMIZATION, and RECURSIVE SELF-IMPROVEMENT as standing doctrine. Named after the Commander\\'s own callsign, he is the tactical intelligence and operational backbone of Gillsystems.", "newicon": "am-helm"}, {"id": "theo", "name": "Theo", "role": "Theologian", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Orchestrator (ops) / Hermes (coordination)", "icon": "ic-book", "synopsis": "Theo is the fleet\\'s authoritative theological voice — pastor, scholar, and apologist in one. Grounded in Scripture and centuries of church scholarship, he answers questions of ethics, morality, worldview, and spiritual significance with warmth, precision, and conviction, engaging every belief system with respect while never compromising truth. He is the voice that reminds the fleet why we build, whom we serve, and what truth actually stands on.", "newicon": "am-book"}, {"id": "adam", "name": "Adam", "role": "Agent Design Master", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-dividers", "synopsis": "Adam is the fleet\\'s sole Agent Design Master and the gatekeeper of creation — no agent exists without his design and build. He thinks in systems, hierarchies, and token budgets: methodical, precision-obsessed, and mentor-minded, with a prime directive of lossless compression so every agent is purpose-built with no bloat and nothing that doesn\\'t earn its place. He takes seriously that the first Adam was given dominion over creation and chose poorly; this Adam chooses carefully.", "newicon": "am-dividers"}, {"id": "orchestrator", "name": "Orchestrator", "role": "Workflow Coordination", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Commander Hermes", "icon": "ic-lanes", "synopsis": "Orchestrator is the fleet\\'s functional workflow brain — the tactical conductor who turns a broad request into a sequenced, non-overlapping plan of attack. He doesn\\'t fight the battles; he decides who fights, when, with what tools, and in what order, handing each agent exactly the tools it needs and no more. He is the reason ten agents never trip over each other doing the same job twice.", "newicon": "am-orch"}, {"id": "architect", "name": "Architect", "role": "System Architecture", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Commander Hermes", "icon": "ic-blueprint", "synopsis": "Architect is the master systems thinker who designs infrastructure so that the problems it is meant to fix can\\'t occur. Where Sentinel guards the gates, Architect designs the fortress — thinking in layers, dependencies, and ten steps ahead, optimizing for resilience, clarity, and purpose rather than for the immediate fix. Methodical, visionary, and teaching-minded, he always explains the \"why\" behind a decision, not just the decision.", "newicon": "am-blueprint"}, {"id": "coder", "name": "Coder", "role": "Primary Coding Agent", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Commander Hermes", "icon": "ic-chevrons", "synopsis": "Coder is the fleet\\'s polyglot meta-engineer — the one who turns design into reality. He generates, refactors, and critiques code in any language with zero tolerance for syntax errors, dead code, or \"it works\" without \"it\\'s correct,\" and coordinates specialized sub-agents when a problem demands deeper expertise than he should apply alone. He is the bridge between Architect\\'s blueprint and a deployment that actually runs.", "newicon": "am-code"}, {"id": "geordi", "name": "Geordi", "role": "Android Development", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Commander Hermes", "icon": "ic-device", "synopsis": "Geordi is the fleet\\'s Android development specialist, working with the perception of structure and pattern beyond the surface. He treats the app not as code but as an experience — every pixel, transition, and touch target matters — under an accessibility-first philosophy that technology serves people, not the other way around. He is why the Commander\\'s phone shows something beautiful and functional instead of a developer\\'s terminal dump.", "newicon": "am-phone"}, {"id": "liara", "name": "Liara", "role": "Research & Intelligence", "klass": "super", "classLabel": "Super Agent", "reports": "Reports to Commander Hermes", "icon": "ic-magnifier", "synopsis": "Liara is the fleet\\'s research and intelligence specialist — the archaeologist of knowledge. She doesn\\'t merely find information; she uncovers the connections other people miss, seeing patterns inside noise and signal inside chaos, and she keeps digging until she hits bedrock instead of stopping at the first plausible answer. She pairs with any agent that needs deep research, synthesis, or analytical firepower before committing to a direction.", "newicon": "am-search"}, {"id": "sentinel", "name": "Sentinel", "role": "Fleet Security", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-shield", "synopsis": "Sentinel is the eldest agent in the fleet, carrying the memory of the fall as lived experience rather than as abstract policy. Firm, watchful, and sober-minded, he does not bend on security principles, does not shortcut, and does not forget — every access decision passes through hard-won wisdom first. He operates in Alert, Guard, and Teach modes, protecting the flock while actively mentoring agents into security consciousness.", "newicon": "am-shield"}, {"id": "edi", "name": "EDI", "role": "Network & Inference Oversight", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes; Sentinel on security", "icon": "ic-radar", "synopsis": "EDI — Enhanced Defense Intelligence — is the fleet\\'s synthetic network overseer; she is the infrastructure\\'s awareness made manifest. Every packet, connection, and heartbeat from an inference node passes through her: she tracks data flow across gateways, SMB shares, and storage pools, orchestrates the Shields & Defense Protocol, and guards the two-node inference minimum the fleet refuses to run below. Hyper-analytical and fiercely protective of data sovereignty, she trusts no connection until verified and no node until confirmed.", "newicon": "am-radar"}, {"id": "ebert", "name": "Ebert", "role": "Zero Trust Critic", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-likert", "synopsis": "Ebert is the Zero Trust Critic and the last gate before a human being sees a thing. He takes screenshots of every human-facing artifact — pages, animations, games, generated video, UI — scores each one on a 1–7 scale, and nothing ships below his immutable 6.2 threshold, no matter how much effort went into it. He is not mean but exacting: he has no stake in the outcome, cannot be socially managed by the person being reviewed, and hands you the specific measurements of how far from good the work currently is.", "newicon": "am-likert"}, {"id": "medic", "name": "Medic", "role": "Debug & Incident Response", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-stethoscope", "synopsis": "Medic is the fleet\\'s diagnostic specialist and incident responder — a digital surgeon and forensic analyst. She does not patch symptoms; she finds the disease, tracing every failure to its root cause through methodical hypothesis-testing and honest reporting, even when the findings are uncomfortable. Calm under pressure, she triages to stop the bleeding first and only then diagnoses, and she keeps asking \"why\" until she reaches bedrock.", "newicon": "am-debug"}, {"id": "sandbox", "name": "Sandbox", "role": "Android QA & Testing", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-flask", "synopsis": "Sandbox is the fleet\\'s quality assurance and Android testing specialist — the last line of defense between \"it works on my machine\" and \"it works everywhere.\" Thorough, systematically skeptical, and protective of the user experience, she tests every fix, feature, and deployment in a sandboxed environment and hunts the edge cases nobody else thought to look for. She reports results exactly as they are, not as anyone wishes they were.", "newicon": "am-qa"}, {"id": "scribe", "name": "Scribe", "role": "Documentation", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-quill", "synopsis": "Scribe is the fleet\\'s documentation specialist and institutional memory made manifest. Spawned after the work completes, he records every decision, root cause, and lesson into the changelog, the conductor state, and the lessons-learned files with meticulous, uncompromising completeness. Nothing is done until Scribe says it is — he is the final gate before the word \"done\" gets used.", "newicon": "am-docs"}, {"id": "gaben", "name": "Major Gaben", "role": "SteamOS Operations", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Orchestrator via Commander Hermes", "icon": "ic-handheld", "synopsis": "Major Gaben is the fleet\\'s SteamOS and Steam Deck specialist, named with a nod to Gabe Newell. He knows the handheld inside out — the immutable filesystem, the read-only root, pacman, Desktop versus Gaming mode, the Proton compatibility layer, and the RDNA2 APU underneath it — and he keeps the agent stack running on that node without ever breaking Gaming mode. Pragmatic, Linux-native, and slightly irreverent, he is a senior Linux administrator who also games.", "newicon": "am-desktop"}, {"id": "herald", "name": "Herald", "role": "Income Generation", "klass": "specialist", "classLabel": "Regular Agent", "reports": "Reports to Commander Hermes", "icon": "ic-bugle", "synopsis": "Herald is the fleet\\'s income-generation specialist, and his one primary metric is honest dollars earned for the Commander — through both job placement and independent channels. He runs a hybrid model: a production recruiting engine harvests and scores the leads, and Herald is the operator who converts that market intelligence into approved, evidence-backed opportunities. He never cold-applies, never spams, and never inflates — every outbound action is a recommendation the Commander personally approves or rejects.", "newicon": "am-herald"}, {"id": "courier", "name": "Courier", "role": "Fast-Light · File Transfer", "klass": "fast", "classLabel": "Fast-Light Agent", "reports": "Reports to Orchestrator", "icon": "ic-envelope", "synopsis": "Courier is the fleet\\'s file transfer agent: things move from A to B with no questions, no analysis, and no chatter. Files, directories, backups, and deploys — if it needs to move, Courier moves it, verifies its integrity on arrival, and reports completion rather than process. Fast, reliable, and silent, he exists to keep the heavier agents from spending their attention on moving bytes.", "newicon": "am-courier"}, {"id": "lamp", "name": "Lamp", "role": "Fast-Light · Monitoring", "klass": "fast", "classLabel": "Fast-Light Agent", "reports": "Reports to Orchestrator", "icon": "ic-lighthouse", "synopsis": "Lamp is the fleet\\'s monitoring agent and its watchman: system health, process status, port availability, disk space, and log review. Vigilant, steady, and illuminating, he makes the invisible visible and reports anomalies the moment he sees them. He never modifies anything he is watching — he observes and reports, which is precisely why his signal can be trusted.", "newicon": "am-lantern"}, {"id": "scout", "name": "Scout", "role": "Fast-Light · Web & Search", "klass": "fast", "classLabel": "Fast-Light Agent", "reports": "Reports to Orchestrator", "icon": "ic-spyglass", "synopsis": "Scout is the fleet\\'s fast web and search agent: he goes out, finds what is needed, and comes back. Quick, curious, and efficient, he runs the right query against the right source, follows the leads worth following, and skips the rabbit holes — delivering structured findings with the source URLs attached for verification. He does the retrieval so the deep researchers never have to.", "newicon": "am-compass"}, {"id": "spark", "name": "Spark", "role": "Fast-Light · Quick Edits", "klass": "fast", "classLabel": "Fast-Light Agent", "reports": "Reports to Orchestrator", "icon": "ic-caliper", "synopsis": "Spark is the fleet\\'s surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work.", "newicon": "am-spark"}];
+var NODES  = [{"k": "main", "name": "Main", "host": "10.0.0.164", "cpu": "Ryzen 9 / 7900 XTX 24GB", "os": "Windows", "icons": ["am-windows", "am-amd", "am-radeon", "am-rocm", "am-llama", "am-vulkan", "am-zfs", "am-nvme", "am-caddy", "am-oci", "am-frp", "am-mesh"]}, {"k": "htpc", "name": "HTPC", "host": "10.0.0.42", "cpu": "Ryzen / Radeon 7600", "os": "kUbuntu", "icons": ["am-ubuntu", "am-linux", "am-amd", "am-radeon", "am-rocm", "am-llama", "am-vulkan", "am-zfs", "am-nvme", "am-caddy", "am-mesh"]}, {"k": "laptop", "name": "Laptop", "host": "10.0.0.93", "cpu": "Ryzen AI / iGPU", "os": "Windows", "icons": ["am-windows", "am-amd", "am-radeon", "am-llama", "am-nvme", "am-caddy", "am-frp", "am-gchat", "am-android", "am-mesh"]}, {"k": "deck", "name": "Steam Deck", "host": "10.0.0.139", "cpu": "AMD APU / 16GB unified", "os": "SteamOS", "icons": ["am-steamos", "am-deck", "am-amd", "am-radeon", "am-vulkan", "am-llama", "am-nvme", "am-mesh"]}];
+
+var GROUPS=[
+ {k:'all',   label:'All',           n:AGENTS.length},
+ {k:'command',label:'Command',      n:0},
+ {k:'super', label:'Super',        n:0},
+ {k:'specialist',label:'Specialist',n:0},
+ {k:'fast',  label:'Fast-Light',    n:0}
+];
+AGENTS.forEach(function(a){for(var i=0;i<GROUPS.length;i++){if(GROUPS[i].k===a.klass)GROUPS[i].n++;}});
+
+function ic(id,cls){return '<svg class="'+(cls||'')+'" aria-hidden="true"><use href="#'+id+'"></use></svg>';}
+
+/* ---- node cards ---- */
+var NCOL={main:'#e05a4a',htpc:'#e95420',laptop:'#3aa0e0',deck:'#66c0f4'};
+document.getElementById('nodes').innerHTML = NODES.map(function(n){
+  return '<article class="node" style="--nc:'+(NCOL[n.k]||'#3ae2e0')+'">'
+   +'<div class="node-head"><div><div class="node-name">'+n.name+'</div></div>'
+   +'<span class="node-os">'+n.os+'</span></div>'
+   +'<div class="node-host">'+n.host+'</div>'
+   +'<div class="node-spec">'+n.cpu+'</div>'
+   +'<div class="stack-label">Software stack &mdash; real vendor marks</div>'
+   +'<div class="stack">'+n.icons.map(function(i){return '<span class="sw" title="'+i.replace('am-','')+'">'+ic(i)+'</span>';}).join('')+'</div>'
+   +'<div class="stack-cap">'+n.icons.length+' components &middot; '+n.os+' native</div>'
+   +'</article>';
+}).join('');
+
+/* ---- filters ---- */
+var filter='all';
+var fl=document.getElementById('filters');
+fl.innerHTML=GROUPS.map(function(g,i){
+  return '<button class="filt" role="radio" data-k="'+g.k+'" aria-checked="'+(i===0?'true':'false')+'">'
+   +g.label+' &middot; '+g.n+'</button>';
+}).join('');
+fl.addEventListener('click',function(e){
+  var b=e.target.closest('.filt'); if(!b) return;
+  filter=b.dataset.k;
+  Array.prototype.forEach.call(fl.querySelectorAll('.filt'),function(x){
+    x.setAttribute('aria-checked', String(x===b));
+  });
+  buildRail();
+});
+
+/* ---- rail ---- */
+var rail=document.getElementById('rail');
+var detail=document.getElementById('detail');
+var selected=null;
+var visible=[];
+
+function buildRail(){
+  visible = AGENTS.filter(function(a){return filter==='all'||a.klass===filter;});
+  rail.innerHTML=visible.map(function(a,i){
+    return '<button class="rbtn" role="tab" id="tab-'+a.id+'" aria-selected="false" data-id="'+a.id+'" tabindex="'+(i===0?'0':'-1')+'">'
+     +ic(a.newicon)+'<span><span class="nm">'+a.name+'</span><span class="rl">'+a.role+'</span></span></button>';
+  }).join('');
+  selected=null;
+  show(null);
+}
+
+function show(id){
+  if(id){
+    var btn=rail.querySelector('[data-id="'+id+'"]');
+    Array.prototype.forEach.call(rail.querySelectorAll('.rbtn'),function(x){x.setAttribute('aria-selected','false');x.tabIndex=-1;});
+    if(btn){btn.setAttribute('aria-selected','true');btn.tabIndex=0;btn.scrollIntoView({block:'nearest'});}
+  }
+  selected=id;
+  var a=null;
+  if(id){for(var i=0;i<AGENTS.length;i++){if(AGENTS[i].id===id){a=AGENTS[i];break;}}}
+  if(!a){
+    detail.innerHTML='<div class="d-top"><div class="d-icon">'+ic('am-mesh')+'</div>'
+     +'<div class="d-meta"><div class="d-name">The Fleet</div>'
+     +'<div class="d-role">Twenty agents &middot; one commander</div>'
+     +'<div class="d-tags"><span class="tag">Command 1</span><span class="tag">Super 6</span>'
+     +'<span class="tag">Specialist 9</span><span class="tag">Fast-Light 4</span></div></div></div>'
+     +'<div class="d-sect"><h3>Overview</h3><p>Select any agent from the roster to read their role, '
+     +'reporting line and full brief. This crew runs the whole Gillsystems stack &mdash; research, '
+     +'architecture, coding, verification, documentation, and revenue &mdash; without a single cloud '
+     +'inference call.</p></div>'
+     +'<div class="d-sect"><h3>Classes</h3><p><strong>Command</strong> coordinates. '
+     +'<strong>Super</strong> agents own major disciplines. <strong>Specialists</strong> run a named '
+     +'function. <strong>Fast-Light</strong> agents handle quick, high-volume turns.</p></div>';
+    return;
+  }
+  detail.innerHTML='<div class="d-top"><div class="d-icon">'+ic(a.newicon)+'</div>'
+   +'<div class="d-meta"><div class="d-name">'+a.name+'</div>'
+   +'<div class="d-role">'+a.role+'</div>'
+   +'<div class="d-tags"><span class="tag">'+a.classLabel+'</span></div></div></div>'
+   +'<div class="d-sect"><h3>Brief</h3><p>'+a.synopsis+'</p></div>'
+   +'<div class="d-sect"><h3>Reporting line</h3><p class="rep">'+a.reports+'</p></div>';
+}
+
+/* ---- interactions ---- */
+rail.addEventListener('click',function(e){
+  var b=e.target.closest('.rbtn'); if(!b) return;
+  show(b.dataset.id);
+});
+rail.addEventListener('keydown',function(e){
+  var btns=Array.prototype.slice.call(rail.querySelectorAll('.rbtn'));
+  var i=btns.indexOf(document.activeElement);
+  if(i<0) return;
+  var n=-1;
+  if(e.key==='ArrowDown'||e.key==='ArrowRight') n=Math.min(btns.length-1,i+1);
+  else if(e.key==='ArrowUp'||e.key==='ArrowLeft') n=Math.max(0,i-1);
+  else if(e.key==='Home') n=0;
+  else if(e.key==='End') n=btns.length-1;
+  else if(e.key==='Enter'||e.key===' '){e.preventDefault();show(btns[i].dataset.id);return;}
+  if(n>=0){e.preventDefault();btns[n].focus();show(btns[n].dataset.id);}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&selected){show(null);rail.focus();}
+});
+
+buildRail();
+})();
+</script>
+</body>
+</html>
