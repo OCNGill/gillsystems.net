@@ -146,10 +146,17 @@ def main():
         'focusable="false">',
         'focusable="false" xmlns="http://www.w3.org/2000/svg">',
     )
+    # RECURSIVE. A prior version used os.listdir(G), which is non-recursive and
+    # silently skipped solutions/ (4 LIVE pages, 28 emoji). Scribe caught this on
+    # 2026-09-30. os.walk is now mandatory; do not regress this.
     files = sorted(
-        os.path.join(G, f)
-        for f in os.listdir(G)
-        if f.endswith(".html") and f not in ("ai-era.html",)
+        os.path.join(dirpath, f)
+        for dirpath, dirnames, filenames in os.walk(G)
+        for f in filenames
+        if f.endswith(".html")
+        # skip backups/archives - not published, not part of the live site
+        and "archive" not in dirpath.replace("\\", "/").split("/")
+        and f not in ("ai-era.html",)
     )
     results = []
     for f in files:
