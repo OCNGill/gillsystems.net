@@ -1,0 +1,97 @@
+
+<!-- ================= BRAND MARK SET v8 =================
+     Commander directive 2026-09-30: "little 3Dish stuff...not so scary but not
+     innocent robot face". These are TRUE brand marks (AMD, Radeon, Linux, Windows,
+     Ubuntu, SteamOS) drawn as layered SVG with an isometric top-face + darker side
+     face so each reads as a small extruded chip/logo rather than a line glyph.
+     Each takes currentColor (--c) plus a brand accent (--b) set by the consumer.
+     =========================================================== -->
+
+<!-- AMD: arrow-in-box, extruded -->
+<symbol id="bm-amd" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#c8813a)" opacity=".22"/>
+  <path d="M3 9 16 15v14L3 23z" fill="var(--b,#c8813a)" opacity=".34"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="var(--b,#c8813a)"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M11 18.5 16 9l5 9.5M12.6 15.4h6.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+</symbol>
+
+<!-- Radeon: stylised R in a bevel chip -->
+<symbol id="bm-radeon" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#e8452f)" opacity=".22"/>
+  <path d="M3 9 16 15v14L3 23z" fill="var(--b,#e8452f)" opacity=".34"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="var(--b,#e8452f)"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M12 24V9h5.4a4.3 4.3 0 0 1 0 8.6H12m5.2 0 5 6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- Linux (Tux-ish penguin silhouette, simplified) -->
+<symbol id="bm-linux" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#f0f0f0)" opacity=".14"/>
+  <path d="M3 9 16 15v14L3 23z" fill="var(--b,#f0f0f0)" opacity=".22"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="var(--b,#f0f0f0)"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <ellipse cx="16" cy="13" rx="4.6" ry="5" fill="#1b1b1b"/>
+  <ellipse cx="14.4" cy="12.4" rx="1.2" ry="1.5" fill="#fff"/><ellipse cx="17.6" cy="12.4" rx="1.2" ry="1.5" fill="#fff"/>
+  <path d="M16 18c-4 0-6.6 2.6-6.6 5.2S11.4 27 16 27s6.6-1.4 6.6-3.8S20 18 16 18z" fill="#1b1b1b"/>
+  <path d="M16 21.4c-2.4 0-4 1.4-4 2.6 0 .6.6 1 1.4 1 .6 0 1-.3 1.6-.3h2c.6 0 1 .3 1.6.3.8 0 1.4-.4 1.4-1 0-1.2-1.6-2.6-4-2.6z" fill="#e8912d"/>
+  <path d="M9.6 24.6c-.6 1.2-1.6 2-2.4 2.4M22.4 24.6c.6 1.2 1.6 2 2.4 2.4" stroke="#e8912d" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+</symbol>
+
+<!-- Windows: four-pane, extruded -->
+<symbol id="bm-windows" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#3aa0e0)" opacity=".18"/>
+  <path d="M3 9 16 15v14L3 23z" fill="var(--b,#3aa0e0)" opacity=".30"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="var(--b,#3aa0e0)"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <g fill="#fff" opacity=".95">
+    <path d="M7.5 12.2 14.6 11v6.3H7.5z"/><path d="M16 10.8 24.5 9.4v7.9H16z"/>
+    <path d="M7.5 18.7h7.1v6.3l-7.1-1.2z"/><path d="M16 18.7h8.5v7.9L16 25.2z"/>
+  </g>
+</symbol>
+
+<!-- Ubuntu: circle-of-friends -->
+<symbol id="bm-ubuntu" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#e95420)" opacity=".20"/>
+  <path d="M3 9 16 15v14L3 23z" fill="var(--b,#e95420)" opacity=".32"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="var(--b,#e95420)"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <g stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M16 8.4v4.2M11 10.2l2.1 3.6M21 10.2l-2.1 3.6"/>
+  </g>
+  <circle cx="16" cy="15.6" r="3.1" fill="#fff"/>
+  <circle cx="8.6" cy="20.6" r="2.5" fill="#fff"/><circle cx="23.4" cy="20.6" r="2.5" fill="#fff"/>
+  <circle cx="11.4" cy="26.2" r="2.5" fill="#fff"/><circle cx="20.6" cy="26.2" r="2.5" fill="#fff"/>
+  <g stroke="var(--b,#e95420)" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9">
+    <path d="M13.2 18.2 10.2 19.9M18.8 18.2l3 1.7M12.4 24.4l-1.4 1.3M19.6 24.4l1.4 1.3"/>
+  </g>
+</symbol>
+
+<!-- kUbuntu: Ubuntu mark on a dark bevelled tile -->
+<symbol id="bm-kubuntu" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="#2c001e"/>
+  <path d="M3 9 16 15v14L3 23z" fill="#1a000f"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="#4a0034"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <g stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round">
+    <path d="M16 9.4v3.6M11.8 11l1.8 3M20.2 11l-1.8 3"/>
+  </g>
+  <circle cx="16" cy="15.4" r="2.7" fill="#fff"/>
+  <circle cx="9.8" cy="19.6" r="2.1" fill="#fff"/><circle cx="22.2" cy="19.6" r="2.1" fill="#fff"/>
+  <circle cx="12.2" cy="24.4" r="2.1" fill="#fff"/><circle cx="19.8" cy="24.4" r="2.1" fill="#fff"/>
+  <g stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".95">
+    <path d="M13.6 17.6 11.2 19M18.4 17.6 20.8 19M12.8 23.2l-1.2 1.1M19.2 23.2l1.2 1.1"/>
+  </g>
+</symbol>
+
+<!-- SteamOS: valve-ish steam swirl + deck silhouette -->
+<symbol id="bm-steamos" viewBox="0 0 32 32">
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="var(--b,#1b2838)" opacity=".34"/>
+  <path d="M3 9 16 15v14L3 23z" fill="#0d1a24"/>
+  <path d="M16 3 29 9 16 15 3 9z" fill="#2a475e"/>
+  <path d="M16 3 29 9v14L16 29 3 23V9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8 19.5a5 5 0 0 1 5-5 4.6 4.6 0 0 1 4.3 2.9" fill="none" stroke="#66c0f4" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="10.4" cy="22.4" r="2.6" fill="#66c0f4"/><circle cx="19.6" cy="20.6" r="2.1" fill="#8bc34a"/>
+  <path d="M12.6 23.4h9.2" stroke="#66c0f4" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M13.4 26.2h7.6" stroke="#8bc34a" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>
+</symbol>
