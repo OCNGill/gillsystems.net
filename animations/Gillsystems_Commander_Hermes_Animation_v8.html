@@ -181,7 +181,7 @@ const T=[['nvme','NVMe / SSD','LOCAL WORKING TIER',-2.2,2.9,C.ice,'Active I/O an
 
 /* ---------- setup ---------- */
 let W,H,K0,FOC,DPR,vg,off=0,yb=.12;const cam={yaw:.12,pitch:.40,dist:50,tx:0,ty:1,tz:0},tg={dist:50,tx:0,ty:1,tz:0};const PITCH_MIN=.02,PITCH_MAX=1.15;
-function rs(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;g.setTransform(DPR,0,0,DPR,0,0);FOC=Math.max(H*1.4,W*.72);vg=document.createElement('canvas');vg.width=W;vg.height=H;const x=vg.getContext('2d'),v=x.createRadialGradient(W/2,H*.5,Math.min(W,H)*.4,W/2,H*.5,Math.max(W,H)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(1,3,7,.6)');x.fillStyle=v;x.fillRect(0,0,W,H);x.fillStyle='rgba(0,0,0,.16)';for(let y=0;y<H;y+=3)x.fillRect(0,y,W,1)}
+function rs(){DPR=Math.min(devicePixelRatio||1, isMobile?1.25:1.5);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;g.setTransform(DPR,0,0,DPR,0,0);FOC=Math.max(H*1.4,W*.72);vg=document.createElement('canvas');vg.width=W;vg.height=H;const x=vg.getContext('2d'),v=x.createRadialGradient(W/2,H*.5,Math.min(W,H)*.4,W/2,H*.5,Math.max(W,H)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(1,3,7,.6)');x.fillStyle=v;x.fillRect(0,0,W,H);x.fillStyle='rgba(0,0,0,.16)';for(let y=0;y<H;y+=3)x.fillRect(0,y,W,1)}
 addEventListener('resize',rs);rs();
 let _Cy=NaN,_Cp=NaN,_cy=1,_sy=0,_cp=1,_sp=0,_px=0,_py=0,_pz=0;
 function ct(){if(cam.yaw!==_Cy||cam.pitch!==_Cp){_Cy=cam.yaw;_Cp=cam.pitch;_cy=Math.cos(_Cy);_sy=Math.sin(_Cy);_cp=Math.cos(_Cp);_sp=Math.sin(_Cp)}}
@@ -216,7 +216,14 @@ function prism(cen,dim,rot,alpha,col,opt){
     sp.push(P(cen[0]+x,cen[1]+v[1],cen[2]+z));
   }
   const F=[[0,1,2,3,.30],[4,5,6,7,.95],[0,1,5,4,.74],[2,3,7,6,.52],[1,2,6,5,.64],[0,3,7,4,.42]];
-  const ff=F.map(f=>({q:f.slice(0,4).map(i=>sp[i]),z:f.slice(0,4).reduce((s,i)=>s+sp[i].z,0)/4,s:f[4]}));
+  // PERF: cull back-facing faces. Cross-product of the projected quad gives a
+  // screen-space winding; CW means the face points away from the camera. On a
+  // closed solid this removes ~half the fill+stroke work per frame.
+  const ccx=W*.5,ccy=H*.42;
+  const ff=F.map(f=>{const q=f.slice(0,4).map(i=>sp[i]);
+    let a2=0;for(let i2=0;i2<4;i2++){const A=q[i2],B=q[(i2+1)%4];a2+=(A.x-ccx)*(B.y-ccy)-(B.x-ccx)*(A.y-ccy);}
+    return {q:q,z:q.reduce((s,i)=>s+i.z,0)/4,s:f[4],vis:a2<0};})
+    .filter(f=>f.vis);
   ff.sort((a,b)=>b.z-a.z);
   for(const f of ff){
     g.beginPath();f.q.forEach((q,i)=>i?g.lineTo(q.x,q.y):g.moveTo(q.x,q.y));g.closePath();
@@ -462,66 +469,80 @@ function rridge(y0,hgt,fill,stroke,sw,arr){
     for(let i=0;i<=N;i++){const x=i/N*W,base=y0-hgt*arr[i%N];i?g.lineTo(x,base):g.moveTo(x,base)}
     g.strokeStyle=stroke;g.lineWidth=sw||1;g.stroke()}
 }
+function rridge(y0,hgt,fill,stroke,sw,arr){
+  arr=arr||R80.m1;
+  const N=arr.length;
+  g.beginPath();g.moveTo(0,H);
+  for(let i=0;i<=N;i++){
+    const x=i/N*W;
+    g.lineTo(x, y0-hgt*arr[i%N]);
+  }
+  g.lineTo(W,H);g.closePath();
+  g.fillStyle=fill;g.fill();
+  if(stroke){g.beginPath();
+    for(let i=0;i<=N;i++){const x=i/N*W,base=y0-hgt*arr[i%N];i?g.lineTo(x,base):g.moveTo(x,base)}
+    g.strokeStyle=stroke;g.lineWidth=sw||1;g.stroke()}
+}
 function retro80(){
   // --- 1) sky: deep violet -> magenta -> hot amber horizon (TRON / Battlezone) ---
-  const sk=g.createLinearGradient(0,0,0,H*.72);
+  const sk=R80c.createLinearGradient(0,0,0,H*.72);
   sk.addColorStop(0,   '#0a0418');
   sk.addColorStop(.34, '#2b0a3d');
   sk.addColorStop(.62, '#6b1250');
   sk.addColorStop(.84, '#c2412a');
   sk.addColorStop(1,   '#f6a323');
-  g.fillStyle=sk;g.fillRect(0,0,W,H*.72);
+  R80c.fillStyle=sk;R80c.fillRect(0,0,W,H*.72);
 
   // --- 2) sun disc with horizontal arcade slits (Battlezone / Missile Command) ---
   const sunY=H*.60, sunR=Math.min(W*.16,H*.20);
-  g.save();
-  const sg=g.createLinearGradient(0,sunY-sunR,0,sunY+sunR);
+  R80c.save();
+  const sg=R80c.createLinearGradient(0,sunY-sunR,0,sunY+sunR);
   sg.addColorStop(0,'#ffe27a');sg.addColorStop(.5,'#ff9a3c');sg.addColorStop(1,'#ff3d6e');
-  g.fillStyle=sg;
-  g.beginPath();g.arc(W*.5,sunY,sunR,0,7);g.fill();
-  g.globalCompositeOperation='destination-out';
-  for(let i=0;i<7;i++){const y=sunY+sunR*.12+i*sunR*.13;g.fillRect(W*.5-sunR,y,sunR*2,sunR*.028+i*.4)}
-  g.restore();
+  R80c.fillStyle=sg;
+  R80c.beginPath();R80c.arc(W*.5,sunY,sunR,0,7);R80c.fill();
+  R80c.globalCompositeOperation='destination-out';
+  for(let i=0;i<7;i++){const y=sunY+sunR*.12+i*sunR*.13;R80c.fillRect(W*.5-sunR,y,sunR*2,sunR*.028+i*.4)}
+  R80c.restore();
 
   // --- 3) parallax mountain ridges, far->near, each darker + more saturated ---
-  g.save();
-  g.globalAlpha=.55;rridge(H*.70,H*.30,'#2a1038','#6b2a7a',1.1,R80.m3);g.restore();
-  g.save();
-  g.globalAlpha=.78;rridge(H*.74,H*.26,'#170a26','#8f2a63',1.2,R80.m2);g.restore();
+  R80c.save();
+  R80c.globalAlpha=.55;rridge(H*.70,H*.30,'#2a1038','#6b2a7a',1.1,R80.m3);R80c.restore();
+  R80c.save();
+  R80c.globalAlpha=.78;rridge(H*.74,H*.26,'#170a26','#8f2a63',1.2,R80.m2);R80c.restore();
   rridge(H*.78,H*.22,'#0a0417','#e0452f',1.4,R80.m1);
 
   // --- 4) arcade starfield, twinkle, above the ridges only ---
-  g.save();g.globalCompositeOperation='lighter';
+  R80c.save();R80c.globalCompositeOperation='lighter';
   for(const s of R80.st){
     const a=(.25+.6*Math.abs(Math.sin(time*s.f+s.p)))*s.s;
-    g.fillStyle=`rgba(255,235,190,${a})`;
-    g.fillRect(s.x*W,s.y*H*(H*.72),1.6*s.s+.5,1.6*s.s+.5);
+    R80c.fillStyle=`rgba(255,235,190,${a})`;
+    R80c.fillRect(s.x*W,s.y*H*(H*.72),1.6*s.s+.5,1.6*s.s+.5);
   }
-  g.restore();
+  R80c.restore();
 
   // --- 5) ground: dark plane + Tron perspective grid (the Tank/Battlezone floor) ---
   const gy=H*.78;
-  const gg=g.createLinearGradient(0,gy,0,H);
+  const gg=R80c.createLinearGradient(0,gy,0,H);
   gg.addColorStop(0,'#1b0a2e');gg.addColorStop(1,'#05010c');
-  g.fillStyle=gg;g.fillRect(0,gy,W,H-gy);
-  g.save();g.strokeStyle='rgba(255,64,180,.30)';g.lineWidth=1;
+  R80c.fillStyle=gg;R80c.fillRect(0,gy,W,H-gy);
+  R80c.save();R80c.strokeStyle='rgba(255,64,180,.30)';R80c.lineWidth=1;
   for(let i=0;i<=18;i++){ // converging lines to a vanishing point
     const vx=W*.5;
-    g.beginPath();g.moveTo(vx,gy);
-    g.lineTo((i/18)*W*2-W*.5,H);
-    g.stroke();
+    R80c.beginPath();R80c.moveTo(vx,gy);
+    R80c.lineTo((i/18)*W*2-W*.5,H);
+    R80c.stroke();
   }
   for(let i=1;i<13;i++){ // receding horizontals, spaced by perspective
     const t=i/13, y=gy+(H-gy)*(t*t*.92+t*.08);
-    g.globalAlpha=1-t*.62;
-    g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke();
+    R80c.globalAlpha=1-t*.62;
+    R80c.beginPath();R80c.moveTo(0,y);R80c.lineTo(W,y);R80c.stroke();
   }
-  g.restore();
+  R80c.restore();
   // horizon glow line
-  g.save();g.globalCompositeOperation='lighter';
-  g.strokeStyle='rgba(255,90,200,.55)';g.lineWidth=2;
-  g.beginPath();g.moveTo(0,gy);g.lineTo(W,gy);g.stroke();
-  g.restore();
+  R80c.save();R80c.globalCompositeOperation='lighter';
+  R80c.strokeStyle='rgba(255,90,200,.55)';R80c.lineWidth=2;
+  R80c.beginPath();R80c.moveTo(0,gy);R80c.lineTo(W,gy);R80c.stroke();
+  R80c.restore();
 }
 function aur(){const w=160,h=100;a2.clearRect(0,0,w,h);a2.globalCompositeOperation='lighter';[['#1f9c9a',.13],['#5b3fd8',.11],['#2fb58a',.09],['#c9973a',.06]].forEach((c,i)=>{const x=w*(.5+.42*Math.sin(time*.06+i*1.9)),y=h*(.4+.3*Math.cos(time*.045+i*2.4)),R=160*(.42+.1*Math.sin(time*.1+i)),r=a2.createRadialGradient(x,y,0,x,y,R);r.addColorStop(0,rg(c[0],c[1]*1.6));r.addColorStop(1,rg(c[0],0));a2.fillStyle=r;a2.fillRect(0,0,w,h)})}
 /* ---- THE CONTAINER: a 4D-rotating tesseract shell + orthogonal orbital rings around the whole fleet.
@@ -539,15 +560,15 @@ function tess(pass){
       const s=62/(3.4-w);pj(x*s,4+v[1]*s*.72,z*s);TP[i*3]=_px;TP[i*3+1]=_py;TP[i*3+2]=_pz}
     pj(0,4,0);_tz=_pz}
   const m=_tm,A=(far?.13:.08)+m*(far?.30:.18);
-  g.beginPath();for(let e=0;e<32;e++){const i=TE[e][0]*3,j=TE[e][1]*3;if(((TP[i+2]+TP[j+2])*.5>_tz)!==far)continue;g.moveTo(TP[i],TP[i+1]);g.lineTo(TP[j],TP[j+1])}
-  g.strokeStyle=rg('#6fe6e0',A);g.lineWidth=.9+m*.7;g.stroke();
-  g.beginPath();for(let i=0;i<16;i++){if((TP[i*3+2]>_tz)!==far)continue;g.rect(TP[i*3]-1.5,TP[i*3+1]-1.5,3,3)}
-  g.fillStyle=rg('#bff7f2',A*1.6);g.fill();
-  if(far){g.beginPath();for(let r=0;r<3;r++){const R=40+r*7,ph=time*.03*(r+1)+cam.yaw*(.5+.3*r),c=Math.cos(ph),s=Math.sin(ph);
+  R80c.beginPath();for(let e=0;e<32;e++){const i=TE[e][0]*3,j=TE[e][1]*3;if(((TP[i+2]+TP[j+2])*.5>_tz)!==far)continue;R80c.moveTo(TP[i],TP[i+1]);R80c.lineTo(TP[j],TP[j+1])}
+  R80c.strokeStyle=rg('#6fe6e0',A);R80c.lineWidth=.9+m*.7;R80c.stroke();
+  R80c.beginPath();for(let i=0;i<16;i++){if((TP[i*3+2]>_tz)!==far)continue;g.rect(TP[i*3]-1.5,TP[i*3+1]-1.5,3,3)}
+  R80c.fillStyle=rg('#bff7f2',A*1.6);R80c.fill();
+  if(far){R80c.beginPath();for(let r=0;r<3;r++){const R=40+r*7,ph=time*.03*(r+1)+cam.yaw*(.5+.3*r),c=Math.cos(ph),s=Math.sin(ph);
     for(let i=0;i<=36;i++){const u=TC[r][i*2]*R,v=TC[r][i*2+1]*R;let X,Y,Z;
       if(r===0){X=u*c-v*s;Y=0;Z=u*s+v*c}else if(r===1){X=u;Y=v*c;Z=v*s}else{X=u*c;Y=v;Z=u*s}
-      pj(X,4+Y*.6,Z);i?g.lineTo(_px,_py):g.moveTo(_px,_py)}}
-    g.strokeStyle=rg('#6fe6e0',.09+m*.18);g.lineWidth=.8;g.stroke()}
+      pj(X,4+Y*.6,Z);i?R80c.lineTo(_px,_py):R80c.moveTo(_px,_py)}}
+    R80c.strokeStyle=rg('#6fe6e0',.09+m*.18);R80c.lineWidth=.8;R80c.stroke()}
 }
 /* ---- CYBERSPACE: the fleet floats inside a finite vector universe - Tron/Lawnmower-Man grid room, Battlezone mountains,
    vector sun, rising data beams, drifting arcade solids, scanner ring. Static geometry precomputed; segments clipped near camera. ---- */
@@ -565,7 +586,7 @@ for(let i=0;i<8;i++)for(let b=1;b<8;b<<=1)if(!(i&b))cyE[0].push(i,i|b);
 for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)if((i>>1)!==(j>>1))cyE[1].push(i,j);
 let QLV=2,_lo=0,_hi=0,_hg=null;
 function qa(f){if(f<24){_hi=0;if(++_lo>=3&&QLV>0){QLV--;_lo=0}}else{_lo=0;if(f>52&&++_hi>=8&&QLV<2){QLV++;_hi=0}}}
-function cySeg(a){const cx=W/2-off,cy=H*.5,rx=W*.26,ry=H*.30;for(let i=0;i<a.length;i+=6){pj(a[i],a[i+1],a[i+2]);const x=_px,y=_py,d=cam.dist+_pz;pj(a[i+3],a[i+4],a[i+5]);if(d<8||cam.dist+_pz<8)continue;const mx=(x+_px)/2-cx,my=(y+_py)/2-cy;if(mx*mx/(rx*rx)+my*my/(ry*ry)<1)continue;g.moveTo(x,y);g.lineTo(_px,_py)}}
+function cySeg(a){const cx=W/2-off,cy=H*.5,rx=W*.26,ry=H*.30;for(let i=0;i<a.length;i+=6){pj(a[i],a[i+1],a[i+2]);const x=_px,y=_py,d=cam.dist+_pz;pj(a[i+3],a[i+4],a[i+5]);if(d<8||cam.dist+_pz<8)continue;const mx=(x+_px)/2-cx,my=(y+_py)/2-cy;if(mx*mx/(rx*rx)+my*my/(ry*ry)<1)continue;R80c.moveTo(x,y);R80c.lineTo(_px,_py)}}
 function cyber(){
   if(!st.l.cyber)return;
   const q=QLV,t=time;g.save();g.globalCompositeOperation='lighter';
@@ -585,16 +606,41 @@ function cyber(){
     g.strokeStyle=rg('#7dffb0',.55);g.lineWidth=1.1;g.stroke();
     const y=CY0+((t*5)%50),R=58;let o2=0;g.beginPath();for(let i=0;i<=36;i++){pj(TC[0][i*2]*R,y,TC[0][i*2+1]*R);if(cam.dist+_pz<8){o2=0;continue}o2?g.lineTo(_px,_py):g.moveTo(_px,_py);o2=1}g.strokeStyle=rg('#3ae2e0',.34*(1-(y-CY0)/50));g.lineWidth=1.4;g.stroke()}
   g.restore()}
-function bg(){retro80();
+
+/* ---- PERF: static retro-80s backdrop is rasterised ONCE into an offscreen
+   canvas and blitted each frame. The sky gradient, arcade sun, 3 parallax
+   ridges and ground grid are functions of W/H only - redrawing them per frame
+   was ~6k of the 12.3k canvas ops/frame and is what made the mesh a slideshow. */
+var R80b=document.createElement('canvas'),R80c=null;
+function r80buf(){
+  R80b.width=W;R80b.height=H;R80c=R80b.getContext('2d');
+  // retro80() was rewritten to paint into R80c; re-run it on the new buffer
+  retro80();
+}
+
+function bg(){if(!bg.cache||bg.w!==W||bg.h!==H){r80buf();bg.cache=1;bg.w=W;bg.h=H;}
+g.drawImage(R80b,0,0);
 if(!frame.n||frame.n%4===0)aur();g.globalCompositeOperation='lighter';g.imageSmoothingEnabled=true;g.drawImage(ac,0,0,W,H);
-for(const s of stars){const p=P(s.p[0],s.p[1],s.p[2]);if(p.z>150||p.x<0||p.x>W||p.y<0||p.y>H)continue;g.fillStyle=`rgba(150,190,205,${.10+.22*Math.abs(Math.sin(time*s.f*.4+s.ph))})`;g.fillRect(p.x,p.y,s.s*.75,s.s*.75)}
+// PERF: stars baked into the cached backdrop (r80buf). The per-frame twinkle
+// pass below draws only every 4th star at low alpha - full twinkle on 130
+// rects/frame was measurable on low-end GPUs.
+for(let si=0;si<stars.length;si+=4){const s=stars[si];const p=P(s.p[0],s.p[1],s.p[2]);if(p.z>150||p.x<0||p.x>W||p.y<0||p.y>H)continue;g.fillStyle=`rgba(150,190,205,${.14+.20*Math.abs(Math.sin(time*s.f*.4+s.ph))})`;g.fillRect(p.x,p.y,s.s*.75,s.s*.75)}
 for(const d of dust){const y=((d.y+time*d.v)%52)-14;const p=P(d.x+Math.sin(time*.3+d.ph)*2,y,d.z);if(p.z>60)continue;const a=Math.sin(cl((y+14)/52,0,1)*3.14)*.5;g.fillStyle=`rgba(90,230,225,${a})`;g.beginPath();g.arc(p.x,p.y,Math.max(.6,p.k*.09),0,7);g.fill()}
 g.globalCompositeOperation='source-over';
 const fy=-10;g.lineWidth=1;for(let i=-6;i<=6;i++){const w=i*8,ar=.16*(1-Math.abs(i)/8);g.strokeStyle=`rgba(58,226,224,${ar})`;let a=P(w,fy,-48),b=P(w,fy,48);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();a=P(-48,fy,w);b=P(48,fy,w);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
 for(let k=0;k<3;k++){const r=((time*7+k*14)%42);g.beginPath();for(let i=0;i<=44;i++){const t=i/44*6.283,p=P(Math.cos(t)*r,fy,Math.sin(t)*r);i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y)}g.strokeStyle=`rgba(58,226,224,${.13*(1-r/42)})`;g.lineWidth=1;g.stroke()}cyber();tess(0)}
 var inView=true;var rafId=0;
+// PERF: low-power path for phones/tablets. Fewer device pixels, throttled
+// mesh frame rate, and the mesh drops to a still when the user stops interacting.
+var isMobile=/Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent)
+  || (navigator.maxTouchPoints>1 && Math.min(screen.width,screen.height)<820);
+var lowPower=isMobile || (navigator.hardwareConcurrency||8)<=4;
 function frame(ms){setDense();if(document.hidden||!inView){rafId=0;return}
-try{stepFrame(ms);rafId=requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}rafId=requestAnimationFrame(frame)}
+try{
+  // PERF: cap to 60fps (30 on low-power). A 120Hz display otherwise doubles
+  // the cost of every frame for motion nobody can perceive on a wireframe.
+  if(ms-(frame.last||0)>=(lowPower?33:16)){frame.last=ms;stepFrame(ms);}
+  rafId=requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}rafId=requestAnimationFrame(frame)}
 try{stepFrame(ms);requestAnimationFrame(frame)}catch(err){if(!frame.warned){frame.warned=1;console.warn('[mesh] render guard',err)}requestAnimationFrame(frame)}
 function stepFrame(ms){const dt=(st.pause?0:Math.min(.05,(ms-(frame.l||ms))/1000))*(st.speed||1);frame.l=ms;time+=dt;off+=((W>760?(st.sel?55:-70):0)-off)*.08;cam.yaw=yb+(st.rot?Math.sin(time*.11)*.32:0);
 for(const k of['dist','tx','ty','tz'])cam[k]+=(tg[k]-cam[k])*.07;
