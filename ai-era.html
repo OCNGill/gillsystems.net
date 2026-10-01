@@ -218,6 +218,43 @@
             }
         }
     
+/* ============ AGENT EXPLORER (hover/click brief) ============ */
+.agent-card{cursor:pointer;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s}
+.agent-card:hover,.agent-card:focus-visible{transform:translateY(-4px);border-color:var(--accent-primary);box-shadow:0 8px 26px rgba(0,204,255,.18);outline:none}
+.agent-card[aria-expanded="true"]{border-color:var(--accent-secondary);box-shadow:0 0 0 1px var(--accent-secondary),0 8px 26px rgba(0,255,170,.16)}
+.agent-ic{display:block;width:38px;height:38px;margin:0 auto .5rem;display:grid;place-items:center}
+.agent-ic svg{width:34px;height:34px;display:block;transition:transform .2s}
+.agent-card:hover .agent-ic svg,.agent-card:focus-visible .agent-ic svg{transform:scale(1.12) rotate(-4deg)}
+
+.agent-detail{margin-top:1.75rem;border:1px solid var(--border-color,rgba(255,255,255,.1));border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));overflow:hidden}
+.agent-detail-inner{display:flex;gap:1.5rem;padding:1.75rem;align-items:flex-start;flex-wrap:wrap}
+.ad-icon{width:78px;height:78px;flex:none;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(160deg,rgba(0,204,255,.12),rgba(0,255,170,.05));border:1px solid var(--accent-primary)}
+.ad-icon svg{width:58px;height:58px;display:block}
+.ad-body{flex:1;min-width:260px}
+.ad-kicker{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-secondary);display:block;margin-bottom:.35rem}
+.ad-name{margin:0 0 .3rem;font-size:1.5rem;line-height:1.2;color:var(--text-primary)}
+.ad-role{margin:0 0 1.1rem;font-family:var(--font-mono);font-size:.85rem;color:var(--accent-primary)}
+.ad-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+.ad-col h4{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-secondary,rgba(255,255,255,.55));margin:0 0 .5rem;font-weight:600}
+.ad-col p{margin:0;font-size:.94rem;line-height:1.72;color:var(--text-primary,rgba(255,255,255,.86))}
+.ad-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.ad-tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  padding:.32rem .6rem;border-radius:5px;border:1px solid rgba(0,204,255,.3);background:rgba(0,204,255,.07);color:var(--accent-primary)}
+@media (max-width:640px){.agent-detail-inner{padding:1.25rem;gap:1rem}.ad-cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.agent-card,.agent-card .agent-ic svg{transition:none}}
+
+
+/* ---- fleet explorer layout: grid + always-visible brief ---- */
+.fleet-wrap{display:grid;grid-template-columns:1fr;gap:1.5rem;margin-top:var(--spacing-md)}
+@media (min-width:1000px){
+  .fleet-wrap{grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr);align-items:start}
+  .agent-detail{position:sticky;top:1rem;margin-top:0;max-height:calc(100vh - 3rem);overflow-y:auto}
+}
+@media (max-width:999px){.agent-detail{position:static;max-height:none}}
+
 
 /* ============ CREW: collapsed drawer + small square tiles (PERF: nothing
    renders until the user asks for it) ============ */
@@ -274,7 +311,6 @@
   .agent-detail-inner{padding:1rem;gap:.9rem}
 }
 @media (prefers-reduced-motion:reduce){.ctile,.crew-toggle,.ct-chev{transition:none}}
-
 /* ---- YouTube facade: load-bearing minimum. No third-party iframe, no player
    JS, no cookies until the visitor actually asks for the video. ---- */
 .yt-facade{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;
@@ -1056,664 +1092,6 @@
     </section>
 
     <!-- THE FLEET -->
-    
-
-    <!-- YouTube Video Section -->
-    <section class="era-section" style="padding-top: 0;">
-        <div class="container">
-            <div class="video-section" style="text-align: center;">
-                <h2
-                    style="color: var(--accent-primary); font-family: var(--font-mono); margin-bottom: 2rem; font-size: clamp(1.2rem, 3.5vw, 2.2rem); line-height: 1.3;">
-                    Watch The Commander in ACTION - 4 COMPUTERS WORKING TOGETHER - INCLUDING STEAM DECK!</h2>
-                <div class="yt-facade" id="ytFacade" role="button" tabindex="0" aria-label="Load and play the Commander in Action video">
-                    <div class="yt-thumb" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                    <p class="yt-title">Watch The Commander in ACTION</p>
-                    <p class="yt-note">4 computers working together &mdash; including Steam Deck.</p>
-                    <p class="yt-note yt-cta">Tap to load video (kept off the critical path)</p>
-                </div>
-                </div>
-            </div>
-
-            <div class="era-nav" style="margin-top: var(--spacing-lg);">
-                <a href="cloud-wars.html" class="btn btn-secondary">← Previous Era</a>
-                <a href="index.html#connect" class="btn btn-primary">Build Your Own Crew →</a>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- THE FLEET IN ACTION (interactive 3D) -->
-    <section class="era-section">
-        <div class="container">
-            <h2 class="era-title">The Fleet in Action</h2>
-            <p class="era-lede" style="text-align:center; max-width:720px; margin:0 auto var(--spacing-lg);">
-                The sovereign AI fleet: a distributed peer mesh coordinating four AMD nodes and eighteen named agent
-                threads. Local-first compute, cloud-assisted when needed. Drag to orbit, scroll to zoom, click any
-                node, agent, or layer to inspect it.
-            </p>
-            <div style="border:1px solid rgba(0,255,136,0.25); border-radius:12px; overflow:hidden; box-shadow:0 0 40px rgba(0,255,136,0.08);">
-                <iframe src="/animations/Gillsystems_Commander_Hermes_Animation_v8.html"
-                        style="width:100%; height:640px; border:0; display:block;"
-                        loading="lazy" title="Gillsystem's Commander Hermes Mesh — interactive 3D fleet visualization"
-                        allow="fullscreen"></iframe>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="assets/Gill Systems Logo.png" alt="Gillsystems Logo" class="footer-logo">
-                    <p>Systems Should Serve Humans</p>
-                    <p style="margin-top: 0.5rem;"><a href="tel:7743274896"
-                            style="color: var(--accent-primary); text-decoration: none; font-family: var(--font-mono); font-weight: bold;">Call
-                            The Commander: 774-327-4896</a></p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <span id="footer-year">2025</span> Gillsystems.net | Built with zero frameworks, maximum
-                    intent</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="ai-era.js"></script>
-<script>
-(function(){
-  var D=document.getElementById('agentDetail');
-  if(!D) return;
-  var el={ic:D.querySelector('.ad-icon use'),kick:D.getElementById('adKicker'),
-    name:D.getElementById('adName'),role:D.getElementById('adRole'),
-    syn:D.getElementById('adSyn'),rep:D.getElementById('adRep'),tags:D.getElementById('adTags')};
-  var cards=Array.prototype.slice.call(document.querySelectorAll('.agent-card'));
-  var narrow=window.matchMedia('(max-width:999px)');
-  var pinned=null;
-  function show(c){
-    if(!c){
-      el.ic.setAttribute('href','#am-mesh');
-      el.kick.textContent='The Fleet';
-      el.name.textContent='Twenty agents, one commander';
-      el.role.textContent='Hover or select any agent for their full brief';
-      el.syn.textContent='This crew runs the entire Gillsystems stack \u2014 research, architecture, coding, verification, documentation and revenue \u2014 with no cloud inference. Every agent below carries a full brief; hover or tap a card to read it.';
-      el.rep.textContent='Command 1 \u00b7 Super 6 \u00b7 Specialist 9 \u00b7 Fast-Light 4';
-      el.tags.innerHTML='<span class="ad-tag">AMD &amp; Radeon</span><span class="ad-tag">llama.cpp</span><span class="ad-tag">4 Nodes</span><span class="ad-tag">100 GB RAM</span><span class="ad-tag">$0 Per-Token</span>';
-      return;
-    }
-    var d=c.dataset;
-    el.ic.setAttribute('href','#'+d.icon);
-    el.kick.textContent = d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
-    el.name.textContent=d.name;
-    el.role.textContent=d.role;
-    el.syn.textContent=d.synopsis;
-    el.rep.textContent=d.reports;
-  }
-  function setExpanded(c){cards.forEach(function(x){x.setAttribute('aria-expanded',String(x===c))})}
-  cards.forEach(function(c){
-    c.addEventListener('click',function(){
-      if(narrow.matches){ pinned = (pinned===c)?null:c; setExpanded(pinned); return; }
-      if(pinned===c){pinned=null;setExpanded(null);show(null);}
-      else{pinned=c;setExpanded(c);show(c);}
-    });
-    c.addEventListener('mouseenter',function(){ if(!narrow.matches&&!pinned) show(c); });
-    c.addEventListener('focus',function(){ if(!narrow.matches) show(c); });
-    c.addEventListener('keydown',function(e){
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}
-      else if(e.key==='Escape'){pinned=null;setExpanded(null);show(null);}
-    });
-  });
-  D.addEventListener('mouseleave',function(){ if(!narrow.matches&&!pinned) show(null); });
-  show(null);
-})();
-(function(){
-  var f=document.querySelector('iframe[src*="Animation_v8"]');
-  if(!f) return;
-  function post(v){ try{f.contentWindow.postMessage({type:'mesh-visibility',visible:v},'*');}catch(e){} }
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(en){post(en.isIntersecting)})},{threshold:0.02});
-    io.observe(f);
-  } else { post(true); }
-  var yt=document.querySelector('iframe[src*="youtube.com"]');
-  if(yt&&'IntersectionObserver' in window){
-    var io2=new IntersectionObserver(function(es){es.forEach(function(en){
-      if(en.isIntersecting){try{yt.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*')}catch(e){}}
-    })},{threshold:0.35});
-    io2.observe(yt);
-  }
-  document.addEventListener('visibilitychange',function(){ post(!document.hidden); });
-})();
-</script>
-</body>
-
-</html><script>
-(function(){
-  var toggle=document.getElementById('crewToggle');
-  var grid=document.getElementById('crewGrid');
-  var D=document.getElementById('agentDetail');
-  if(!toggle||!grid||!D) return;
-  var el={ic:D.querySelector('.ad-icon use'),kick:document.getElementById('adKicker'),
-    name:document.getElementById('adName'),role:document.getElementById('adRole'),
-    syn:document.getElementById('adSyn'),rep:document.getElementById('adRep'),tags:document.getElementById('adTags')};
-  var tiles=Array.prototype.slice.call(grid.querySelectorAll('.ctile'));
-  var sel=null;
-
-  // CREW DRAWER: collapsed by default. Nothing renders until asked for.
-  toggle.addEventListener('click',function(){
-    var open=toggle.getAttribute('aria-expanded')==='true';
-    toggle.setAttribute('aria-expanded',String(!open));
-    grid.hidden=open;
-    toggle.querySelector('.ct-count').textContent = open?'20 agents \u00b7 tap to expand':'20 agents \u00b7 tap a name';
-  });
-  toggle.addEventListener('keydown',function(e){if(e.key==='Escape'&&!grid.hidden)toggle.click();});
-
-  function show(d){
-    el.ic.setAttribute('href','#'+d.icon);
-    el.kick.textContent = d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
-    el.name.textContent=d.name;
-    el.role.textContent=d.role;
-    el.syn.textContent=d.synopsis;
-    el.rep.textContent=d.reports;
-    D.hidden=false;
-  }
-  function clearSel(){ tiles.forEach(function(t){t.setAttribute('aria-expanded','false')}); sel=null; }
-
-  tiles.forEach(function(t){
-    t.addEventListener('click',function(){
-      if(sel===t){ clearSel(); D.hidden=true; return; }
-      clearSel(); sel=t; t.setAttribute('aria-expanded','true'); show(t.dataset);
-      // bring the brief into view without a scroll hunt
-      if(D.scrollIntoView)D.scrollIntoView({block:'nearest',behavior:'smooth'});
-    });
-    t.addEventListener('keydown',function(e){
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}
-      else if(e.key==='Escape'){clearSel();D.hidden=true;}
-    });
-  });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sel){clearSel();D.hidden=true;}});
-})();
-
-/* ---- PERF: render the mesh only while it is on screen; keep YouTube minimal.
-   Commander 2026-09-30: YouTube never even loaded and the mesh was a slideshow. */
-(function(){
-  var f=document.querySelector('iframe[src*="Animation_v8"]');
-  function post(v){ if(f){try{f.contentWindow.postMessage({type:'mesh-visibility',visible:v},'*');}catch(e){}} }
-  if(f&&'IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(en){post(en.isIntersecting)})},{threshold:0.02});
-    io.observe(f);
-  }
-  // YouTube: only mounted when scrolled near, and never mounted on a save-data
-  // or 2G/3G connection. The facade keeps the page light; the player is swapped in
-  // on demand, which is the standard load-bearing-minimum pattern.
-  var yt=document.getElementById('ytMount');
-  var holder=document.getElementById('ytFacade');
-  if(yt&&holder){
-    var load=function(){
-      if(holder.dataset.mounted)return; holder.dataset.mounted='1';
-      var ifr=document.createElement('iframe');
-      ifr.src='https://www.youtube-nocookie.com/embed/0MQqCORjlis?rel=0&modestbranding=1&playsinline=1';
-      ifr.title='YouTube video player'; ifr.width='100%'; ifr.height='100%';
-      ifr.style.border='0'; ifr.setAttribute('loading','lazy');
-      ifr.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      ifr.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
-      ifr.setAttribute('allowfullscreen','');
-      holder.innerHTML=''; holder.appendChild(ifr);
-    };
-    var conn=navigator.connection||{};
-    if(conn.saveData||/^(slow-)?2g$|3g$/.test(conn.effectiveType||'')){
-      holder.querySelector('.yt-note')&&(holder.querySelector('.yt-note').textContent='Video paused on this connection to keep the page fast. Tap to load.');
-    }
-    holder.addEventListener('click',load);
-    holder.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();load();}});
-    if('IntersectionObserver' in window){
-      var io2=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting)load();})},{rootMargin:'300px'});
-      io2.observe(holder);
-    }
-  }
-  document.addEventListener('visibilitychange',function(){ post(!document.hidden); });
-})();
-</script>E html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="AI Era (2023-Present) - The Sovereign AI Stack: a 4-node local AMD cluster running llama.cpp, and an 20-agent AI crew. Zero cloud dependency, zero per-token bills.">
-    <title>AI Era (2023-Present) | Gillsystems</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="era-pages.css">
-    <style>
-        /* AI-Era page-specific styles - built on the site's existing variables */
-
-        /* Stats Row */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin: var(--spacing-md) 0 0;
-        }
-
-        .stat {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.25rem 1rem;
-            text-align: center;
-            font-family: var(--font-mono);
-        }
-
-        .stat-number {
-            display: block;
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            font-weight: bold;
-            color: var(--accent-primary);
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-            line-height: 1.2;
-        }
-
-        .stat-label {
-            display: block;
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-        }
-
-        /* Stack Node Card Grid */
-        .stack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: var(--spacing-md);
-        }
-
-        .node-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: all var(--transition-normal);
-        }
-
-        .node-card:hover {
-            border-color: var(--accent-primary);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.1);
-        }
-
-        .node-card.primary-node {
-            border-color: var(--accent-primary);
-            background: linear-gradient(135deg, var(--bg-secondary), rgba(0, 255, 136, 0.05));
-        }
-
-        .node-icon {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 0.75rem;
-        }
-
-        .node-name {
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--accent-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .node-gpu {
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: var(--accent-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .node-model {
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .node-role {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .node-tag {
-            display: inline-block;
-            margin-top: 0.75rem;
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--accent-primary);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            font-family: var(--font-mono);
-        }
-
-        /* Doctrine Quote Strip */
-        .doctrine-strip {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-top: var(--spacing-md);
-        }
-
-        .doctrine-quote {
-            border-left: 3px solid var(--accent-primary);
-            padding: 0.75rem 1rem;
-            font-family: var(--font-mono);
-            color: var(--accent-primary);
-            text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
-            background: rgba(0, 255, 136, 0.04);
-            border-radius: 0 8px 8px 0;
-        }
-
-        /* Fleet Roster Grid */
-        .fleet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: var(--spacing-md);
-        }
-
-        .agent-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            transition: border-color var(--transition-normal);
-        }
-
-        .agent-card:hover {
-            border-color: var(--accent-secondary);
-        }
-
-        .agent-name {
-            font-family: var(--font-mono);
-            font-weight: bold;
-            color: var(--accent-secondary);
-            margin-bottom: 0.25rem;
-        }
-
-        .agent-role {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .agent-card.fast-light {
-            border-style: dashed;
-        }
-
-        /* Fleet capability chips */
-        .fleet-chips {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: var(--spacing-md);
-        }
-
-        .fleet-chip {
-            background: rgba(0, 204, 255, 0.1);
-            color: var(--accent-secondary);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(0, 204, 255, 0.3);
-            font-family: var(--font-mono);
-        }
-
-        /* Section headings on this page */
-        .stack-section-title {
-            font-family: var(--font-mono);
-            color: var(--accent-primary);
-            text-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            margin-bottom: 0.5rem;
-        }
-
-        .stack-section-subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 0;
-        }
-
-        /* Mobile responsiveness consistent with the rest of the site */
-        @media (max-width: 768px) {
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stack-grid,
-            .doctrine-strip,
-            .fleet-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    
-
-/* ============ CREW: collapsed drawer + small square tiles (PERF: nothing
-   renders until the user asks for it) ============ */
-.crew-drawer{margin-top:var(--spacing-md)}
-.crew-toggle{display:flex;align-items:center;gap:.75rem;width:100%;padding:.95rem 1.1rem;
-  background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;
-  cursor:pointer;color:var(--text-primary);text-align:left;font-family:var(--font-mono);
-  transition:border-color .2s,background .2s}
-.crew-toggle:hover,.crew-toggle:focus-visible{border-color:var(--accent-primary);outline:none}
-.crew-toggle[aria-expanded="true"]{border-color:var(--accent-primary);background:var(--bg-primary)}
-.ct-ic{width:26px;height:26px;flex:none}
-.ct-title{font-weight:bold;letter-spacing:.14em;font-size:.86rem;color:var(--accent-secondary)}
-.ct-count{font-size:.72rem;color:var(--text-secondary);margin-left:auto;letter-spacing:.05em}
-.ct-chev{width:18px;height:18px;flex:none;transition:transform .25s;opacity:.7}
-.crew-toggle[aria-expanded="true"] .ct-chev{transform:rotate(180deg)}
-.crew-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
-  gap:.5rem;padding:.9rem;margin-top:.5rem;background:rgba(0,204,255,.03);
-  border:1px solid var(--border-color);border-radius:10px}
-.crew-grid[hidden]{display:none}
-.ctile{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.6rem .3rem;
-  background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;
-  cursor:pointer;color:var(--text-secondary);transition:transform .16s,border-color .16s,color .16s}
-.ctile svg{width:30px;height:30px;display:block}
-.ctile span{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.04em;text-align:center;
-  line-height:1.25;word-break:break-word}
-.ctile:hover,.ctile:focus-visible{transform:translateY(-3px);border-color:var(--accent-primary);
-  color:var(--text-primary);outline:none}
-.ctile[aria-expanded="true"]{border-color:var(--accent-secondary);background:rgba(0,255,170,.07);
-  color:var(--text-primary);box-shadow:0 0 0 1px var(--accent-secondary)}
-.agent-detail{margin-top:.9rem;border:1px solid var(--border-color);border-radius:12px;
-  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));overflow:hidden}
-.agent-detail[hidden]{display:none}
-.agent-detail-inner{display:flex;gap:1.25rem;padding:1.35rem;align-items:flex-start;flex-wrap:wrap}
-.ad-icon{width:64px;height:64px;flex:none;border-radius:12px;display:grid;place-items:center;
-  background:linear-gradient(160deg,rgba(0,204,255,.12),rgba(0,255,170,.05));border:1px solid var(--accent-primary)}
-.ad-icon svg{width:48px;height:48px;display:block}
-.ad-body{flex:1;min-width:240px}
-.ad-kicker{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--accent-secondary);display:block;margin-bottom:.3rem}
-.ad-name{margin:0 0 .25rem;font-size:1.32rem;line-height:1.2}
-.ad-role{margin:0 0 .9rem;font-family:var(--font-mono);font-size:.8rem;color:var(--accent-primary)}
-.ad-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.15rem}
-.ad-col h4{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--text-secondary);margin:0 0 .45rem}
-.ad-col p{margin:0;font-size:.9rem;line-height:1.7}
-.ad-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
-.ad-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
-  padding:.28rem .5rem;border-radius:4px;border:1px solid rgba(0,204,255,.3);
-  background:rgba(0,204,255,.07);color:var(--accent-primary)}
-@media (max-width:560px){
-  .crew-grid{grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:.4rem;padding:.6rem}
-  .ctile svg{width:26px;height:26px}
-  .ad-cols{grid-template-columns:1fr}
-  .agent-detail-inner{padding:1rem;gap:.9rem}
-}
-@media (prefers-reduced-motion:reduce){.ctile,.crew-toggle,.ct-chev{transition:none}}
-</style>
-
-</head>
-
-<body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-bar-content">
-                <a href="tel:7743274896" class="top-bar-link">Call: 774-327-4896</a>
-                <span class="top-bar-message"><span class="glow-way">WAY</span> more likely to answer a text from a
-                    human.</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="nav-container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="assets/Gill Systems Logo.png" alt="Gillsystems Logo">
-                    <span class="logo-text">Gillsystems</span>
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="solutions.html">SOLUTIONS</a></li>
-                <li><a href="index.html#philosophy">PHILOSOPHY</a></li>
-                <li><a href="ai-era.html" class="active">AI-ROBOTS</a></li>
-                <li><a href="open-source.html">OPEN SOURCE</a></li>
-                <li><a href="index.html#connect">CONNECT</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Era Hero -->
-    <section class="era-hero">
-        <div class="container">
-            <h1 class="era-title">AI Era</h1>
-            <p class="era-subtitle">2023-Present</p>
-            <p style="max-width: 800px; margin-top: 1.5rem; color: var(--text-primary); font-size: 1.05rem; line-height: 1.8;">
-                Commander Stephen Gill — 30+ years hands-on, from DOS to Cloud — built every piece of this himself,
-                with his AI crew doing the heavy lifting. No vendor stack. No subscription. No permission slip.
-                This is what "Systems Should Serve Humans" looks like when it's actually built.
-            </p>
-
-            <!-- Stats Row -->
-            <div class="stats-row">
-                <div class="stat">
-                    <span class="stat-number">4</span>
-                    <span class="stat-label">Nodes</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">18</span>
-                    <span class="stat-label">AI Agents</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">192K</span>
-                    <span class="stat-label">Context</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">0</span>
-                    <span class="stat-label">Cloud Bills</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- THE SOVEREIGN AI STACK -->
-    <section class="era-section">
-        <div class="container">
-            <h2 class="stack-section-title"><svg class="gs-ic" style="width:1.1em;height:1.1em;vertical-align:middle" aria-hidden="true"><use href="#am-radeon"/></svg> The Sovereign AI Stack</h2>
-            <p class="stack-section-subtitle">A 4-node heterogeneous AMD cluster. Every node runs llama.cpp locally on
-                AMD ROCm/Vulkan. Your technology should make you money, not cost you money — so this one runs on
-                hardware already paid for, with zero cloud dependency and zero per-token bills.</p>
-
-            <div class="stack-grid">
-                <div class="node-card primary-node">
-                    <span class="node-icon"><svg class="gs-ic" style="width:2.2em;height:2.2em;vertical-align:middle" aria-hidden="true"><use href="#am-windows"/></svg></span>
-                    <h3 class="node-name">Gillsystems-Laptop</h3>
-                    <p class="node-gpu">AMD Ryzen UMA — Vega iGPU</p>
-                    <p class="node-model">Qwen3.5-4B · llama.cpp</p>
-                    <p class="node-role">Hermes gateway &amp; operations hub — the always-on command node</p>
-                    <span class="node-tag">Operations</span>
-                </div>
-
-                <div class="node-card primary-node">
-                    <span class="node-icon"><svg class="gs-ic" style="width:2.2em;height:2.2em;vertical-align:middle" aria-hidden="true"><use href="#am-radeon"/></svg></span>
-                    <h3 class="node-name">Gillsystems-Main</h3>
-                    <p class="node-gpu">AMD Radeon 7900 XTX — 24GB VRAM</p>
-                    <p class="node-model">Qwen3.8-27B + vision · MTP speculative decoding</p>
-                    <p class="node-role">Heavy inference and vision workloads — 192K context, stress-verified</p>
-                    <span class="node-tag">192K Context</span>
-                </div>
-
-                <div class="node-card">
-                    <span class="node-icon"><svg class="gs-ic" style="width:2.2em;height:2.2em;vertical-align:middle" aria-hidden="true"><use href="#am-ubuntu"/></svg></span>
-                    <h3 class="node-name">Gillsystems-HTPC</h3>
-                    <p class="node-gpu">AMD Radeon RX 7600</p>
-                    <p class="node-model">Qwen3.5-9B · llama.cpp</p>
-                    <p class="node-role">Living-room node — media center that also thinks</p>
-                    <span class="node-tag">HTPC</span>
-                </div>
-
-                <div class="node-card">
-                    <span class="node-icon"><svg class="gs-ic" style="width:2.2em;height:2.2em;vertical-align:middle" aria-hidden="true"><use href="#am-steamos"/></svg></span>
-                    <h3 class="node-name">Gillsystems-Steam-Deck</h3>
-                    <p class="node-gpu">16GB Unified Memory APU</p>
-                    <p class="node-model">Qwen3.5-9B · llama.cpp</p>
-                    <p class="node-role">SteamOS handheld — a game console that joined the cluster</p>
-                    <span class="node-tag">SteamOS</span>
-                </div>
-            </div>
-
-            <div class="doctrine-strip">
-                <p class="doctrine-quote">"Systems Should Serve Humans"</p>
-                <p class="doctrine-quote">"Your technology should make you money, not cost you money"</p>
-                <p class="doctrine-quote">Zero vendor lock-in. Zero cloud dependency.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- FLAGSHIP OPEN SOURCE: THE AI STACK INSTALLER -->
-    <section class="era-section" style="padding-top: 0;">
-        <div class="container">
-            <div class="lab-card premier-card"
-                style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1)); border: 2px solid var(--accent-primary); padding: 1.5rem; border-radius: 8px; position: relative; overflow: hidden;">
-                <div class="premier-badge"
-                    style="position: absolute; top: 10px; right: 10px; background: var(--accent-primary); color: var(--bg-primary); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px;">
-                    FLAGSHIP OPEN SOURCE</div>
-                <div class="card-icon gs-big" style="margin-bottom: 1rem;"><svg class="gs-ic" style="width:3.2em;height:3.2em;vertical-align:middle" aria-hidden="true"><use href="#am-linux"/></svg></div>
-                <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 1.75rem;"><a
-                        href="https://github.com/OCNGill/Gillsystems-AMD-Radeon-llama-cpp-Update-AI-Stack" target="_blank"
-                        rel="noopener"
-                        style="color: var(--accent-primary); text-decoration: none;">Gillsystems-AMD-Radeon-llama-cpp-Update-AI-Stack</a>
-                </h3>
-                <p style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary);">
-                    The installer/updater that builds this exact stack on your own AMD hardware. One-click installers,
-                    self-healing CI/CD, llama.cpp on ROCm/Vulkan — the same setup running on all four nodes above.
-                    It's the flagship of the open-source lineup, and it's the difference between renting intelligence
-                    and owning it.
-                </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                    <span
-                        style="background: rgba(0, 255, 136, 0.1); color: var(--accent-primary); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid rgba(0, 255, 136, 0.3);">One-Click
-                        Installers</span>
-                    <span
-                        style="background: rgba(0, 204, 255, 0.1); color: var(--accent-secondary); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid rgba(0, 204, 255, 0.3);">Self-Healing
-                        CI/CD</span>
-                    <span
-                        style="background: rgba(255, 170, 0, 0.1); color: var(--accent-warning); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid rgba(255, 170, 0, 0.3);">AMD
-                        ROCm/Vulkan</span>
-                </div>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="https://github.com/OCNGill/Gillsystems-AMD-Radeon-llama-cpp-Update-AI-Stack" target="_blank"
-                        rel="noopener" class="btn btn-primary">Get the Stack →</a>
-                    <a href="index.html#connect" class="btn btn-secondary">Want It Set Up For You? Let's Talk</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- THE FLEET -->
     <section class="era-section" style="padding-top: 0;">
         <div class="container">
             <h2 class="stack-section-title"><svg class="gs-ic" style="width:1.1em;height:1.1em;vertical-align:middle" aria-hidden="true"><use href="#am-mesh"/></svg> The Fleet</h2>
@@ -1788,7 +1166,7 @@
                 <h2
                     style="color: var(--accent-primary); font-family: var(--font-mono); margin-bottom: 2rem; font-size: clamp(1.2rem, 3.5vw, 2.2rem); line-height: 1.3;">
                     Watch The Commander in ACTION - 4 COMPUTERS WORKING TOGETHER - INCLUDING STEAM DECK!</h2>
-                
+                <div class="yt-facade" id="ytFacade" role="button" tabindex="0" aria-label="Load and play the Commander in Action video"><div class="yt-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><p class="yt-title">Watch The Commander in ACTION</p><p class="yt-note">4 computers working together &mdash; including Steam Deck.</p><p class="yt-note yt-cta">Tap to load video</p></div>
                 </div>
             </div>
 
@@ -1796,7 +1174,7 @@
                 <a href="cloud-wars.html" class="btn btn-secondary">← Previous Era</a>
                 <a href="index.html#connect" class="btn btn-primary">Build Your Own Crew →</a>
             </div>
-        </div>
+        
     </section>
 
 
@@ -1840,68 +1218,91 @@
     <script src="ai-era.js"></script>
 <script>
 (function(){
+  var toggle=document.getElementById('crewToggle');
+  var grid=document.getElementById('crewGrid');
   var D=document.getElementById('agentDetail');
-  if(!D) return;
-  var el={ic:D.querySelector('.ad-icon use'),kick:D.getElementById('adKicker'),
-    name:D.getElementById('adName'),role:D.getElementById('adRole'),
-    syn:D.getElementById('adSyn'),rep:D.getElementById('adRep'),tags:D.getElementById('adTags')};
-  var cards=Array.prototype.slice.call(document.querySelectorAll('.agent-card'));
-  var narrow=window.matchMedia('(max-width:999px)');
-  var pinned=null;
-  function show(c){
-    if(!c){
-      el.ic.setAttribute('href','#am-mesh');
-      el.kick.textContent='The Fleet';
-      el.name.textContent='Twenty agents, one commander';
-      el.role.textContent='Hover or select any agent for their full brief';
-      el.syn.textContent='This crew runs the entire Gillsystems stack \u2014 research, architecture, coding, verification, documentation and revenue \u2014 with no cloud inference. Every agent below carries a full brief; hover or tap a card to read it.';
-      el.rep.textContent='Command 1 \u00b7 Super 6 \u00b7 Specialist 9 \u00b7 Fast-Light 4';
-      el.tags.innerHTML='<span class="ad-tag">AMD &amp; Radeon</span><span class="ad-tag">llama.cpp</span><span class="ad-tag">4 Nodes</span><span class="ad-tag">100 GB RAM</span><span class="ad-tag">$0 Per-Token</span>';
-      return;
-    }
-    var d=c.dataset;
+  if(!toggle||!grid||!D) return;
+  var el={ic:D.querySelector('.ad-icon use'),kick:document.getElementById('adKicker'),
+    name:document.getElementById('adName'),role:document.getElementById('adRole'),
+    syn:document.getElementById('adSyn'),rep:document.getElementById('adRep'),tags:document.getElementById('adTags')};
+  var tiles=[].slice.call(grid.querySelectorAll('.ctile'));
+  var sel=null;
+
+  // CREW DRAWER: collapsed by default, so nothing renders until it is asked for.
+  toggle.addEventListener('click',function(){
+    var open=toggle.getAttribute('aria-expanded')==='true';
+    toggle.setAttribute('aria-expanded',String(!open));
+    grid.hidden=open;
+    toggle.querySelector('.ct-count').textContent = open?'20 agents \u00b7 tap to expand':'20 agents \u00b7 tap a name';
+  });
+
+  function show(d){
     el.ic.setAttribute('href','#'+d.icon);
     el.kick.textContent = d.klass==='fast'?'Fast-Light Agent':(d.klass==='command'?'Command':(d.klass==='super'?'Super Agent':'Specialist'));
     el.name.textContent=d.name;
     el.role.textContent=d.role;
     el.syn.textContent=d.synopsis;
     el.rep.textContent=d.reports;
+    D.hidden=false;
   }
-  function setExpanded(c){cards.forEach(function(x){x.setAttribute('aria-expanded',String(x===c))})}
-  cards.forEach(function(c){
-    c.addEventListener('click',function(){
-      if(narrow.matches){ pinned = (pinned===c)?null:c; setExpanded(pinned); return; }
-      if(pinned===c){pinned=null;setExpanded(null);show(null);}
-      else{pinned=c;setExpanded(c);show(c);}
+  function clearSel(){ tiles.forEach(function(t){t.setAttribute('aria-expanded','false')}); sel=null; }
+
+  tiles.forEach(function(t){
+    t.addEventListener('click',function(){
+      if(sel===t){ clearSel(); D.hidden=true; return; }
+      clearSel(); sel=t; t.setAttribute('aria-expanded','true'); show(t.dataset);
+      if(grid.hidden===false && D.scrollIntoView) D.scrollIntoView({block:'nearest',behavior:'smooth'});
     });
-    c.addEventListener('mouseenter',function(){ if(!narrow.matches&&!pinned) show(c); });
-    c.addEventListener('focus',function(){ if(!narrow.matches) show(c); });
-    c.addEventListener('keydown',function(e){
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}
-      else if(e.key==='Escape'){pinned=null;setExpanded(null);show(null);}
+    t.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}
+      else if(e.key==='Escape'){clearSel();D.hidden=true;}
     });
   });
-  D.addEventListener('mouseleave',function(){ if(!narrow.matches&&!pinned) show(null); });
-  show(null);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sel){clearSel();D.hidden=true;}});
 })();
+
+/* PERF: the mesh only runs while it is on screen. Commander 2026-09-30: the mesh
+   was rendering below the fold at full rate and starving the YouTube player. */
 (function(){
   var f=document.querySelector('iframe[src*="Animation_v8"]');
-  if(!f) return;
-  function post(v){ try{f.contentWindow.postMessage({type:'mesh-visibility',visible:v},'*');}catch(e){} }
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(en){post(en.isIntersecting)})},{threshold:0.02});
-    io.observe(f);
-  } else { post(true); }
-  var yt=document.querySelector('iframe[src*="youtube.com"]');
-  if(yt&&'IntersectionObserver' in window){
-    var io2=new IntersectionObserver(function(es){es.forEach(function(en){
-      if(en.isIntersecting){try{yt.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*')}catch(e){}}
-    })},{threshold:0.35});
-    io2.observe(yt);
+  function post(v){ if(f){try{f.contentWindow.postMessage({type:'mesh-visibility',visible:v},'*');}catch(e){}} }
+  if(f&&'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){es.forEach(function(en){post(en.isIntersecting)})},{threshold:0.02}).observe(f);
+  } else if(f){
+    post(f.getBoundingClientRect().top < window.innerHeight);
   }
   document.addEventListener('visibilitychange',function(){ post(!document.hidden); });
 })();
+
+/* PERF: YouTube on a light facade. No third-party iframe, no player JS, no
+   cookies until the visitor actually asks. On save-data or 2G/3G it never
+   mounts at all - YouTube was pulling more weight than the rest of the page. */
+(function(){
+  var holder=document.getElementById('ytFacade');
+  if(!holder) return;
+  var load=function(){
+    if(holder.dataset.mounted) return; holder.dataset.mounted='1';
+    var ifr=document.createElement('iframe');
+    ifr.src='https://www.youtube-nocookie.com/embed/0MQqCORjlis?rel=0&modestbranding=1&playsinline=1';
+    ifr.title='YouTube video player'; ifr.width='100%'; ifr.height='100%';
+    ifr.style.border='0'; ifr.setAttribute('loading','lazy');
+    ifr.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    ifr.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    ifr.setAttribute('allowfullscreen','');
+    holder.innerHTML=''; holder.appendChild(ifr);
+  };
+  var c=navigator.connection||{};
+  if(c.saveData || /^(slow-)?2g$|3g$/.test(c.effectiveType||'')){
+    var n=holder.querySelector('.yt-cta'); if(n) n.textContent='Video paused on this connection to keep the page fast. Tap to load.';
+  }
+  holder.addEventListener('click',load);
+  holder.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();load();}});
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting)load();})},{rootMargin:'300px'}).observe(holder);
+  }
+})();
 </script>
+
 </body>
 
 </html>
