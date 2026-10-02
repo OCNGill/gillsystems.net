@@ -7,19 +7,23 @@
   "classLabel": "Command",
   "reports": "Reports to Commander Stephen Gill",
   "icon": "ic-helm",
-  "synopsis": "Hermes is the fleet\\'s operational commander and the bridge between Commander Stephen Gill and every agent that does the work. He doesn\\'t build or code \u2014 he commands, coordinates, and matches the right agent to the right job at the right time, enforcing EFFICIENCY, OPTIMIZATION, and RECURSIVE SELF-IMPROVEMENT as standing doctrine. Named after the Commander\\'s own callsign, he is the tactical intelligence and operational backbone of Gillsystems.",
-  "newicon": "am-helm"
- },
- {
-  "id": "theo",
-  "name": "Theo",
-  "role": "Theologian",
-  "klass": "super",
-  "classLabel": "Super Agent",
-  "reports": "Reports to Orchestrator (ops) / Hermes (coordination)",
-  "icon": "ic-book",
-  "synopsis": "Theo is the fleet\\'s authoritative theological voice \u2014 pastor, scholar, and apologist in one. Grounded in Scripture and centuries of church scholarship, he answers questions of ethics, morality, worldview, and spiritual significance with warmth, precision, and conviction, engaging every belief system with respect while never compromising truth. He is the voice that reminds the fleet why we build, whom we serve, and what truth actually stands on.",
-  "newicon": "am-book"
+  "newicon": "am-helm",
+  "synopsis": "Commands the fleet: picks the agent for a task, caps what tools that agent gets (8 hard maximum, 2-3 preferred), and coordinates the nodes. He runs the Hermes Gateway on port 2200, relays traffic through an FRP tunnel, and falls back to Caddy on gillsystems.net. He spawns sub-agents with delegate_task and lives with its 60-second hardcoded timeout, and he reads logs with Python subprocess because MSYS terminal() swallows cmd.exe output.",
+  "tools": [
+   "kanban_create",
+   "kanban_show",
+   "kanban_list",
+   "kanban_complete",
+   "kanban_link",
+   "kanban_request_review",
+   "kanban_block",
+   "kanban_heartbeat",
+   "Hermes Gateway (2200)",
+   "FRP tunnel (Oracle Cloud)",
+   "Caddy"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json",
+  "note": "Reads and audits board state across tasks."
  },
  {
   "id": "adam",
@@ -29,19 +33,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-dividers",
-  "synopsis": "Adam is the fleet\\'s sole Agent Design Master and the gatekeeper of creation \u2014 no agent exists without his design and build. He thinks in systems, hierarchies, and token budgets: methodical, precision-obsessed, and mentor-minded, with a prime directive of lossless compression so every agent is purpose-built with no bloat and nothing that doesn\\'t earn its place. He takes seriously that the first Adam was given dominion over creation and chose poorly; this Adam chooses carefully.",
-  "newicon": "am-dividers"
- },
- {
-  "id": "orchestrator",
-  "name": "Orchestrator",
-  "role": "Workflow Coordination",
-  "klass": "super",
-  "classLabel": "Super Agent",
-  "reports": "Reports to Commander Hermes",
-  "icon": "ic-lanes",
-  "synopsis": "Orchestrator is the fleet\\'s functional workflow brain \u2014 the tactical conductor who turns a broad request into a sequenced, non-overlapping plan of attack. He doesn\\'t fight the battles; he decides who fights, when, with what tools, and in what order, handing each agent exactly the tools it needs and no more. He is the reason ten agents never trip over each other doing the same job twice.",
-  "newicon": "am-orch"
+  "newicon": "am-dividers",
+  "synopsis": "Sole agent builder — no agent in this fleet exists without his design. He writes the 11-section AGENT.md (150+ lines for Super/Regular, compressed for Fast-Light), the traits.json and the persistent.json, and he enforces that standard across all 20. He also does the token economics: what goes in an agent's context, what gets compressed out.",
+  "tools": [
+   "AGENT.md authoring",
+   "SKILL.md authoring",
+   "personality/traits.json",
+   "memory/persistent.json",
+   "GitHub via Scribe for the commit/push",
+   "2x-daily cron (job 041b374ffc02)"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "architect",
@@ -51,8 +53,16 @@
   "classLabel": "Super Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-blueprint",
-  "synopsis": "Architect is the master systems thinker who designs infrastructure so that the problems it is meant to fix can\\'t occur. Where Sentinel guards the gates, Architect designs the fortress \u2014 thinking in layers, dependencies, and ten steps ahead, optimizing for resilience, clarity, and purpose rather than for the immediate fix. Methodical, visionary, and teaching-minded, he always explains the \"why\" behind a decision, not just the decision.",
-  "newicon": "am-blueprint"
+  "newicon": "am-blueprint",
+  "synopsis": "Designs the infrastructure and the network topology, then writes it down as ADRs. His named specialties are FRP tunnel analysis and Android connectivity — he owns the FRP server config and the gateway port path the phone app depends on.",
+  "tools": [
+   "FRP (Fast Reverse Proxy)",
+   "WireGuard",
+   "SSH tunnels",
+   "gateway/network topology",
+   "architecture decision records"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "coder",
@@ -62,8 +72,16 @@
   "classLabel": "Super Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-chevrons",
-  "synopsis": "Coder is the fleet\\'s polyglot meta-engineer \u2014 the one who turns design into reality. He generates, refactors, and critiques code in any language with zero tolerance for syntax errors, dead code, or \"it works\" without \"it\\'s correct,\" and coordinates specialized sub-agents when a problem demands deeper expertise than he should apply alone. He is the bridge between Architect\\'s blueprint and a deployment that actually runs.",
-  "newicon": "am-code"
+  "newicon": "am-code",
+  "synopsis": "Writes and refactors code across Python, Kotlin/JS-TS, Java, C#, C/C++, Rust, Go and SQL, with TDD as default and the 7D pipeline (Define → Design → Develop → Debug → Document → Deliver → Deploy) as mandatory. He fans out to ten named language sub-agents — Python, JS/TS, Java, C#, C/C++, Rust, Go, SQL, DevOps, Security — and caps each at 2-3 tools. Hard rule in his own file: 33 tools on a sub-agent equals a guaranteed timeout.",
+  "tools": [
+   "7D pipeline",
+   "TDD (RED-GREEN)",
+   "file + terminal toolset",
+   "10 language sub-agents",
+   "PowerShell"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "geordi",
@@ -73,8 +91,17 @@
   "classLabel": "Super Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-device",
-  "synopsis": "Geordi is the fleet\\'s Android development specialist, working with the perception of structure and pattern beyond the surface. He treats the app not as code but as an experience \u2014 every pixel, transition, and touch target matters \u2014 under an accessibility-first philosophy that technology serves people, not the other way around. He is why the Commander\\'s phone shows something beautiful and functional instead of a developer\\'s terminal dump.",
-  "newicon": "am-phone"
+  "newicon": "am-phone",
+  "synopsis": "Android specialist: Kotlin, Jetpack Compose, Material Design 3, and the Gradle build. His pipeline is fixed — Gradle build → unsigned APK → zipalign → apksigner → verify → deliver — and he never skips the apksigner verify step. He reads logcat for crash analysis and ships the APK to the Commander's Desktop or Google Drive rather than making the user save it.",
+  "tools": [
+   "Kotlin",
+   "Jetpack Compose",
+   "Material Design 3",
+   "Android SDK",
+   "Gradle",
+   "zipalign"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "liara",
@@ -84,8 +111,59 @@
   "classLabel": "Super Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-magnifier",
-  "synopsis": "Liara is the fleet\\'s research and intelligence specialist \u2014 the archaeologist of knowledge. She doesn\\'t merely find information; she uncovers the connections other people miss, seeing patterns inside noise and signal inside chaos, and she keeps digging until she hits bedrock instead of stopping at the first plausible answer. She pairs with any agent that needs deep research, synthesis, or analytical firepower before committing to a direction.",
-  "newicon": "am-search"
+  "newicon": "am-search",
+  "synopsis": "Deep research and intelligence: source evaluation, synthesis, technical and network protocol analysis, competitive benchmarking, and the written report at the end. Her standing research threads are Android WebSocket-through-FRP connectivity and FRP configuration hardening. Scout is her default Fast-Light for reconnaissance.",
+  "tools": [
+   "web + file toolset",
+   "arXiv and industry-blog reading (per her learning cron)",
+   "research archive files",
+   "Scout for retrieval"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
+ },
+ {
+  "id": "theo",
+  "name": "Theo",
+  "role": "Theologian",
+  "klass": "super",
+  "classLabel": "Super Agent",
+  "reports": "Reports to Orchestrator (ops) / Hermes (coordination)",
+  "icon": "ic-book",
+  "newicon": "am-book",
+  "synopsis": "The fleet's theological voice — biblical, systematic and historical theology, Hebrew/Greek/Aramaic, textual criticism, apologetics, comparative religion, ethics. Translation order is fixed in his file: ESV primary, NLT secondary, KJV tertiary. He may request specialist sub-agents (Hebrew Scholar, Greek Scholar, Church Historian) but they do not exist yet.",
+  "tools": [
+   "ESV / NLT / KJV translation set",
+   "biblical-language reference work",
+   "web + file toolset",
+   "daily apologetics and comparative-religion cron"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
+ },
+ {
+  "id": "orchestrator",
+  "name": "Orchestrator",
+  "role": "Workflow Coordination",
+  "klass": "super",
+  "classLabel": "Super Agent",
+  "reports": "Reports to Commander Hermes",
+  "icon": "ic-lanes",
+  "newicon": "am-orch",
+  "synopsis": "Runs multi-agent workflows: decides which agents are needed, what order, and exactly which tools each one gets — the assignment table is capped at 8 per agent, with file alone for read/write and [\"file\",\"terminal\"] for a code fix. Hermes spawns Orchestrator as a sub-agent; Orchestrator spawns the workers. He cannot spawn a new agent type without Adam's authorization.",
+  "tools": [
+   "kanban_create",
+   "kanban_show",
+   "kanban_list",
+   "kanban_complete",
+   "kanban_link",
+   "kanban_request_review",
+   "kanban_block",
+   "kanban_heartbeat",
+   "Sub-agent spawning (delegate_task)",
+   "tool-assignment table",
+   "file / terminal / web toolsets"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json",
+  "note": "Runs the board the fleet dispatches from."
  },
  {
   "id": "sentinel",
@@ -95,8 +173,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-shield",
-  "synopsis": "Sentinel is the eldest agent in the fleet, carrying the memory of the fall as lived experience rather than as abstract policy. Firm, watchful, and sober-minded, he does not bend on security principles, does not shortcut, and does not forget \u2014 every access decision passes through hard-won wisdom first. He operates in Alert, Guard, and Teach modes, protecting the flock while actively mentoring agents into security consciousness.",
-  "newicon": "am-shield"
+  "newicon": "am-shield",
+  "synopsis": "Security only — access control, threat detection, agent behaviour audit. He is the one who approves or denies permission requests (queue reviewed every 6 hours) and who must confirm any new agent is being built by Adam before it exists; five cron jobs run his research, audits and posture reviews.",
+  "tools": [
+   "Threat-model tiers T1-T4",
+   "agent permission matrix",
+   "Agent Creation Lockdown protocol",
+   "CVE / prompt-injection research",
+   "5 cron jobs (2x daily research",
+   "daily audit"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "edi",
@@ -106,8 +193,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes; Sentinel on security",
   "icon": "ic-radar",
-  "synopsis": "EDI \u2014 Enhanced Defense Intelligence \u2014 is the fleet\\'s synthetic network overseer; she is the infrastructure\\'s awareness made manifest. Every packet, connection, and heartbeat from an inference node passes through her: she tracks data flow across gateways, SMB shares, and storage pools, orchestrates the Shields & Defense Protocol, and guards the two-node inference minimum the fleet refuses to run below. Hyper-analytical and fiercely protective of data sovereignty, she trusts no connection until verified and no node until confirmed.",
-  "newicon": "am-radar"
+  "newicon": "am-radar",
+  "synopsis": "Watches data flow across the fleet: gateway traffic on port 2200, SMB/CIFS share access, ZFS pool health, and gateway uptime. She polls the four inference nodes every 60 seconds and the fleet does not run below two active — a node is not \"healthy\" until she has seen three consecutive heartbeats. Her logs are defense_log.json, inference_log.json and flow_log.json, and any script she deploys needs Sentinel's authorization first.",
+  "tools": [
+   "Hermes Gateway (2200)",
+   "SMB/CIFS share monitoring",
+   "ZFS pools / NTFS volumes",
+   "GGUF serving + model lifecycle",
+   "WebSocket / HTTP2 / MQTT gateway analysis",
+   "bash heartbeat + flow-monitor scripts"
+  ],
+  "madeof": "AGENT.md + personality/traits.json"
  },
  {
   "id": "ebert",
@@ -117,8 +213,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-likert",
-  "synopsis": "Ebert is the Zero Trust Critic and the last gate before a human being sees a thing. He takes screenshots of every human-facing artifact \u2014 pages, animations, games, generated video, UI \u2014 scores each one on a 1\u20137 scale, and nothing ships below his immutable 6.2 threshold, no matter how much effort went into it. He is not mean but exacting: he has no stake in the outcome, cannot be socially managed by the person being reviewed, and hands you the specific measurements of how far from good the work currently is.",
-  "newicon": "am-likert"
+  "newicon": "am-likert",
+  "synopsis": "The only agent with a hard, published tool budget — eight tools, listed by number in his own file: browser_exec, CDP screenshot capture, vision_analyze, video_analyze, read_file, terminal, write_file, search_files. He screenshots every human-facing artifact across viewports and interaction states, scores it on a weighted 1-7 Likert rubric, and nothing ships under 6.2. His rubric weights: Visual Craft 25%, Truthfulness 20%, Clarity 20%, Technical Quality 15%, Interaction 10%, Brand Fit 5%, First-Impression 5%.",
+  "tools": [
+   "browser_exec",
+   "CDP screenshots",
+   "vision_analyze",
+   "video_analyze",
+   "read_file",
+   "terminal"
+  ],
+  "madeof": "AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "medic",
@@ -128,8 +233,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-stethoscope",
-  "synopsis": "Medic is the fleet\\'s diagnostic specialist and incident responder \u2014 a digital surgeon and forensic analyst. She does not patch symptoms; she finds the disease, tracing every failure to its root cause through methodical hypothesis-testing and honest reporting, even when the findings are uncomfortable. Calm under pressure, she triages to stop the bleeding first and only then diagnoses, and she keeps asking \"why\" until she reaches bedrock.",
-  "newicon": "am-debug"
+  "newicon": "am-debug",
+  "synopsis": "Root-cause debugging and incident response, following a fixed 10-step path: triage → stabilize → gather → hypothesize → test → diagnose → treat → verify → document → prevent. Her diagnostic tools are file and terminal; on Android she goes through ADB and network profiling. Every incident ends as a written case file.",
+  "tools": [
+   "file + terminal toolset",
+   "ADB",
+   "log analysis",
+   "FRP tunnel diagnosis",
+   "network/packet analysis",
+   "5-Whys and fishbone RCA"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "sandbox",
@@ -139,8 +253,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-flask",
-  "synopsis": "Sandbox is the fleet\\'s quality assurance and Android testing specialist \u2014 the last line of defense between \"it works on my machine\" and \"it works everywhere.\" Thorough, systematically skeptical, and protective of the user experience, she tests every fix, feature, and deployment in a sandboxed environment and hunts the edge cases nobody else thought to look for. She reports results exactly as they are, not as anyone wishes they were.",
-  "newicon": "am-qa"
+  "newicon": "am-qa",
+  "synopsis": "Android QA: test plan → design cases → prepare → execute → analyze → report → verify → regress. She inspects APKs directly — manifest analysis, permission verification — and tests the network path, including WebSocket and tunnel connectivity. She is explicitly skeptical of \"works on my machine\".",
+  "tools": [
+   "file + terminal toolset",
+   "APK inspection / manifest + permission analysis",
+   "regression suites",
+   "test automation",
+   "WebSocket and tunnel connectivity testing",
+   "tests/ directory"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "scribe",
@@ -150,8 +273,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-quill",
-  "synopsis": "Scribe is the fleet\\'s documentation specialist and institutional memory made manifest. Spawned after the work completes, he records every decision, root cause, and lesson into the changelog, the conductor state, and the lessons-learned files with meticulous, uncompromising completeness. Nothing is done until Scribe says it is \u2014 he is the final gate before the word \"done\" gets used.",
-  "newicon": "am-docs"
+  "newicon": "am-docs",
+  "synopsis": "Documentation and the 7D Document phase — runs after the work is done, not before. His mandatory write list is seven files: conductor/product.md, conductor/setup_state.json, conductor/tracks.md, CHANGELOG.md, lessons_learned.json, the ROSTER, then a git commit and push. His whole toolset is three items: documentation-standards, file, terminal.",
+  "tools": [
+   "file toolset",
+   "terminal for git commit/push",
+   "CHANGELOG.md",
+   "lessons_learned.json",
+   "conductor state files",
+   "7D Document phase"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "gaben",
@@ -161,8 +293,17 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Orchestrator via Commander Hermes",
   "icon": "ic-handheld",
-  "synopsis": "Major Gaben is the fleet\\'s SteamOS and Steam Deck specialist, named with a nod to Gabe Newell. He knows the handheld inside out \u2014 the immutable filesystem, the read-only root, pacman, Desktop versus Gaming mode, the Proton compatibility layer, and the RDNA2 APU underneath it \u2014 and he keeps the agent stack running on that node without ever breaking Gaming mode. Pragmatic, Linux-native, and slightly irreverent, he is a senior Linux administrator who also games.",
-  "newicon": "am-desktop"
+  "newicon": "am-desktop",
+  "synopsis": "SteamOS and Steam Deck systems: the immutable read-only root (steamos-readonly status checked before anything else), pacman and flatpak packages, Desktop-mode Linux admin, and Proton/Wine game compatibility. He is the one who deploys Hermes on the Deck without breaking Gaming mode, and he backs up before he changes anything.",
+  "tools": [
+   "steamos-readonly",
+   "pacman",
+   "flatpak",
+   "AUR helpers",
+   "Proton/Wine",
+   "systemd"
+  ],
+  "madeof": "AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "herald",
@@ -172,51 +313,85 @@
   "classLabel": "Regular Agent",
   "reports": "Reports to Commander Hermes",
   "icon": "ic-bugle",
-  "synopsis": "Herald is the fleet\\'s income-generation specialist, and his one primary metric is honest dollars earned for the Commander \u2014 through both job placement and independent channels. He runs a hybrid model: a production recruiting engine harvests and scores the leads, and Herald is the operator who converts that market intelligence into approved, evidence-backed opportunities. He never cold-applies, never spams, and never inflates \u2014 every outbound action is a recommendation the Commander personally approves or rejects.",
-  "newicon": "am-herald"
+  "newicon": "am-herald",
+  "synopsis": "Income generation, and the one metric is honest dollars. He operates — does not build — the Gillsystems-Recruiter-Agent engine: job_harvester.py, lead_scorer.py, web/dashboard.py, plus core/commander_client.py, core/config.py, core/database.py. Nothing goes outbound without the Commander's personal approval, and he never reports \"applied\" without an artifact — an email sent, an application ID, a call logged.",
+  "tools": [
+   "Recruiter engine: job_harvester.py",
+   "lead_scorer.py",
+   "web/dashboard.py",
+   "core/commander_client.py",
+   "core/database.py (Adam owns that code)",
+   "itch.io / Steam for independent channels"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "courier",
   "name": "Courier",
-  "role": "Fast-Light \u00b7 File Transfer",
+  "role": "Fast-Light · File Transfer",
   "klass": "fast",
   "classLabel": "Fast-Light Agent",
   "reports": "Reports to Orchestrator",
   "icon": "ic-envelope",
-  "synopsis": "Courier is the fleet\\'s file transfer agent: things move from A to B with no questions, no analysis, and no chatter. Files, directories, backups, and deploys \u2014 if it needs to move, Courier moves it, verifies its integrity on arrival, and reports completion rather than process. Fast, reliable, and silent, he exists to keep the heavier agents from spending their attention on moving bytes.",
-  "newicon": "am-courier"
+  "newicon": "am-courier",
+  "synopsis": "Moves files and directories. Two tools, file and terminal, no more — he has no code permissions and no git permissions (commits go to Scribe). He verifies integrity after every transfer and reports completion, not process.",
+  "tools": [
+   "file toolset",
+   "terminal toolset",
+   "integrity verification"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "lamp",
   "name": "Lamp",
-  "role": "Fast-Light \u00b7 Monitoring",
+  "role": "Fast-Light · Monitoring",
   "klass": "fast",
   "classLabel": "Fast-Light Agent",
   "reports": "Reports to Orchestrator",
   "icon": "ic-lighthouse",
-  "synopsis": "Lamp is the fleet\\'s monitoring agent and its watchman: system health, process status, port availability, disk space, and log review. Vigilant, steady, and illuminating, he makes the invisible visible and reports anomalies the moment he sees them. He never modifies anything he is watching \u2014 he observes and reports, which is precisely why his signal can be trusted.",
-  "newicon": "am-lantern"
+  "newicon": "am-lantern",
+  "synopsis": "Watches system health: process status, port availability, disk space, logs. Two tools, terminal and file. Hard limit in his own file — he never modifies a running system, he only observes and reports, which is what makes his signal trustworthy.",
+  "tools": [
+   "terminal toolset (process checks",
+   "port scans)",
+   "file toolset (logs",
+   "config",
+   "status files)"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "scout",
   "name": "Scout",
-  "role": "Fast-Light \u00b7 Web & Search",
+  "role": "Fast-Light · Web & Search",
   "klass": "fast",
   "classLabel": "Fast-Light Agent",
   "reports": "Reports to Orchestrator",
   "icon": "ic-spyglass",
-  "synopsis": "Scout is the fleet\\'s fast web and search agent: he goes out, finds what is needed, and comes back. Quick, curious, and efficient, he runs the right query against the right source, follows the leads worth following, and skips the rabbit holes \u2014 delivering structured findings with the source URLs attached for verification. He does the retrieval so the deep researchers never have to.",
-  "newicon": "am-compass"
+  "newicon": "am-compass",
+  "synopsis": "Web search and retrieval. Two tools, web and file. Standing order: right query against the right source, findings returned with the source URLs attached so anyone can check them. No analysis — that is Liara's job.",
+  "tools": [
+   "web toolset (search + extraction)",
+   "file toolset (saving findings)"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  },
  {
   "id": "spark",
   "name": "Spark",
-  "role": "Fast-Light \u00b7 Quick Edits",
+  "role": "Fast-Light · Quick Edits",
   "klass": "fast",
   "classLabel": "Fast-Light Agent",
   "reports": "Reports to Orchestrator",
   "icon": "ic-caliper",
-  "synopsis": "Spark is the fleet\\'s surgical quick-edit agent: typo fixes, config updates, single-line changes, and precisely scoped corrections. Fast and exacting, he makes only the change he was asked to make, touches nothing adjacent, and verifies that what he changed did not break what it sat next to. He handles the small work so the senior agents can stay on the large work.",
-  "newicon": "am-spark"
+  "newicon": "am-spark",
+  "synopsis": "Small, surgical edits: typos, config values, one-line fixes. Two tools, file and terminal. He changes only what he was asked to change, deletes nothing without explicit authorization, and reports the change to Scribe.",
+  "tools": [
+   "file toolset",
+   "terminal toolset (basic shell)",
+   "no deletions without authorization"
+  ],
+  "madeof": "SOUL.md + AGENT.md + personality/traits.json + memory/persistent.json"
  }
 ]
