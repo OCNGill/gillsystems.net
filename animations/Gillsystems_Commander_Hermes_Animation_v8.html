@@ -111,6 +111,8 @@ dd{margin:0;color:#bfe3ec;word-break:break-word}
 #info .ttl{font-size:10.5px;letter-spacing:1.2px;color:var(--am);margin:-2px 0 2px}#info .syn{font-size:11.5px;line-height:1.72;color:#c4e0e8;margin:8px 0}#info .tp[hidden]{display:none}
 .cmd-dot{display:inline-block;width:5px;height:5px;border-radius:50%;
 background:var(--gold,#c9a24a);margin-left:6px;vertical-align:middle}
+.hint{margin:10px 0 0;font-size:10px;line-height:1.6;color:#527282}
+.hint b{color:#7fd4ff;font-weight:600}
 </style>
 </head>
 <body>
@@ -148,7 +150,7 @@ const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),sm=u=>u*u*(3-2*u);
 const N={
 main:{nm:"GILLSYSTEMS-MAIN",s:'MAIN',p:[-18,1.5,2],r:2.3,os:'Windows 11 Pro',role:'Orchestrator · primary compute · Tier 1',gpu:'Radeon 7900 XTX · 24 GB dedicated',cpu:'Ryzen 9 5900X · 12C/24T',ram:'48 GB',disk:'2 TB NVMe',tgt:'gfx1100 · ROCm/HIP — GPU mandatory',model:'Qwen3.8-27B + vision · MTP · 192K ctx',tps:130,thr:24,chassis:'ASUS TUF Gaming full-tower · RX 7900 XTX',dw:21,dh:50,dd:47},
 htpc:{nm:'GILLSYSTEMS-HTPC',s:'HTPC',p:[9,1,9],r:1.8,os:'Kubuntu',role:'Storage authority · worker · Tier 1',gpu:'Radeon RX 7600 · 8 GB dedicated',cpu:'Ryzen 5 5600G · 6C/12T',ram:'16 GB',disk:'2 TB ZFS pool',tgt:'gfx1102 · ROCm — GPU mandatory',model:'Qwen3.5-9B · llama.cpp',tps:60,thr:12,chassis:'SFF long-box · RX 7600',dw:20,dh:13,dd:32},
-laptop:{nm:'GILLSYSTEMS-LAPTOP',s:'LAPTOP',p:[19,3,-4],r:1.6,os:'Windows 10',role:'Worker · gateway & ops hub · Tier 2',gpu:'Vega 6 iGPU · UMA (shared, no dedicated VRAM)',cpu:'Ryzen 5 4500U · 6C/6T',ram:'20 GB',disk:'1 TB SSD',tgt:'gfx90c · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-4B · llama.cpp',tps:9,thr:6,chassis:'Acer Aspire 5 15.6in numpad laptop',dw:39,dh:27,dd:26},
+laptop:{nm:'GILLSYSTEMS-LAPTOP',s:'LAPTOP',p:[19,3,-4],r:1.6,os:'Windows 10',role:'Worker · gateway & ops hub · Tier 2',gpu:'Vega 6 iGPU · UMA (shared, no dedicated VRAM)',cpu:'Ryzen 5 4500U · 6C/6T',ram:'20 GB',disk:'1 TB SSD',tgt:'gfx90c · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-4B · llama.cpp',tps:9,thr:6,chassis:'Acer Aspire 5 15.6in numpad laptop — the machine the entire fleet was written on. Held together with duct tape.',dw:39,dh:27,dd:26},
 deck:{nm:'GILLSYSTEMS-STEAM-DECK',s:'STEAM DECK',p:[-8,-1,-10],r:1.9,os:'SteamOS (Arch)',role:'Worker · handheld · Tier 2',gpu:'RDNA 2 APU · 8 CUs · 8 GB unified (shared)',cpu:'Zen 2 · 4C/8T',ram:'16 GB unified',disk:'512 GB NVMe',tgt:'gfx1033 · Vulkan, or HIP + LLAMA_HIP_UMA=1',model:'Qwen3.5-9B · llama.cpp',tps:30,thr:8,chassis:'Handheld thin-slab · VanGogh APU',dw:30,dh:11,dd:3.5}
 };
 const A=[
@@ -191,7 +193,7 @@ function pj(x,y,z){ct();x-=cam.tx;y-=cam.ty;z-=cam.tz;const a=x*_cy-z*_sy,b=x*_s
 function P(x,y,z){ct();x-=cam.tx;y-=cam.ty;z-=cam.tz;const cy=_cy,sy=_sy,cp=_cp,sp=_sp;
 const a=x*cy-z*sy,b=x*sy+z*cy,c=y*cp-b*sp,d=y*sp+b*cp,dz=Math.max(2,cam.dist+d),k=FOC/dz;return{x:W/2-off+a*k,y:H*.53-c*k,k,z:d}}
 const pos={};for(const k in N)pos['n:'+k]=N[k].p;for(const k in X)pos[k]=X[k].p;
-const st={l:{android:1,gchat:1,sync:1,storage:1,cloud:1,names:1,trails:1,cyber:1},sel:null,hov:null,pause:matchMedia('(prefers-reduced-motion:reduce)').matches,rot:!matchMedia('(prefers-reduced-motion:reduce)').matches,speed:.45,bloom:true,flow:true};
+const st={l:{android:1,gchat:1,sync:1,storage:1,cloud:1,names:1,trails:1,cyber:1,info:0},sel:null,hov:null,pause:matchMedia('(prefers-reduced-motion:reduce)').matches,rot:!matchMedia('(prefers-reduced-motion:reduce)').matches,speed:.45,bloom:true,flow:true};
 const ag=A.map((a,i)=>{const hn=a[2],idx=A.filter((b,j)=>j<i&&b[2]===hn).length;return{nm:a[0],role:a[1],home:hn,cls:a[3],anc:a[4],i,R:N[hn].r*1.5+1.5+(idx%3)*.9,inc:.45+(idx*.83)%1.7,rot:idx*1.3+i,sp:(.32+(idx%4)*.1)*(idx%2?1:-1),ang:i*2.1,st:0,u:0,tm:1+Math.random()*12,tr:[]}});
 const agByHome={};for(const a of ag)(agByHome[a.home]=agByHome[a.home]||[]).push(a);
 const LK=[];for(const k in N){LK.push({a:'mesh',b:'n:'+k,lift:3,c:C[k],n:3,sp:.22,ly:0});if(k!=='htpc')LK.push({a:'n:htpc',b:'n:'+k,lift:-3.5,c:C.am,n:2,sp:.14,ly:'sync',bi:1})}
@@ -302,19 +304,12 @@ function model3d(cen,M,rot,alpha,hot){
     B(0,5.6,-10.6,35,18.6,.2,'#7ff0ff',{ghost:true,lw:.85}); LS([-17.5,-3.7,-10.5,17.5,-3.7,-10.5],'#4a545c',.5,2.4); // display, thick bezel + chin
     DT(0,15.3,-10.5,.4,'#1a2026',.9); LS([-1.4,-6.2,-10.5,1.4,-6.2,-10.5],'#cfd8e0',.5,1.4); // webcam, Acer mark on chin
     B(-11.5,-7.6,-12.6,7,2.2,2.6,'#b9c2cb'); B(11.5,-7.6,-12.6,7,2.2,2.6,'#b9c2cb'); // two broad silver hinges
-    const tp=O(-15.6,-9.7,13.6),tq=O(10.1,-9.7,13.6),tA=P(tp[0],tp[1],tp[2]),tB=P(tq[0],tq[1],tq[2]);
-    const tw=Math.max(2.0,3.0*tA.k), ang=Math.atan2(tB.y-tA.y,tB.x-tA.x);
-    g.save();g.translate(tA.x,tA.y);g.rotate(ang);
-    const tl=tB.x-tA.x, gd=g.createLinearGradient(0,-tw/2,0,tw/2);
-    gd.addColorStop(0,rg('#c8ccd0',.92*alpha));gd.addColorStop(.45,rg('#a7adb2',.95*alpha));gd.addColorStop(1,rg('#8e9499',.9*alpha));
-    g.fillStyle=gd;g.beginPath();g.moveTo(0,-tw/2);g.lineTo(tl,-tw/2);g.lineTo(tl,tw/2);g.lineTo(0,tw/2);g.closePath();g.fill();
-    g.strokeStyle=rg('#6f757a',.34*alpha);g.lineWidth=.6;
-    for(let i=0;i<tl;i+=Math.max(2,2.4*tA.k)){g.beginPath();g.moveTo(i,-tw/2);g.lineTo(i,tw/2);g.stroke();}
-    g.fillStyle=rg('#b6bbc0',.95*alpha);
-    g.beginPath();g.moveTo(tl,-tw/2);g.lineTo(tl+tw*.34,-tw*.22);g.lineTo(tl+tw*.12,tw*.06);
-    g.lineTo(tl+tw*.40,tw*.30);g.lineTo(tl,tw/2);g.closePath();g.fill();
-    g.strokeStyle=rg('#5f666b',.5*alpha);g.lineWidth=.7;g.stroke();
-    g.restore();
+    // PERF: the floating torn-corner sheet that sat in front of the deck is GONE.
+    // It read as a stray polygon rather than a part of the machine, and it cost
+    // real fill rate every frame. The clickpad is now one inset outline on the
+    // deck instead - same read, a fraction of the work.
+    B(0,-8.9,7.6,9.2,3.4,.12,'#39424b',{ghost:true,lw:.6});
+g.restore();
   }
 }
 // flat fan disc used by tower / sff
@@ -335,7 +330,7 @@ const bz=(a,b,l,t)=>{const m=[(a[0]+b[0])/2,(a[1]+b[1])/2+l,(a[2]+b[2])/2],u=1-t
 const op=(c,R,inc,rot,t)=>{const x=Math.cos(t)*R,z0=Math.sin(t)*R,y=z0*Math.sin(inc),z=z0*Math.cos(inc);return[c[0]+x*Math.cos(rot)-z*Math.sin(rot),c[1]+y,c[2]+x*Math.sin(rot)+z*Math.cos(rot)]};
 const stars=[...Array(150)].map(()=>{const u=Math.random()*6.283,v=Math.random()*2-1,q=Math.sqrt(1-v*v),R=110+Math.random()*80;return{p:[q*Math.cos(u)*R,v*R,q*Math.sin(u)*R],s:Math.random()*1.4+.4,f:Math.random()*3+.5,ph:Math.random()*6}});
 const dust=[...Array(44)].map(()=>({x:Math.random()*90-45,y:Math.random()*40-12,z:Math.random()*90-45,v:.5+Math.random()*1.2,ph:Math.random()*6}));
-let hits=[],time=0;
+let hits=[],time=0,_hz=0;
 const dimN=id=>{const s=st.sel;if(!s||!s.startsWith('n:'))return 1;return id===s?1:.3};
 const GC=new Map();
 function gq(key,make){let q=GC.get(key);if(!q){q=make();if(GC.size>500)GC.clear();GC.set(key,q)}return q}
@@ -383,6 +378,51 @@ function dev(p,sc,col,kind,dim,on){
   g.fillStyle=rg(col,on?.5:.25*dim);rr(p.x-9*sc,y+h-4.5*sc,18*sc,1.8*sc,.9*sc);g.fill();
 }
 const ac=document.createElement('canvas');ac.width=160;ac.height=100;const a2=ac.getContext('2d');
+let seed=0;
+
+// ---- TANK-COMMANDER HORIZON: a 360-degree ridge band, built ONCE into the
+// cached backdrop buffer. The Commander is right that colour is free - it is
+// only the geometry that costs, and this geometry is computed once at startup
+// and blitted like everything else in `ac`. Each ridge is a closed, periodic
+// function of the viewing angle, so it wraps seamlessly through a full orbit.
+const RIDGES=[
+  // [height, colour, segments, detail] - three ranks, far to near
+  [0.34,'#123a52',26,2],   // far range, cool blue
+  [0.52,'#0f5c5e',34,3],   // mid range, teal
+  [0.72,'#1b7a4e',44,4]    // near range, the green we actually wanted
+];
+// periodic pseudo-noise: sums of integer-frequency sines, so it wraps by
+// construction and needs no seam special-casing
+const ridgeH=(seg,detail,salt)=>{
+  let h=0;
+  for(let o=0;o<detail;o++){const f=o+2+salt;h+=Math.sin(seg/f*6.283+salt*1.7)*Math.cos(seg/(f*1.9)*6.283+seed*salt)/f;}
+  return h;
+};
+function drawHorizon(){
+  if(!ac)return;const c=ac.getContext('2d');const w=160,h=100;
+  c.save();
+  for(const[amp,colr,seg,detail]of RIDGES){
+    // fill the silhouette, then stroke the crest: colour is the whole point
+    c.beginPath();c.moveTo(0,h);
+    for(let i=0;i<=seg;i++){
+      const x=i/seg*w;
+      const t=(seed*0.02+i/seg*detail*7)%(detail*7);
+      const y=h-(h*0.42+ridgeH(seg,detail,i%3)*h*0.16*amp);
+      i?c.lineTo(x,y):c.lineTo(x,y);
+    }
+    c.lineTo(w,h);c.closePath();
+    c.fillStyle=colr+'1a';c.fill();
+    c.beginPath();
+    for(let i=0;i<=seg;i++){
+      const x=i/seg*w;
+      const y=h-(h*0.42+ridgeH(seg,detail,i%3)*h*0.16*amp);
+      i?c.lineTo(x,y):c.moveTo(x,y);
+    }
+    c.strokeStyle=colr;c.lineWidth=0.6;c.stroke();
+  }
+  c.restore();
+}
+
 function aur(){const w=160,h=100;a2.clearRect(0,0,w,h);a2.globalCompositeOperation='lighter';[['#1f9c9a',.13],['#5b3fd8',.11],['#2fb58a',.09],['#c9973a',.06]].forEach((c,i)=>{const x=w*(.5+.42*Math.sin(time*.06+i*1.9)),y=h*(.4+.3*Math.cos(time*.045+i*2.4)),R=160*(.42+.1*Math.sin(time*.1+i)),r=a2.createRadialGradient(x,y,0,x,y,R);r.addColorStop(0,rg(c[0],c[1]*1.6));r.addColorStop(1,rg(c[0],0));a2.fillStyle=r;a2.fillRect(0,0,w,h)})}
 /* ---- THE CONTAINER: a 4D-rotating tesseract shell + orthogonal orbital rings around the whole fleet.
    Far edges draw behind the nodes, near edges in front, so the fleet sits INSIDE it. Faint at rest; camera motion
@@ -446,7 +486,7 @@ function cyber(){
     const y=CY0+((t*5)%50),R=58;let o2=0;g.beginPath();for(let i=0;i<=36;i++){pj(TC[0][i*2]*R,y,TC[0][i*2+1]*R);if(cam.dist+_pz<8){o2=0;continue}o2?g.lineTo(_px,_py):g.moveTo(_px,_py);o2=1}g.strokeStyle=rg('#3ae2e0',.34*(1-(y-CY0)/50));g.lineWidth=1.4;g.stroke()}
   g.restore()}
 function bg(){let q=g.createLinearGradient(0,0,0,H);q.addColorStop(0,'#02050a');q.addColorStop(.6,'#051019');q.addColorStop(1,'#071722');g.fillStyle=q;g.fillRect(0,0,W,H);
-if(!frame.n||frame.n%4===0)aur();g.globalCompositeOperation='lighter';g.imageSmoothingEnabled=true;g.drawImage(ac,0,0,W,H);
+if(!frame.n||frame.n%4===0)aur();if(!_hz){_hz=1;drawHorizon();}g.globalCompositeOperation='lighter';g.imageSmoothingEnabled=true;g.drawImage(ac,0,0,W,H);
 for(const s of stars){const p=P(s.p[0],s.p[1],s.p[2]);if(p.z>150||p.x<0||p.x>W||p.y<0||p.y>H)continue;g.fillStyle=`rgba(150,190,205,${.10+.22*Math.abs(Math.sin(time*s.f*.4+s.ph))})`;g.fillRect(p.x,p.y,s.s*.75,s.s*.75)}
 for(const d of dust){const y=((d.y+time*d.v)%52)-14;const p=P(d.x+Math.sin(time*.3+d.ph)*2,y,d.z);if(p.z>60)continue;const a=Math.sin(cl((y+14)/52,0,1)*3.14)*.5;g.fillStyle=`rgba(90,230,225,${a})`;g.beginPath();g.arc(p.x,p.y,Math.max(.6,p.k*.09),0,7);g.fill()}
 g.globalCompositeOperation='source-over';
@@ -477,7 +517,12 @@ for(const k in N){const n=N[k],id='n:'+k,p=P(...n.p),dm=dimN(id),col=C[k];items.
 agByHome[k].forEach((a,j)=>{if(a.cls!=='c'&&a.cls!=='f')return;ring(n.p,a.R,a.inc,a.rot,col,.09*dm+(st.sel===id?.08:0),1,null,32)});
 model3d(n.p,MODELS[k],time*.16+.6,dm,st.sel===id||st.hov===id);ring(n.p,n.r*1.3,.3,time*.5,col,.34*dm,1.3,null,44);
 g.strokeStyle=rg(col,.42*dm);g.lineWidth=1;g.beginPath();g.arc(p.x,p.y,r*1.12,0,7);g.stroke();orb(p.x,p.y,r,col,dm*.72);if(st.sel===id||st.hov===id){g.strokeStyle=rg('#ffffff',.85);g.lineWidth=1.5;g.setLineDash([5,5]);g.lineDashOffset=-time*20;g.beginPath();g.arc(p.x,p.y,r*1.9,0,7);g.stroke();g.setLineDash([])}
-lab(n.s,p.x,p.y+r*1.9+16*sc,13*sc,'#e8fbff',dm);if(DENSE){lab(n.tps+' TOK/S · '+n.gpu.split('·')[0].trim(),p.x,p.y+r*1.9+31*sc,9.5*sc,col,dm);lab(n.chassis,p.x,p.y+r*1.9+45*sc,8.6*sc,'#a6c9d6',dm*.95,'center');lab(n.gpu+' \u00b7 '+n.ram+' RAM \u00b7 '+n.thr+' threads',p.x,p.y+r*1.9+57*sc,8.6*sc,'#7fd4ff',dm*.9,'center')}hits.push({id:id,x:p.x,y:p.y,r:r*1.5,pr:1,z:p.z})}})}
+lab(n.s,p.x,p.y+r*1.9+16*sc,13*sc,'#e8fbff',dm);
+  // PERF + CLARITY: hardware detail is OFF by default. The name always draws;
+  // the spec lines render only when the INFO layer is switched on. That is 3
+  // fewer text draws per node per frame, and it stops the mesh reading as a wall
+  // of clutter over the model. Click a node to inspect it in the side panel.
+  if(st.l.info&&DENSE){lab(n.tps+' TOK/S · '+n.gpu.split('·')[0].trim(),p.x,p.y+r*1.9+31*sc,9.5*sc,col,dm);lab(n.chassis,p.x,p.y+r*1.9+45*sc,8.6*sc,'#a6c9d6',dm*.95,'center');lab(n.gpu+' \u00b7 '+n.ram+' RAM \u00b7 '+n.thr+' threads',p.x,p.y+r*1.9+57*sc,8.6*sc,'#7fd4ff',dm*.9,'center')}hits.push({id:id,x:p.x,y:p.y,r:r*1.5,pr:1,z:p.z})}})}
 for(const a of ag){const h=N[a.home],col=C[a.home],dm=dimN('n:'+a.home);
 if(!st.pause){a.ang+=a.sp*dt;if(a.st==0){a.tm-=dt;if(a.tm<=0){a.st=1;a.u=0;a.ax=a.anc[Math.random()*a.anc.length|0]}}else if(a.st==1){a.u+=dt/2.4;if(a.u>=1){a.u=1;a.st=2;a.tm=1.5}}else if(a.st==2){a.tm-=dt;if(a.tm<=0)a.st=3}else{a.u-=dt/2.4;if(a.u<=0){a.u=0;a.st=0;a.tm=6+Math.random()*12}}}
 const hm=op(h.p,a.R,a.inc,a.rot,a.ang);let q=hm;if(a.u>0){const T2=pos[a.ax],o=[T2[0]+Math.cos(a.ang*2)*1.9,T2[1]+.5,T2[2]+Math.sin(a.ang*2)*1.9],e=sm(a.u);q=[0,1,2].map(i=>hm[i]+(o[i]-hm[i])*e);q[1]+=Math.sin(a.u*3.14)*2.6}
@@ -524,7 +569,7 @@ function atab(b,i){const p=b.closest('#info');p.querySelectorAll('.tabs button')
 function show(id){st.sel=id;const el=$('#info');document.querySelectorAll('#nb .tg').forEach(b=>b.classList.toggle('sel',id==='n:'+b.dataset.n));
 if(!id){el.hidden=true;Object.assign(tg,{dist:50,tx:0,ty:1,tz:0});return}
 let h='<button class="x" onclick="show(null)">CLOSE</button>',row=r=>'<dl>'+r.map(x=>`<dt>${x[0].toUpperCase()}</dt><dd>${x[1]}</dd>`).join('')+'</dl>';
-if(id.startsWith('n:')){const k=id.slice(2),n=N[k],rs2=ag.filter(a=>a.home===k);h+=`<span class="tag">FLEET NODE · ${n.role.toUpperCase()}</span><h3>${n.nm}</h3><div style="font-size:9px;color:#527282;letter-spacing:1px">LLM INFERENCE · ${n.tps} TOKENS/SEC</div><div class="bar"><i style="width:${n.tps/130*100}%"></i></div>`+row([['OS',n.os],['GPU',n.gpu],['CPU',n.cpu],['RAM',n.ram],['Storage',n.disk],['Build',n.tgt],['Model',n.model]])+`<div style="font-size:9px;letter-spacing:2px;color:#527282;margin-top:8px">RESIDENT AGENTS · ${rs2.length}</div>`+rs2.map(a=>`<button class="chip" onclick="show('a:${a.i}')">${a.nm.toUpperCase()}${a.cls==='c'?'<span class="cmd-dot" aria-label="command"></span>':''}</button>`).join('');const p=n.p;Object.assign(tg,{tx:p[0]*.7,ty:p[1],tz:p[2]*.7,dist:34})}
+if(id.startsWith('n:')){const k=id.slice(2),n=N[k],rs2=ag.filter(a=>a.home===k);h+=`<span class="tag">FLEET NODE · ${n.role.toUpperCase()}</span><h3>${n.nm}</h3><div style="font-size:9px;color:#527282;letter-spacing:1px">LLM INFERENCE · ${n.tps} TOKENS/SEC</div><div class="bar"><i style="width:${n.tps/130*100}%"></i></div>`+row([['OS',n.os],['GPU',n.gpu],['CPU',n.cpu],['RAM',n.ram],['Storage',n.disk],['Chassis',n.chassis],['Build',n.tgt],['Model',n.model],['Threads',n.thr+' threads'],['Throughput',n.tps+' tok/sec']])+`<p class="hint">Switch <b>HARDWARE DETAIL</b> on in LAYERS to print these over the mesh itself. It is off by default - the names stay, the spec sheet does not.</p>`+`<div style="font-size:9px;letter-spacing:2px;color:#527282;margin-top:8px">RESIDENT AGENTS · ${rs2.length}</div>`+rs2.map(a=>`<button class="chip" onclick="show('a:${a.i}')">${a.nm.toUpperCase()}${a.cls==='c'?'<span class="cmd-dot" aria-label="command"></span>':''}</button>`).join('');const p=n.p;Object.assign(tg,{tx:p[0]*.7,ty:p[1],tz:p[2]*.7,dist:34})}
 else if(id.startsWith('a:')){const a=ag[+id.slice(2)],c=CREW[a.nm]||['CREW',a.role,''],hn=N[a.home],sm=/seat (\d)/.exec(a.role);
 h+=`<span class="tag">${c[0]}</span><h3>${a.nm.toUpperCase()}</h3><div class="ttl">${c[1]}</div><div class="tabs"><button class="on" onclick="atab(this,0)">PROFILE</button><button onclick="atab(this,1)">DEPLOYMENT</button></div><div class="tp" data-t="0"><p class="syn">${c[2]}</p></div><div class="tp" data-t="1" hidden>`+row([['Class',c[0]],['Role',c[1]],['Home node',hn.nm]].concat(sm?[['Seat','Hermes seat '+sm[1]+' of 2']]:[]).concat([['Dispatch to',a.anc.map(x=>x.startsWith('n:')?N[x.slice(2)].s:x.toUpperCase()).join(' · ')]]))+`<p>Home-node placement is illustrative; dispatch motion is simulated.</p></div><button class="chip" onclick="show('n:${a.home}')">◂ ${hn.s}</button>`}
 else if(id.startsWith('tier:')){const t=T.find(t=>'tier:'+t[0]===id);h+=`<span class="tag">STORAGE · ${t[2]}</span><h3>${t[1]}</h3><p>${t[6]}</p>`}
@@ -532,8 +577,8 @@ else{const x=X[id];h+=`<span class="tag">${x.g}</span><h3>${x.t}</h3>`+row(x.row
 el.innerHTML=h;el.hidden=false;if(id.startsWith('a:'))tg.dist=Math.max(tg.dist,60)}
 $('#nb').innerHTML=Object.keys(N).map(k=>`<button class="tg nd" data-n="${k}" style="--c:${C[k]}"><i></i>${N[k].s}<small>${ag.filter(a=>a.home===k).length} AGENTS</small></button>`).join('');
 $('#nb').onclick=e=>{const b=e.target.closest('button');if(b)show(st.sel==='n:'+b.dataset.n?null:'n:'+b.dataset.n)};
-const LY=[['android','ANDROID APP',C.tl],['gchat','GOOGLE CHAT',C.tl],['sync','NODE SYNC',C.am],['storage','STORAGE',C.htpc],['cloud','CLOUD PATHS',C.gold],['names','AGENT NAMES',C.ice],['trails','AGENT TRAILS',C.main],['cyber','CYBERSPACE',C.ice]];
-$('#lb').innerHTML=LY.map(l=>`<button class="lay tg" data-l="${l[0]}" aria-pressed="true" style="--c:${l[2]}"><i></i>${l[1]}</button>`).join('');
+const LY=[['android','ANDROID APP',C.tl],['gchat','GOOGLE CHAT',C.tl],['sync','NODE SYNC',C.am],['storage','STORAGE',C.htpc],['cloud','CLOUD PATHS',C.gold],['names','AGENT NAMES',C.ice],['trails','AGENT TRAILS',C.main],['cyber','CYBERSPACE',C.ice],['info','HARDWARE DETAIL',C.laptop]];
+$('#lb').innerHTML=LY.map(l=>`<button class="lay tg" data-l="${l[0]}" aria-pressed="${!!st.l[l[0]]}" style="--c:${l[2]}"><i></i>${l[1]}</button>`).join('');
 $('#lb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.l;st.l[k]=st.l[k]?0:1;b.setAttribute('aria-pressed',!!st.l[k])};
 $('#bp').onclick=e=>{st.pause=!st.pause;e.target.setAttribute('aria-pressed',st.pause);e.target.textContent=st.pause?'PLAY':'PAUSE'};
 $('#br').onclick=e=>{st.rot=!st.rot;e.target.setAttribute('aria-pressed',st.rot)};
