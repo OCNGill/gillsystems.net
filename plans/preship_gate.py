@@ -12,6 +12,7 @@ Exit 0 = safe to publish. Exit 1 = DO NOT PUBLISH.
 """
 import os
 import re
+import json
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -101,6 +102,55 @@ def check(path):
 
     return rel, len(h), errs
 
+
+def check_crew_parity(ROOT):
+    """crew.json is a BUILD INPUT, not a runtime file - the page embeds the
+    crew as static markup and never fetches it. That means nothing would ever
+    tell us the two had drifted apart. This check closes that hole: every agent
+    in crew.json must appear on the page carrying the SAME tools and files.
+
+    Added 2026-10-01 after the crew rewrite, when a 5-tool display cap was
+    silently hiding 22 of 113 tools. Structure checks passed while the page was
+    quietly telling a partial truth.
+    """
+    errs = []
+    cj = os.path.join(ROOT, "plans", "crew.json")
+    page = os.path.join(ROOT, "ai-era.html")
+    if not (os.path.exists(cj) and os.path.exists(page)):
+        return errs
+    try:
+        crew = json.load(open(cj, encoding="utf-8"))
+    except Exception as e:
+        return [f"crew.json unreadable: {e}"]
+    h = open(page, encoding="utf-8").read()
+    tiles = re.findall(r'<button class="ctile"[^>]*>', h)
+    by_id = {}
+    for t in tiles:
+        m = re.search(r'data-agent="([^"]+)"', t)
+        if m:
+            by_id[m.group(1)] = t
+    ids = [re.search(r'data-agent="([^"]+)"', t).group(1) for t in tiles
+           if re.search(r'data-agent="([^"]+)"', t)]
+    if len(ids) != len(set(ids)):
+        errs.append(f"crew parity: duplicate agent tiles on page ({len(ids)} vs {len(set(ids))} unique)")
+    for a in crew:
+        t = by_id.get(a.get("id"))
+        if not t:
+            errs.append(f"crew parity: '{a.get('name')}' in crew.json but not on page")
+            continue
+        want = " | ".join(a.get("tools", []))
+        got = (t.split('data-tools="')[1].split('" data-madeof')[0]
+               if 'data-tools="' in t else "")
+        got = got.replace("&amp;", "&").replace("&quot;", '"').replace("&#x27;", "'")
+        if want != got:
+            errs.append(f"crew parity: '{a.get('name')}' tool list differs - json has {len(a.get('tools',[]))}, page shows {len(got.split('|')) if got else 0} (none may be hidden)")
+        wmade = a.get("madeof", "")
+        gmade = (t.split('data-madeof="')[1].split('"')[0] if 'data-madeof="' in t else "")
+        gmade = gmade.replace("&amp;", "&")
+        if wmade != gmade:
+            errs.append(f"crew parity: '{a.get('name')}' 'built from' differs")
+    return errs
+
 def main():
     files = sorted(html_files())
     if not files:
@@ -117,6 +167,14 @@ def main():
                 print(f"       - {e}")
         else:
             print(f"  ok  {rel} ({size:,} B)")
+    cperr = check_crew_parity(ROOT)
+    if cperr:
+        total_err += len(cperr)
+        print(f"\nFAIL crew.json <-> ai-era.html parity")
+        for e in cperr:
+            print(f"       - {e}")
+    else:
+        print("  ok  crew.json <-> ai-era.html parity")
     print("=" * 62)
     if total_err:
         print(f"RESULT: {total_err} PROBLEM(S). DO NOT PUBLISH.")
