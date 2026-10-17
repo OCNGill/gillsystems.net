@@ -1,14 +1,41 @@
-# GillSystems.net - 2025 Reboot
+<p align="center">
+  <img src="https://raw.githubusercontent.com/OCNGill/Gillsystems-AMD-Radeon-llama-cpp-Update-AI-Stack/main/Gillsystems_logo_stuff/Gill%20Systems%20Logo.png" alt="Gill Systems Logo" width="800">
+</p>
 
-**"Systems Should Serve Humans"**
+# **Gillsystems.net — 2025 Reboot**
+
+> *"Systems Should Serve Humans"*
+
+[![Site](https://img.shields.io/badge/Site-gillsystems.net-00ff88)](https://gillsystems.net)
+[![Hosting](https://img.shields.io/badge/Hosting-GitHub%20Pages-222?logo=github&logoColor=white)](https://pages.github.com)
+[![Stack](https://img.shields.io/badge/Stack-HTML%20%7C%20CSS%20%7C%20Vanilla%20JS-00ccff)](https://gillsystems.net)
+[![Status](https://img.shields.io/badge/Status-Phase%201%20Complete-brightgreen)](IMPLEMENTATION-NOT-COMPLETE.md)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-009cde?logo=paypal&logoColor=white)](https://paypal.me/gillsystems)
 
 Modern consulting portfolio showcasing 30+ years of technology expertise from DOS to Cloud.
 
-## 🎯 Project Overview
+## **Table of Contents**
+
+- [Project Overview](#-project-overview)
+- [Current Status (December 17, 2025)](#-current-status-december-17-2025)
+- [Project Structure](#-project-structure)
+- [Design Philosophy & Technical Stack](#-design-philosophy--technical-stack)
+- [Content Sections & Features](#-content-sections--features)
+- [Technical Features](#-technical-features)
+- [File Statistics](#-file-statistics)
+- [Deployment](#-deployment)
+- [Success Metrics & Goals](#-success-metrics--goals)
+- [Future Phases](#-future-phases)
+- [Contact](#-contact)
+- [Support / Donate](#-support--donate)
+
+---
+
+## **🎯 Project Overview**
 
 This is a strategic business asset - not a personal site. Every visitor is a potential enterprise consulting engagement. The design balances technical depth with accessibility, featuring a terminal-inspired aesthetic that's authentic to GillSystems' roots without being inaccessible.
 
-## 🚦 Current Status (December 17, 2025)
+## **🚦 Current Status (December 17, 2025)**
 
 **Phase 1: CORE IMPLEMENTATION COMPLETE** ✅ (but NOT polished)
 
@@ -33,7 +60,7 @@ This is a strategic business asset - not a personal site. Every visitor is a pot
 - January 2026 for page-wide polish and updates
 - No immediate work planned; current state is functional for visitors
 
-## 📂 Project Structure
+## **📂 Project Structure**
 
 ```
 gillsystems.net/
@@ -96,7 +123,7 @@ gillsystems.net/
     └── gillsystems.net.code-workspace
 ```
 
-## 🎨 Design Philosophy & Technical Stack
+## **🎨 Design Philosophy & Technical Stack**
 
 ### Visual Identity
 - **Terminal-inspired aesthetic**: Dark mode with green/cyan accents (#00ff88 primary, #00ccff secondary)
@@ -132,7 +159,7 @@ gillsystems.net/
 - Color contrast meets WCAG AA standards
 - Alt text on all images
 
-## 📋 Content Sections & Features
+## **📋 Content Sections & Features**
 
 ### 1. Homepage (index.html)
 - **Hero Section**: 30-year evolution timeline with clickable era links
@@ -185,7 +212,7 @@ gillsystems.net/
 - **CTA Emoji Portals**: Interactive 💪 and 👍 emoji buttons with sounds
 - **Hover Effects**: Cards, buttons, interactive elements
 
-## � Technical Features
+## **🔧 Technical Features**
 
 ### JavaScript Features
 - **CTA Component** (cta-component.js - 409 lines):
@@ -226,7 +253,7 @@ gillsystems.net/
 - **Error Handling**: Graceful fallback if audio fails
 - **Mobile Optimized**: Works on iOS, Android, desktop
 
-## 📊 File Statistics
+## **📊 File Statistics**
 
 | File | Type | Lines | Purpose |
 |------|------|-------|---------|
@@ -239,7 +266,7 @@ gillsystems.net/
 | styles.css | CSS | ~800 | Global styling |
 | era-pages.css | CSS | ~400 | Era/philosophy styling |
 
-## 🚀 Deployment
+## **🚀 Deployment**
 
 **Hosting:** GitHub Pages (OCNGill/gillsystems.net)
 **Domain:** gillsystems.net (via CNAME)
@@ -257,7 +284,7 @@ npx serve .
 # Then open: http://localhost:8000
 ```
 
-## 🎯 Success Metrics & Goals
+## **🎯 Success Metrics & Goals**
 
 **Primary Objectives:**
 - CEOs understand value in <30 seconds ✅
@@ -271,7 +298,7 @@ npx serve .
 - Open source discovery
 - Philosophy alignment
 
-## � Future Phases
+## **🔮 Future Phases**
 
 ### January 2026 Review
 - Polish and refinement of all pages
@@ -299,7 +326,7 @@ npx serve .
 - [ ] Newsletter signup
 - [ ] Resource downloads (whitepapers, guides)
 
-## 📞 Contact
+## **📞 Contact**
 
 **Commander Stephen Gill**
 - Email: see the contact page at https://gillsystems.net
@@ -308,7 +335,7 @@ npx serve .
 
 ---
 
-## 💖 Support / Donate
+## **💖 Support / Donate**
 
 If you find this project helpful, you can support ongoing work — thank you!
 
