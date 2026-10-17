@@ -22,7 +22,7 @@ All notable changes to this project.
 
 ### Changed
 - **Caddyfile** — Changed from Let's Encrypt TLS to `tls internal` (self-signed cert). No port 80 required.
-- **Architecture** — Primary WAN ingress moved from gillsystems.net:443 (port forwarding) to OCI Cloud Relay at 129.213.114.55:2200 (no port forwarding).
+- **Architecture** — Primary WAN ingress moved from gillsystems.net:443 (port forwarding) to OCI Cloud Relay at [RELAY-LOCAL] (no port forwarding).
 
 ### Deprecated
 - `gillsystems.net:443` as primary WAN ingress method (kept for LAN testing with `tls internal`).
@@ -45,7 +45,7 @@ All notable changes to this project.
 - **ai-era.html** — Fleet animation iframe path corrected to absolute (`/animations/...`) so it renders from any page on the site.
 
 ### Verified
-LAN (10.0.0.93) and GitHub Pages both serve identical content; animation serves at `/animations/fleet_animation_v2.html` (HTTP 200).
+LAN ([LAN-DETAILS-LOCAL]) and GitHub Pages both serve identical content; animation serves at `/animations/fleet_animation_v2.html` (HTTP 200).
 
 > *"They went down to the sea in ships, doing business on the mighty waters... then were glad because they were quiet, and he brought them unto their desired haven." — Psalm 107:23, 30 (ESV)*
 > — The fleet ships from the harbor it already knows, into quiet waters, and comes home to the live site it was built for.
@@ -62,7 +62,7 @@ LAN (10.0.0.93) and GitHub Pages both serve identical content; animation serves 
   mesh, not a central gateway). Now: "distributed peer mesh ... four AMD nodes and eighteen named agent threads."
 - **Live-embed single source:** the AI page now references ONLY `/animations/fleet_animation_v6.html`. The old
   v2 reference is gone from the page (kept only in this changelog as history).
-- Verified on LAN (curl --resolve 10.0.0.93) and pushed to origin/main.
+- Verified on LAN (curl --resolve [LAN-DETAILS-LOCAL]) and pushed to origin/main.
 ## 2026-09-28 — Animation v7: solid 3D node models, real agent roster, mobile
 Per Commander Gill's iteration requests, all live on the AI Era page:
 - **Solid 3D models** per real node (face-shaded, projected): Main = desktop tower, HTPC = small-form-factor

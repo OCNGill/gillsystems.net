@@ -9,7 +9,7 @@
 
 | Detail | Value |
 |--------|-------|
-| **Subnet** | `10.0.0.0/24` |
+| **Subnet** | `[LAN-DETAILS-LOCAL]` |
 | **DHCP / Assignment** | Static allocations per node (see below) |
 
 ---
@@ -18,17 +18,17 @@
 
 | Node Name | IP Address | OS | Role | Storage | GPU | RAM | Disk |
 |-----------|------------|----|------|---------|-----|-----|------|
-| **Gillsystems-Main** | `10.0.0.164` | Windows 11 Pro | Orchestrator / Primary Compute | 2 TB NVMe | Radeon 7900 XTX (24 GB) | 48 GB | Ryzen 9 5900X |
-| **Gillsystems-HTPC** | `10.0.0.42` | Kubuntu | Storage Authority / Worker | 2 TB ZFS | Radeon 7600 (8 GB) | 16 GB | Ryzen 5 5600G |
-| **Gillsystems-Laptop** | `10.0.0.93` | Windows 10 | Worker | 1 TB SSD | Vega 6 (integrated) | 20 GB | Ryzen 5 4500U |
-| **Gillsystems-Steam-Deck** | `10.0.0.139` | SteamOS (Arch Linux) | Worker | 512 GB NVMe | AMD RDNA 2 APU (shared) | 16 GB unified | 512 GB |
+| **Gillsystems-Main** | `[LAN-DETAILS-LOCAL]` | Windows 11 Pro | Orchestrator / Primary Compute | 2 TB NVMe | Radeon 7900 XTX (24 GB) | 48 GB | Ryzen 9 5900X |
+| **Gillsystems-HTPC** | `[LAN-DETAILS-LOCAL]` | Kubuntu | Storage Authority / Worker | 2 TB ZFS | Radeon 7600 (8 GB) | 16 GB | Ryzen 5 5600G |
+| **Gillsystems-Laptop** | `[LAN-DETAILS-LOCAL]` | Windows 10 | Worker | 1 TB SSD | Vega 6 (integrated) | 20 GB | Ryzen 5 4500U |
+| **Gillsystems-Steam-Deck** | `[LAN-DETAILS-LOCAL]` | SteamOS (Arch Linux) | Worker | 512 GB NVMe | AMD RDNA 2 APU (shared) | 16 GB unified | 512 GB |
 
 ---
 
 ## Node Details
 
 ### Gillsystems-Main
-- **IP:** `10.0.0.164`
+- **IP:** `[LAN-DETAILS-LOCAL]`
 - **OS:** Windows 11 Pro x64
 - **Role:** Primary orchestrator / heavy compute node
 - **Compute Tier:** Tier 1 (Production-Grade)
@@ -40,12 +40,12 @@
 - **Storage:** 2 TB NVMe
 - **Model Path:** `C:\Models\Working_Models\`
 - **LLM Inference Speed:** ~130 tokens/sec
-- **Home Directory:** `C:\Users\Gillsystems Laptop\`
+- **Home Directory:** `<USER-HOME>\`
 
 ---
 
 ### Gillsystems-HTPC
-- **IP:** `10.0.0.42`
+- **IP:** `[LAN-DETAILS-LOCAL]`
 - **OS:** Kubuntu (Linux)
 - **Role:** Storage authority and secondary worker
 - **Compute Tier:** Tier 1 (Production-Grade)
@@ -63,7 +63,7 @@
 ---
 
 ### Gillsystems-Laptop
-- **IP:** `10.0.0.93`
+- **IP:** `[LAN-DETAILS-LOCAL]`
 - **OS:** Windows 10 x64
 - **Role:** Worker node
 - **Compute Tier:** Tier 2 (Mobile/Edge)
@@ -73,15 +73,15 @@
 - **RAM:** 20 GB
 - **GPU:** AMD Radeon Vega 6 (integrated)
 - **Storage:** 1 TB SSD
-- **Model Path:** `C:\Users\Gillsystems Laptop\Desktop\Models\`
-- **MAC Address:** `6D:B4:D3:4C:32:C8`
+- **Model Path:** `<USER-HOME>\Desktop\Models\`
+- **MAC Address:** `[MAC-REDACTED]`
 - **LLM Inference Speed:** ~9 tokens/sec
-- **Home Directory:** `C:\Users\Gillsystems Laptop\`
+- **Home Directory:** `<USER-HOME>\`
 
 ---
 
 ### Gillsystems-Steam-Deck
-- **IP:** `10.0.0.139`
+- **IP:** `[LAN-DETAILS-LOCAL]`
 - **OS:** SteamOS (Arch Linux base)
 - **Role:** Worker node
 - **Compute Tier:** Tier 2 (Mobile/Edge)
@@ -129,7 +129,7 @@ MAC addresses are the authoritative node identity mechanism (overrides hostname 
 |------|-------------|
 | Gillsystems-Main | *(auto-detected — record here once confirmed)* |
 | Gillsystems-HTPC | *(auto-detected — record here once confirmed)* |
-| Gillsystems-Laptop | `6D:B4:D3:4C:32:C8` |
+| Gillsystems-Laptop | `[MAC-REDACTED]` |
 | Gillsystems-Steam-Deck | *(auto-detected — record here once confirmed)* |
 
 Identity resolution order: **MAC → Hostname → IP fallback**
@@ -149,10 +149,10 @@ Identity resolution order: **MAC → Hostname → IP fallback**
 ## Quick Reference: Node IPs
 
 ```
-Gillsystems-Main        10.0.0.164   (Windows — Orchestrator)
-Gillsystems-HTPC        10.0.0.42    (Linux   — Storage/Relay)
-Gillsystems-Laptop      10.0.0.93    (Windows — Worker)
-Gillsystems-Steam-Deck  10.0.0.139   (SteamOS — Worker)
+Gillsystems-Main        [LAN-DETAILS-LOCAL]   (Windows — Orchestrator)
+Gillsystems-HTPC        [LAN-DETAILS-LOCAL]    (Linux   — Storage/Relay)
+Gillsystems-Laptop      [LAN-DETAILS-LOCAL]    (Windows — Worker)
+Gillsystems-Steam-Deck  [LAN-DETAILS-LOCAL]   (SteamOS — Worker)
 ```
 
 ---

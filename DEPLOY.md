@@ -163,7 +163,7 @@ caddy version
 4. (Optional) Add to PATH for global access:
 
 ```cmd
-setx PATH "%PATH%;C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net"
+setx PATH "%PATH%;<repo-root>"
 ```
 
 ### Caddy — Linux (Debian/Ubuntu)
@@ -183,7 +183,7 @@ caddy version
 ### Python Dependencies
 
 ```bash
-cd C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net
+cd <repo-root>
 pip install -r scripts/requirements.txt
 ```
 
@@ -223,7 +223,7 @@ Your router must forward external ports 80 and 443 to the internal IP of the mac
 
 ### Common Router Steps
 
-1. Access your router admin panel (typically `192.168.1.1` or `10.0.0.1`)
+1. Access your router admin panel (typically `192.168.1.1` or your router's gateway)
 2. Navigate to **Port Forwarding** or **Virtual Servers**
 3. Add the following rules:
 
@@ -254,7 +254,7 @@ The watcher monitors the node registry and updates `conf/upstreams.conf` when no
 
 ```bash
 # Windows
-cd C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net
+cd <repo-root>
 python scripts/node_registry_watcher.py
 
 # Linux
@@ -266,7 +266,7 @@ python3 scripts/node_registry_watcher.py
 
 ```bash
 # From the project root (where Caddyfile lives)
-cd C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net
+cd <repo-root>
 
 # Windows
 caddy run
@@ -315,14 +315,14 @@ For production, run both Caddy and the watcher as Windows services using [NSSM](
 ### Create Caddy Service
 
 ```cmd
-nssm install CaddyWSS "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\caddy.exe"
-nssm set CaddyWSS AppDirectory "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net"
+nssm install CaddyWSS "caddy.exe"
+nssm set CaddyWSS AppDirectory "<repo-root>"
 nssm set CaddyWSS AppParameters "run"
 nssm set CaddyWSS DisplayName "Caddy WSS Reverse Proxy"
 nssm set CaddyWSS Description "Caddy reverse proxy for Hermes WebSocket node registry and static site serving"
 nssm set CaddyWSS Start SERVICE_AUTO_START
-nssm set CaddyWSS AppStdout "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\logs\caddy.log"
-nssm set CaddyWSS AppStderr "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\logs\caddy-error.log"
+nssm set CaddyWSS AppStdout "logs\caddy.log"
+nssm set CaddyWSS AppStderr "logs\caddy-error.log"
 nssm start CaddyWSS
 ```
 
@@ -330,13 +330,13 @@ nssm start CaddyWSS
 
 ```cmd
 nssm install NodeRegistryWatcher "C:\Python311\python.exe"
-nssm set NodeRegistryWatcher AppDirectory "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net"
+nssm set NodeRegistryWatcher AppDirectory "<repo-root>"
 nssm set NodeRegistryWatcher AppParameters "scripts/node_registry_watcher.py"
 nssm set NodeRegistryWatcher DisplayName "Node Registry Watcher"
 nssm set NodeRegistryWatcher Description "Watches node registry and updates Caddy upstreams"
 nssm set NodeRegistryWatcher Start SERVICE_AUTO_START
-nssm set NodeRegistryWatcher AppStdout "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\logs\watcher.log"
-nssm set NodeRegistryWatcher AppStderr "C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\logs\watcher-error.log"
+nssm set NodeRegistryWatcher AppStdout "logs\watcher.log"
+nssm set NodeRegistryWatcher AppStderr "logs\watcher-error.log"
 nssm start NodeRegistryWatcher
 ```
 

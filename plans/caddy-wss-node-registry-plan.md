@@ -11,7 +11,7 @@ Configure Caddy at `gillsystems.net` to read the Hermes NodeRegistry API on each
 ### Current State
 
 ```
-Android App --ws://10.0.0.93:2200/hermes--> [Hardcoded LAN IP, ws://]
+Android App --ws://[LAN-DETAILS-LOCAL]:2200/hermes--> [Hardcoded LAN IP, ws://]
                                             - No TLS
                                             - No failover
                                             - Hardcoded to laptop
@@ -34,13 +34,13 @@ flowchart TD
         WATCHER["node_registry_watcher.py\nPoll NodeRegistry API\nWrite upstream config\nCaddy reload"]
     end
 
-    subgraph LAN["Home LAN 10.0.0.0/24"]
+    subgraph LAN["Home LAN [LAN-DETAILS-LOCAL]"]
         NR["NodeRegistry API\nGET /api/config/node\nReturns: {master, nodes}"]
         
-        MAIN["Main 10.0.0.164\nRadeon 7900 XTX"]
-        LAP["Laptop 10.0.0.93\nRadeon Vega 6"]
-        HTPC["HTPC 10.0.0.42\nRadeon 7600"]
-        SD["Steam Deck 10.0.0.139\nRDNA 2 APU"]
+        MAIN["Main [LAN-DETAILS-LOCAL]\nRadeon 7900 XTX"]
+        LAP["Laptop [LAN-DETAILS-LOCAL]\nRadeon Vega 6"]
+        HTPC["HTPC [LAN-DETAILS-LOCAL]\nRadeon 7600"]
+        SD["Steam Deck [LAN-DETAILS-LOCAL]\nRDNA 2 APU"]
     end
 
     ANDROID -->|"wss://gillsystems.net/hermes"| CADDY
@@ -82,7 +82,7 @@ flowchart TD
   "nodes": [
     {
       "node_name": "Gillsystems-Main",
-      "lan_ip": "10.0.0.164",
+      "lan_ip": "[LAN-DETAILS-LOCAL]",
       "port": 2200,
       "gpu": "Radeon 7900 XTX",
       "hostname": "Gillsystems-Main",
@@ -92,7 +92,7 @@ flowchart TD
   ],
   "master": {
     "node_name": "Gillsystems-Main",
-    "lan_ip": "10.0.0.164",
+    "lan_ip": "[LAN-DETAILS-LOCAL]",
     "port": 2200,
     "gpu": "Radeon 7900 XTX",
     "hostname": "Gillsystems-Main",
@@ -222,7 +222,7 @@ handle_path /health {
 ### Step 4: Update Android WebSocket Client
 
 Modify `WebSocketClient.kt` to:
-- Default host: `"gillsystems.net"` (from `"10.0.0.93"`)
+- Default host: `"gillsystems.net"` (from `"[LAN-DETAILS-LOCAL]"`)
 - Default port: `443` (WSS default, was `2200`)
 - Use `wss://` scheme (Ktor handles this via `wss://` URL prefix or TLS config)
 - Add TLS configuration for Ktor CIO engine (trust system CA certs)
@@ -255,7 +255,7 @@ Modify `WebSocketClient.kt` to:
 ```mermaid
 sequenceDiagram
     participant W as node_registry_watcher.py
-    participant M as Master Node (10.0.0.164)
+    participant M as Master Node ([LAN-DETAILS-LOCAL])
     participant S as Slave Nodes
     participant C as Caddy
 

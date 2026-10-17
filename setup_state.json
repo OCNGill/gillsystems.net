@@ -13,7 +13,7 @@
   },
   "frp_tunnel": {
     "status": "connected",
-    "server": "129.213.114.55:7000",
+    "server": "[RELAY-LOCAL]",
     "relay_ssh_port": 2222,
     "relay_hermes_port": 2200,
     "local_port": 2200,
@@ -22,12 +22,12 @@
   },
   "wan_access": {
     "method": "OCI Cloud Relay (Sovereign Bridge)",
-    "relay_host": "129.213.114.55",
+    "relay_host": "[RELAY-LOCAL]",
     "relay_ssh_port": 2222,
     "relay_hermes_port": 2200,
     "port_forwarding_required": false,
     "isp_independent": true,
-    "notes": "Deployed 2026-06-06. App connects to wss://129.213.114.55:2200/hermes directly."
+    "notes": "Deployed 2026-06-06. App connects to wss://[RELAY-LOCAL]/hermes directly."
   },
   "node_registry_watcher": {
     "status": "running",
@@ -35,52 +35,52 @@
     "config_output": "conf/upstreams.conf",
     "caddy_reload": "via admin API (127.0.0.1:2019)",
     "nodes_monitored": [
-      "Gillsystems-Main (10.0.0.164)",
-      "Gillsystems-HTPC (10.0.0.42)",
-      "Gillsystems-Laptop (10.0.0.93)",
-      "Gillsystems-Steam-Deck (10.0.0.139)"
+      "Gillsystems-Main ([LAN-DETAILS-LOCAL])",
+      "Gillsystems-HTPC ([LAN-DETAILS-LOCAL])",
+      "Gillsystems-Laptop ([LAN-DETAILS-LOCAL])",
+      "Gillsystems-Steam-Deck ([LAN-DETAILS-LOCAL])"
     ],
-    "active_master": "Gillsystems-Laptop (10.0.0.93:2200)"
+    "active_master": "Gillsystems-Laptop ([LAN-DETAILS-LOCAL]:2200)"
   },
   "proxy_routes": {
     "/hermes/*": {
-      "target": "ws://10.0.0.93:2200/hermes/*",
+      "target": "ws://[LAN-DETAILS-LOCAL]:2200/hermes/*",
       "type": "WebSocket",
       "notes": "Android companion app primary endpoint"
     },
     "/ws/android/*": {
-      "target": "ws://10.0.0.93:2200/hermes/*",
+      "target": "ws://[LAN-DETAILS-LOCAL]:2200/hermes/*",
       "type": "WebSocket",
       "proxy_config": "uri strip_prefix /ws/android",
       "notes": "Caddy-proxied Android path with TLS termination / prefix stripping"
     },
     "/console/*": {
-      "target": "ws://10.0.0.93:2200/console/*",
+      "target": "ws://[LAN-DETAILS-LOCAL]:2200/console/*",
       "type": "WebSocket",
       "notes": "Console streaming endpoint"
     },
     "/api/config/*": {
-      "target": "http://10.0.0.93:2200/api/config/*",
+      "target": "http://[LAN-DETAILS-LOCAL]:2200/api/config/*",
       "type": "HTTP",
       "notes": "Engine/node config REST API"
     },
     "/v1/*": {
-      "target": "http://10.0.0.93:2200/v1/*",
+      "target": "http://[LAN-DETAILS-LOCAL]:2200/v1/*",
       "type": "HTTP",
       "notes": "OpenAI-compatible API proxy"
     },
     "/health": {
-      "target": "http://10.0.0.93:2200/health",
+      "target": "http://[LAN-DETAILS-LOCAL]:2200/health",
       "type": "HTTP",
       "notes": "Health check endpoint"
     },
     "/api/sessions/*": {
-      "target": "http://10.0.0.93:2200/api/sessions/*",
+      "target": "http://[LAN-DETAILS-LOCAL]:2200/api/sessions/*",
       "type": "HTTP",
       "notes": "Session management REST API"
     },
     "/v1/runs/*": {
-      "target": "http://10.0.0.93:2200/v1/runs/*",
+      "target": "http://[LAN-DETAILS-LOCAL]:2200/v1/runs/*",
       "type": "HTTP",
       "notes": "Run management endpoint"
     },
@@ -94,7 +94,7 @@
   "hermes_agent": {
     "status": "active",
     "gateway_port": 2200,
-    "host": "Gillsystems-Laptop (10.0.0.93)"
+    "host": "Gillsystems-Laptop ([LAN-DETAILS-LOCAL])"
   },
   "pipeline": {
     "current": "v1.1.0",

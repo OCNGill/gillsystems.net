@@ -234,7 +234,7 @@ npx hyperlink index.html
 ## 📞 Contact
 
 **Commander Stephen Gill**
-- Email: gillsystems@gmail.com
+- Email: see the contact page at https://gillsystems.net
 - GitHub: @OCNGill
 - LinkedIn: https://www.linkedin.com/in/stephen-gill-66004b6/
 

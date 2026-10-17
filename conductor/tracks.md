@@ -22,7 +22,7 @@
 - **Phase:** Deploy ✓
 - **Objective:** Replace ISP-dependent port forwarding with OCI Always Free relay
 - **Infrastructure:**
-  - OCI Instance: 129.213.114.55 (Ubuntu 20.04, 1GB RAM)
+  - OCI Instance: [RELAY-LOCAL] (Ubuntu 20.04, 1GB RAM)
   - FRP tunnel from Windows laptop to OCI relay
   - Caddy kept on gillsystems.net with `tls internal` for LAN fallback
-  - Android app connects directly to 129.213.114.55:2200
+  - Android app connects directly to [RELAY-LOCAL]

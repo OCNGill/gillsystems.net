@@ -1,12 +1,12 @@
 # Specification: Add Phone Number
 
 ## Objective
-Include the phone number `774-327-4896` in the top navigation bar and the contact section of `index.html`.
+Include the phone number `[PHONE-REMOVED]` in the top navigation bar and the contact section of `index.html`.
 
 ## Requirements
 1. **Topbar**:
-   - Add a clickable link: "Call The Commander: 774-327-4896".
-   - Clicking the link should initiate a phone call (`tel:7743274896`).
+   - Add a clickable link: "Call The Commander: [PHONE-REMOVED]".
+   - Clicking the link should initiate a phone call (`tel:[PHONE-REMOVED]`).
    - Style: Font size must match the updated (larger) navigation menu items.
 
 2. **Navigation Menu**:
@@ -14,7 +14,7 @@ Include the phone number `774-327-4896` in the top navigation bar and the contac
 
 3. **Contact Area**:
    - Create a "nice little panel" for the phone number.
-   - The number `774-327-4896` must be clearly visible.
+   - The number `[PHONE-REMOVED]` must be clearly visible.
    - **The entire panel must be clickable** to initiate the call.
    - Style: Consistent with Gillsystems design, but with a larger font.
 
@@ -23,4 +23,4 @@ Include the phone number `774-327-4896` in the top navigation bar and the contac
 
 ## Technical Details
 - Targets: `index.html`, `styles.css`.
-- URL format: `tel:7743274896`.
+- URL format: `tel:[PHONE-REMOVED]`.

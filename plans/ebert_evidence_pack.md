@@ -1,7 +1,7 @@
 AI-ERA V2 MOCKUP — EVIDENCE PACK FOR EBERT
 ===========================================
 
-FILE: C:\Users\Gillsystems Laptop\source\repos\OCNGill\gillsystems.net\ai-era-v2.html
+FILE: ai-era-v2.html
 LAN URL: https://gillsystems.net/ai-era-v2.html (served by Caddy from working tree)
 
 STATIC GATES (all passed):

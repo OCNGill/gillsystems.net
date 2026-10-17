@@ -12,11 +12,11 @@
 | Debug       | ✅ Complete | End-to-end WAN path tested via OCI relay       |
 | Document    | ✅ Complete | product.md, setup_state.json, tracks.md, DEPLOY.md updated |
 | Deliver     | ✅ Complete | Sovereign Bridge cut over as primary WAN ingress |
-| Deploy      | ✅ Complete | OCI relay at 129.213.114.55 operational        |
+| Deploy      | ✅ Complete | OCI relay at [RELAY-LOCAL] operational        |
 
 ### Active Items
 
-1. **OCI Relay Deployment** — ✅ Done. OCI Always Free instance at 129.213.114.55 running Ubuntu 20.04.
+1. **OCI Relay Deployment** — ✅ Done. OCI Always Free instance at [RELAY-LOCAL] running Ubuntu 20.04.
 2. **FRP Tunnel** — ✅ Done. frpc on Windows laptop → frps on OCI relay. Hermes port 2200 tunneled.
 3. **Caddy TLS Migration** — ✅ Done. Changed from Let's Encrypt to `tls internal`. No port 80 required.
 4. **WAN Cutover** — ✅ Done. Primary WAN ingress moved from gillsystems.net:443 (port forwarding) to OCI relay.

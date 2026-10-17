@@ -7,11 +7,11 @@
 | **Product**    | Gillsystems.net — Caddy Server Infrastructure               |
 | **Version**    | 1.1.0                                                       |
 | **Status**     | Active — Sovereign Bridge Deployed                          |
-| **Platform**   | Windows 10 (Gillsystems-Laptop, 10.0.0.93)                  |
+| **Platform**   | Windows 10 (Gillsystems-Laptop, [LAN-DETAILS-LOCAL])                  |
 
 ## Description
 
-Caddy-based reverse proxy and static site server for the Gillsystems platform. Serves the gillsystems.net static website, proxies WebSocket and API traffic to Hermes agent nodes on the LAN, and provides TLS termination for WAN access. The "Sovereign Bridge" architecture uses an OCI Cloud Relay (129.213.114.55) to eliminate dependency on ISP port forwarding.
+Caddy-based reverse proxy and static site server for the Gillsystems platform. Serves the gillsystems.net static website, proxies WebSocket and API traffic to Hermes agent nodes on the LAN, and provides TLS termination for WAN access. The "Sovereign Bridge" architecture uses an OCI Cloud Relay ([RELAY-LOCAL]) to eliminate dependency on ISP port forwarding.
 
 ## Tech Stack
 
@@ -33,12 +33,12 @@ Caddy-based reverse proxy and static site server for the Gillsystems platform. S
 │                                                                  │
 │   Browser (HTTPS)               Android App (WSS)                │
 │         │                              │                         │
-│         │  gillsystems.net            │  wss://129.213.114.55   │
+│         │  gillsystems.net            │  wss://[RELAY-LOCAL]    │
 │         │                            │  /hermes                 │
 │         ▼                            ▼                         │
 │   ┌──────────────┐          ┌──────────────────┐               │
 │   │  Caddy v2    │          │  OCI Cloud Relay │               │
-│   │  (LAN only,  │          │  129.213.114.55  │               │
+│   │  (LAN only,  │          │  [RELAY-LOCAL]  │                │
 │   │   tls        │          │  :2200/:7000     │               │
 │   │   internal)  │          └────────┬─────────┘               │
 │   └──────┬───────┘                   │ FRP Tunnel               │
@@ -47,10 +47,10 @@ Caddy-based reverse proxy and static site server for the Gillsystems platform. S
            │                           │
            ▼                           ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│                    LOCAL NETWORK (10.0.0.0/24)                   │
+│            LOCAL NETWORK ([LAN-DETAILS-LOCAL])                   │
 │                                                                  │
 │   ┌─────────────────────────────────────────────────────────┐    │
-│   │  Gillsystems-Laptop (10.0.0.93)                         │    │
+│   │  Gillsystems-Laptop ([LAN-DETAILS-LOCAL])               │    │
 │   │                                                         │    │
 │   │  ┌──────────┐  ┌────────────────┐  ┌────────────────┐  │    │
 │   │  │  Caddy   │  │  Node Registry │  │  FRP Client    │  │    │
@@ -69,10 +69,10 @@ Caddy-based reverse proxy and static site server for the Gillsystems platform. S
 │   └─────────────────────────────────────────────┘                │
 │                                                                  │
 │   LAN Nodes (probed by watcher):                                 │
-│   - Gillsystems-Main      10.0.0.164  (Windows 11)              │
-│   - Gillsystems-HTPC      10.0.0.42   (Kubuntu)                 │
-│   - Gillsystems-Laptop    10.0.0.93   (Windows 10)              │
-│   - Gillsystems-Steam-Deck 10.0.0.139 (SteamOS)                 │
+│   - Gillsystems-Main      [LAN-DETAILS-LOCAL]  (Windows 11)     │
+│   - Gillsystems-HTPC      [LAN-DETAILS-LOCAL]   (Kubuntu)       │
+│   - Gillsystems-Laptop    [LAN-DETAILS-LOCAL]   (Windows 10)    │
+│   - Gillsystems-Steam-Deck [LAN-DETAILS-LOCAL] (SteamOS)        │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -89,11 +89,11 @@ Caddy-based reverse proxy and static site server for the Gillsystems platform. S
 2. Watcher writes active master to `conf/upstreams.conf`
 3. Caddy hot-reloads upstreams (zero-downtime)
 4. Client connects via `wss://gillsystems.net/hermes`
-5. Caddy proxies to active Hermes gateway at `10.0.0.x:2200`
+5. Caddy proxies to active Hermes gateway at `[LAN-DETAILS-LOCAL]:2200`
 
 ### Data Flow — WAN (Sovereign Bridge)
 
-1. Android app connects to `wss://129.213.114.55:2200/hermes` directly
+1. Android app connects to `wss://[RELAY-LOCAL]/hermes` directly
 2. FRP tunnel forwards traffic from OCI relay to Gillsystems-Laptop:2200
 3. No port forwarding required — ISP independent
 
@@ -115,4 +115,4 @@ Caddy-based reverse proxy and static site server for the Gillsystems platform. S
 - **Caddy start**: `caddy run --config Caddyfile`
 - **Caddy reload**: `caddy reload --config Caddyfile`
 - **Watcher start**: `python scripts/node_registry_watcher.py`
-- **Active master**: Gillsystems-Laptop at 10.0.0.93:2200
+- **Active master**: Gillsystems-Laptop at [LAN-DETAILS-LOCAL]:2200

@@ -138,7 +138,7 @@ All **19** public pages were fetched over HTTPS from `https://gillsystems.net` a
 | `node --check`, extracted v7 JS (53,949 B) | **CLEAN** |
 | `node --check`, extracted v8 JS (60,372 B) | **CLEAN** |
 | v8 full-loop integration test (stubbed canvas, 30 real frames `frame()` → `stepFrame()`) | **185,961 canvas calls, 0 NaN, 0 bad lineWidth, render guard never fired** |
-| v8 SHA256 across Laptop / Main (10.0.0.164) / Deck (10.0.0.139) | **byte-identical**, `4c37feef…`, 436,281 B |
+| v8 SHA256 across Laptop / Main ([LAN-DETAILS-LOCAL]) / Deck ([LAN-DETAILS-LOCAL]) | **byte-identical**, `4c37feef…`, 436,281 B |
 | Working tree, both repos | **clean** (`git status --short` empty) |
 
 ## 8. Corrections
@@ -181,7 +181,7 @@ Both are now fixed at the source (`os.walk`) and at the method (public-URL fetch
 - **152 vs 154** count discrepancy unresolved and recorded as-is (§4).
 - **Browser-render verification was not possible** during this cycle — browser tooling was wedged. The gates actually run were static analysis (`node --check`), the node harness, and per-page public HTTP fetches. No claim of "it looks right in a browser" is supported by evidence from this cycle, and none should be inferred.
 - **`archive/` is out of scope by design** and still holds emoji in the working tree (backups, not served). It is now **explicitly** excluded in the script rather than excluded by accident.
-- **HTPC (10.0.0.42) unreachable** — did not receive the sync; v8 byte-identity is confirmed on Laptop, Main, and Deck only.
+- **HTPC ([LAN-DETAILS-LOCAL]) unreachable** — did not receive the sync; v8 byte-identity is confirmed on Laptop, Main, and Deck only.
 - **Next Bible verse:** Commander has asked **Theo** to select it.
 
 ---
