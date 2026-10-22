@@ -4,6 +4,15 @@ All notable changes to this project.
 
 ---
 
+## [1.2.1] - 2026-10-22
+
+### Fixed
+- **vendor/three.umd.js** — Added the vendored Three.js r157 build (1,271,276 B, byte-identical to `Gillsystems_games/vendor/three.umd.js`). The Deadwood alien-shooter page references `vendor/three.umd.js` for its WebGL renderer, but the deployment repository never carried the file, so the served page loaded the script tag against a 404 and the game module never booted — `THREE` was undefined, zero canvases were created, and the page rendered as a dead shell on gillsystems.net. The library is now vendored in-repo, so the site stays sovereign and offline-capable with no CDN dependency.
+
+### Verse
+- *"Your life is a lamp for my feet, and my doctrine is a light for your path." — Psalm 119:105 (ESV)*
+- Chosen because the doctrine was never missing — the game code was complete and correct; what was missing was the lamp standing beside it. The light was in the room the whole time; the fix was to put the provision where the path actually walks.
+
 ## [1.2.0] - 2026-09-20
 
 ### Changed
@@ -63,3 +72,15 @@ LAN ([LAN-DETAILS-LOCAL]) and GitHub Pages both serve identical content; animati
 - **Live-embed single source:** the AI page now references ONLY `/animations/fleet_animation_v6.html`. The old
   v2 reference is gone from the page (kept only in this changelog as history).
 - Verified on LAN (curl --resolve [LAN-DETAILS-LOCAL]) and pushed to origin/main.
+## 2026-09-28 — Animation v7: solid 3D node models, real agent roster, mobile
+Per Commander Gill's iteration requests, all live on the AI Era page:
+- **Solid 3D models** per real node (face-shaded, projected): Main = desktop tower, HTPC = small-form-factor
+  cube, Steam Deck = handheld slab, Laptop = clamshell with a red duct-tape strip on the front edge.
+- **Real agent data** — 19 threads / 18 names sourced from `Agents/ROSTER.md` (real roles and classes),
+  replacing generic labels. Ebert (Zero Trust Critic) is on the Laptop ops seat; Hermes honestly holds two seats.
+- **Speed control** defaulting to 45%, **RESET**, **BLOOM** (additive blur post-pass), and **DATA FLOW** toggles.
+- **Logo** in the header, via a relative path so it resolves on the site and in local preview.
+- **Mobile**: collapsible controls drawer + responsive layout at <=820px; orbit is rotation-only.
+- Rotate-crash fix retained (negative ellipse minor-radius on the storage glow; canvas throws, it never clamps).
+- Verified: 7,745-frame headless crash sweep = 0 fatal canvas violations, 0 render-guard trips. Zero IP/path
+  leaks, zero external dependencies. Build success on commit 88afcd5.

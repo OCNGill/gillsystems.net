@@ -4,6 +4,15 @@ All notable changes to this project.
 
 ---
 
+## [1.2.1] - 2026-10-22
+
+### Fixed
+- **vendor/three.umd.js** — Added the vendored Three.js r157 build (1,271,276 B, byte-identical to `Gillsystems_games/vendor/three.umd.js`). The Deadwood alien-shooter page references `vendor/three.umd.js` for its WebGL renderer, but the deployment repository never carried the file, so the served page loaded the script tag against a 404 and the game module never booted — `THREE` was undefined, zero canvases were created, and the page rendered as a dead shell on gillsystems.net. The library is now vendored in-repo, so the site stays sovereign and offline-capable with no CDN dependency.
+
+### Verse
+- *"Your life is a lamp for my feet, and my doctrine is a light for your path." — Psalm 119:105 (ESV)*
+- Chosen because the doctrine was never missing — the game code was complete and correct; what was missing was the lamp standing beside it. The light was in the room the whole time; the fix was to put the provision where the path actually walks.
+
 ## [1.2.0] - 2026-09-20
 
 ### Changed
