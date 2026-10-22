@@ -8,6 +8,13 @@ All notable changes to this project.
 
 ### Fixed
 - **vendor/three.umd.js** — Added the vendored Three.js r157 build (1,271,276 B, byte-identical to `Gillsystems_games/vendor/three.umd.js`). The Deadwood alien-shooter page references `vendor/three.umd.js` for its WebGL renderer, but the deployment repository never carried the file, so the served page loaded the script tag against a 404 and the game module never booted — `THREE` was undefined, zero canvases were created, and the page rendered as a dead shell on gillsystems.net. The library is now vendored in-repo, so the site stays sovereign and offline-capable with no CDN dependency.
+- **index.html** — Repointed the "The Commander Boomer Shooter" home-page game card from the non-existent in-site path `The_Commander_Boomer_Shooter` (HTTP 404) to the project's public repository, matching the treatment already used in `open-source.html`. The placeholder copy itself (title, status blurb, `IN DEVELOPMENT` badge) is unchanged and no fake screenshots were added — the UE build does not exist yet, so the card links to the build's source of truth instead of a dead page.
+
+### Verified
+- Live boot on `https://gillsystems.net/Deadwood_alien_shooter.html`: `THREE` loads, one canvas, WebGL context OK, zero console errors.
+- Full gameplay loop driven against production through the game's own camera/aim/fire path: start → Hunter killed in 3 hits (42.5 dmg each, +200 score, "Hunter ELIMINATED" feed) → reload (`0` → `6 / 6`) → wave 1 → 2 (10 aliens, `WAVE 2` HUD) → death (`gameOver:true`, restart button visible) → restart (full state reset) → reload after restart (`6 / 6`).
+- Live game HTML is byte-identical to the committed `HEAD:Deadwood_alien_shooter.html` blob (104,030 B, SHA256 `a681891b7ec06c1b`).
+- `plans/preship_gate.py` — all clean, exit 0.
 
 ### Verse
 - *"Your life is a lamp for my feet, and my doctrine is a light for your path." — Psalm 119:105 (ESV)*
