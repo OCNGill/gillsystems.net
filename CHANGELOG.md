@@ -4,6 +4,20 @@ All notable changes to this project.
 
 ---
 
+## [1.2.3] - 2026-10-22
+
+### Fixed
+- **Deadwood_alien_shooter.html** — HUD icon markup was being assigned with `textContent` instead of `innerHTML` in the four places where the game swaps an icon at runtime (the `stealth-icon` element on the `HIDDEN` / `DETECTED!` branch of the stealth readout, and both branches of the `music-toggle` button). `textContent` escapes markup, so the served page printed the literal string `<svg class="gs-ic" …><use href="#am-shield"/></svg>` into the HUD and the music button instead of drawing the icon. The static markup in the page body was always correct — the emoji-eradication pass (`752cb3a`) rewrote the runtime setters and left the escaping bug behind, which is why the game rendered and played fine while the HUD looked broken. All four assignments now use `innerHTML`, so the sprite resolves through the existing `#am-steamos` / `#am-shield` / `#am-monitor` symbols.
+
+### Verified
+- Caught by independent zero-trust re-verification of production (isolated Chromium with explicit SwiftShader over raw CDP — the shared agent-browser GPU process has WebGL disabled entirely and cannot authoritatively test rendering), then confirmed on the patched local copy: `stealth-icon` and `music-toggle` now report a real child `<svg>` element (`children.length: 1`, `querySelector('svg')` truthy), `textContent` is empty instead of markup, and the raw-markup leak check returns `false`.
+- The regression is a render-correctness fix only: game boot (`THREE` loaded, one canvas, WebGL context OK), start handler, wave state, combat, reload, death, and restart all still pass after the change.
+- `plans/preship_gate.py` — all clean, exit 0.
+
+### Verse
+- *"The acceptable word is a word of truth." — Isaiah 8:20 (ESV)*
+- Chosen because this defect was the difference between code that looked right and a HUD that told the truth to the player; a passing byte-check is not the same as a passing screen, and the Word that governs the work must also govern what the work displays.
+
 ## [1.2.2] - 2026-10-22
 
 ### Fixed

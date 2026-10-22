@@ -1038,10 +1038,10 @@
     document.getElementById('music-toggle').addEventListener('click', () => {
       if(musicPlaying) {
         stopMusic();
-        document.getElementById('music-toggle').textContent = '<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-monitor"/></svg> MUSIC: OFF';
+        document.getElementById('music-toggle').innerHTML = '<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-monitor"/></svg> MUSIC: OFF';
       } else {
         startMusic();
-        document.getElementById('music-toggle').textContent = '<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-monitor"/></svg> MUSIC: ON';
+        document.getElementById('music-toggle').innerHTML = '<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-monitor"/></svg> MUSIC: ON';
       }
     });
 
@@ -1809,8 +1809,8 @@
       document.getElementById('kills-display').textContent=`${state.kills} KILLS`;
       
       const si=document.getElementById('stealth-icon'),st=document.getElementById('stealth-text');
-      if(state.stealth){st.textContent='HIDDEN';st.style.color='#7cc97c';si.textContent='<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-steamos"/></svg>';}
-      else{st.textContent='DETECTED!';st.style.color='#e05a3a';si.textContent='<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-shield"/></svg>';}
+      if(state.stealth){st.textContent='HIDDEN';st.style.color='#7cc97c';si.innerHTML='<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-steamos"/></svg>';}
+      else{st.textContent='DETECTED!';st.style.color='#e05a3a';si.innerHTML='<svg class="gs-ic" style="width:1.15em;height:1.15em;vertical-align:middle;display:inline-block" aria-hidden="true"><use href="#am-shield"/></svg>';}
     }
 
     // ── START BUTTON ──
